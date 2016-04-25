@@ -1,60 +1,78 @@
 <div class="container vert-pad-large text-left">
-
 <div class="col-md-12">
-<h1 style="text-align: center;">Waarom MyWheels?</h1>
+<h1 style="text-align: center;">Dit is MyWheels</h1>
+<br />
+</div>
+<div class="col-md-12">
+<md-card class="content-green">
+<p>Mywheels geeft je de mogelijkheid om eenvoudig en snel een auto te huren. Er staan zowel particuliere auto's op, als auto's die je met een ov-chipkaart opent. Dus of je nu een auto voor een avond uit zoekt, of een mooie camper voor een vakantie, MyWheels heeft het. 
+</p>
+</md-card>
+<br />
+</div>
+<div class="col-md-12">
+<h1 style="text-align: center;">De voordelen van Mywheels</h1>
 <br />
 </div>
 <div class="col-md-6">
-  <div style="display: inline-block;  padding: 5%; background-color: #fff; min-height: 18em; border: 2px solid #82B955;"><h2 style="color: #82B955;"><md-icon style="color: #82B955; vertical-align: top; margin: 1px 10px 0 0;">home</md-icon>&nbsp;Huur in de buurt</h2>
+<md-card class="content-white">
+  <div><h2><md-icon>home</md-icon>&nbsp;Huur in de buurt</h2>
   <p>
  Met auto's in meer dan 400 plaatsen, is er altijd wel een auto bij jou in de buurt. Boek, een auto, haal de sleutel op en rijden maar! In veel grote steden staan zelfs smartwheels, dat zijn auto's die makkelijk open gaan met je OV-kaart of Smartphone. Ideaal! </p>
-<p style="text-align: right; position: relative; vertical-align: bottom;">
- <a class="btn-success btn" href="" style="color: #fff; border: 1px solid #fff; vertical-align: bottom;">Bekijk de auto's >></a></p>
- </div>
+<p style="text-align: right;"><a class="btn-success btn" href="" ng-click="doSearch()" style="color: #fff; border: 1px solid #fff; bottom: 0;">Bekijk het aanbod</a></p> 
 </div>
-<div class="col-md-12" hide-gt-sm><br /><br /></div>
+</md-card>
+</div>
+
+<div class="col-md-12" hide-gt-sm><br /><br />
+</div>
 <div class="col-md-6">
-  <div style="box-shadow: 0px 3px 5px #444; padding: 5%;background-color: #82B955; min-height: 18em;"><h2 style="color: #fff;"><md-icon style="color: #efefef; vertical-align: top; margin: 1px 10px 0 0;">euro_symbol</md-icon>Verhuur en verdien</h2>
+<md-card class="content-white">
+  <div><h2><md-icon>euro_symbol</md-icon>Verhuur en verdien</h2>
   <p>
-  Je auto aanbieden is gratis. We vragen een klein vergoeding zodra je auto gehuurd wordt. En je weet zeker dat je goed verzekerd bent want dat regelen wij voor je. Vul je kenteken in, maak wat mooie foto's en je kan beginnen.</p>
-  <p style="text-align: right;"><a class="btn-success btn" href="" style="color: #fff; border: 1px solid #fff; bottom: 0;">Bereken wat je kunt verdienen >></a></p>
+  Je auto aanbieden is gratis. We vragen een klein vergoeding zodra je auto gehuurd wordt. En je weet zeker dat je goed verzekerd bent want dat regelen wij voor je. Vul je kenteken in, maak wat mooie foto's en je kan beginnen. Zo maak je de buurt een stukje beter.</p>
+  <p style="text-align: right;"><a class="btn-success btn" href="" style="color: #fff; border: 1px solid #fff; bottom: 0;">Bereken je winst</a></p>
   </div>
+</md-card>
 </div>
 
 <div class="col-md-12">
 <br />
-<div class="col-md-12" style="background-image: url(https://mywheels.nl/branding/img/home-rotate-3.jpg); background-size: width:100%; background-position-y: -180px; background-repeat: no-repeat;">
-<h2 style="color: #fff; text-shadow: 0px 3px 5px #444; text-align: center; padding-top: 40px; padding-bottom: 40px;">Begin direct met huren</h2></span>
-<p style="text-align: center;"><a style="align: center; background-color: #82B955;" href="" ng-click="signup()"class="btn-lg btn-success btn">{{ 'SIGNUP_SHORT' | translate }}</a></p>
+<div class="col-md-12" style="background-image: url(https://mywheels.nl/branding/img/home-rotate-3.jpg); background-size: width:100%; background-position-y: -180px; background-position-x: -30px; background-repeat: no-repeat;">
+<h2 style="color: #fff; text-shadow: 0px 1px 3px #444; text-align: center; padding-top: 40px; padding-bottom: 40px;">Begin direct met huren</h2></span>
+<p style="text-align: center;"><a style="align: center; background-color: #E65A37;  box-shadow: 0px 3px 5px #444; border: 0;" href="" ng-click="signup()"class="btn-lg btn-success btn">{{ 'SIGNUP_SHORT' | translate }}</a></p>
 <br />
 </div>
 </div>
 
 <div class="col-md-6">
 <br />
-  <div style="box-shadow: 0px 3px 5px #444; padding: 5%;background-color: #82B955; min-height: 20em; display: inline-block;"><h2 style="color: #fff;"><md-icon style="color: #efefef; vertical-align: top; margin: 1px 10px 0 0;">done</md-icon>Het voordeligste autodelen</h2>
-  <p >
-  MyWheels is de voordeligste, dat kan omdat we non-profit zijn en geen winstoogmerk hebben. Daarom delen onze leden al meer dan tweeduizend auto’s via MyWheels. Vergelijk de tarieven op <a target="_blank" href="https://www.deelauto.nl">deelauto.nl</a> of lees meer over <a href="https://mywheels.nl/autodelen/community/onze-idealen/">onze idealen</a>. Doe mee en steun de deeleconomie!
+<div><md-card class="content-white"><h2><md-icon>done</md-icon>Het voordeligste autodelen</h2>
+  <p>
+  MyWheels is de voordeligste, dat kan omdat we non-profit zijn en geen winstoogmerk hebben. Daarom delen onze leden al meer dan tweeduizend auto’s via MyWheels. Doe mee en steun de deeleconomie!
   </p>
-   <p style="text-align: right;"><a class="btn-success btn" href="" style="color: #fff; border: 1px solid #fff;">Iets met goedkoop rijden >></a></p> 
+   <p style="text-align: right;"><a class="btn-success btn" href="https://mywheels.nl/autodelen/hoe-huren-werkt/tarieven-huren/" style="color: #fff; border: 1px solid #fff;">Onze tarieven</a></p>
   </div>
+  </md-card>
   </div>
   <div class="col-md-12" hide-gt-sm><br /></div>
   <div class="col-md-6">
   <br />
-<div style="box-shadow: 0px 3px 5px #444; padding: 5%;background-color: #82B955; min-height: 20em;"><h2 style="color: #fff; "><md-icon style="color: #efefef; vertical-align: top; margin: 1px 10px 0 0;" >directions_car</md-icon>Een passende optie voor iedereen</h2>
+  
+<div><md-card class="content-white"><h2><md-icon>directions_car</md-icon>Een passende optie voor iedereen</h2>
 <p>
 Voor elk type gebruiker hebben we een passend aanbod. Huur je soms? Dan kan je zonder borg direct beginnen met huren, huur je vaak? Voor een tientje per maand krijg je allerlei voordelen die het makkelijk maken.
 </p>
-<p style="text-align: right;"><a class="btn-success btn" href="" style="color: #fff; border: 1px solid #fff;">Vergelijk de contracten >> </a></p> 
+<p style="text-align: right;"><a class="btn-success btn" href="" style="color: #fff; border: 1px solid #fff;">Vergelijk de contracten</a></p> 
 </div> 
 </div>
 <div class="col-md-12" style="display: block;">
-<br /><br />
+<br />
 <br />
 </div>
 <div class="col-md-12">
 <h1 style="text-align: center;">Wat kost MyWheels?</h1>
+</div>
 <div class="col-md-8">
 <div style="box-shadow: 0px 3px 5px #444; padding: 5%;background-color: #82B955;">
 <h3 style="color: #fff;">Voor de huurder</h3>
@@ -62,6 +80,7 @@ Voor elk type gebruiker hebben we een passend aanbod. Huur je soms? Dan kan je z
 <p style="text-align: right;"><a class="btn-success btn" href="" style="color: #fff; border: 1px solid #fff;">Zoek een auto</a></p> 
 </div>
 </div>
+<br />
 <div class="col-md-4">
 <div style="box-shadow: 0px 3px 5px #444; padding: 5%;background-color: #82B955;">
 <h3 style="color: #fff;">Voor de Verhuur</h3>
@@ -72,18 +91,35 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Hic nihil fuit, quod qu
 
 </div>
 </div>
+</div>
 
 </div>
-</div>
-</form>
-</div>
-</div>
-</div>
-<div>
-  <div class="container text-left">
+
+ 
+<div ng-if="features.myWheelsFooter" class="footer-logo-row text-center">
+  <div class="container">
     <div class="row">
-     
-    </div>
+      <div class="col-md-3" hide-xs hide-sm>
+        <h2 class="no-margin">In de media</h2>
+        <img class="grayscale" src="assets/img/media/de_volkskrant_logo.png" />
+        <img class="grayscale" src="assets/img/media/nos_logo.png" />
+      </div>
+      <div class="col-md-3" hide-xs hide-sm>
+        <h2 class="no-margin">&nbsp;</h2>
+        <img class="grayscale" src="assets/img/media/de_telegraaf_logo.png" />
+        <img class="grayscale" src="assets/img/media/financieel_dagblad_logo.png" />
+      </div>
+      <div class="col-xs-6 col-md-3">
+        <h2 class="no-margin">Partners</h2>
+        <img class="grayscale" src="assets/img/partners/centraal_beheer_achmea_logo.png" />
+        <img class="grayscale" src="assets/img/partners/green_deal_logo.png" />
+      </div>
+      <div class="col-xs-6 col-md-3">
+        <h2 class="no-margin">&nbsp;</h2>
+        <img class="grayscale" src="assets/img/partners/peugeot_assistance_logo.png" />
+        <img class="grayscale" src="assets/img/partners/sharenl_logo.png" />
+      </div>
 
+    </div>
   </div>
 </div>
