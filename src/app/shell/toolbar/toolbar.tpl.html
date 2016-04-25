@@ -2,7 +2,7 @@
   <md-toolbar class="app-toolbar">
     <div class="md-toolbar-tools">
 
-      <a class="app-logo" ui-sref="home">
+      <a ng-if="isWindowSizeSM" class="app-logo" ui-sref="home">
         <img ng-src="branding/img/logo.png" />
       </a>
 
@@ -14,17 +14,18 @@
         <md-icon>menu</md-icon>
         <span>Menu</span>
       </md-button>
-
-      <span flex></span>
-
-      <!-- help button -->
+	
+	<span flex>
+	
+</span>
+     <!-- <!-- help button --*>
       <md-button hide-gt-xs ng-if="user.isAuthenticated" class="md-icon-button" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
         <md-icon>help_outline</md-icon>
       </md-button>
       <md-button hide-xs ng-if="user.isAuthenticated || isWindowSizeXS" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
         <md-icon>help_outline</md-icon>
         <span>Help</span>
-      </md-button>
+      </md-button>-->
 
       <!-- spinner -->
       <div ng-if="user.isPending">

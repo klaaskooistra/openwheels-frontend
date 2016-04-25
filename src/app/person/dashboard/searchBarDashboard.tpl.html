@@ -1,5 +1,13 @@
 <form>
-  <div class="input-group" style="box-shadow: 4px 6px 8px rgba(0,0,0, 0.35)">
+  <div hide-gt-xs class="input-group" style="box-shadow: 4px 6px 8px rgba(0,0,0, 0.35)">
+    <input type="text" ow-geocoder="{ onDetails: doSearch }" ng-model="search.text" class="form-control" placeholder="Welke plaats wil je huren?" style="font-weight: normal;" />
+    <div class="input-group-btn">
+      <button style="width: 48px;"type="button" class="btn btn-success" ng-click="doSearch()"><md-icon>search</md-icon></button>
+    </div>
+  </div>
+</form>
+<form>
+  <div hide-xs class="input-group" style="box-shadow: 4px 6px 8px rgba(0,0,0, 0.35)">
     <input type="text" ow-geocoder="{ onDetails: doSearch }" ng-model="search.text" class="form-control" placeholder="Welke plaats wil je huren?" style="font-weight: normal;" />
     <div class="input-group-btn">
       <button type="button" class="btn btn-success" ng-click="doSearch()">Zoek</button>
