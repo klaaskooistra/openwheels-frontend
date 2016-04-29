@@ -112,11 +112,12 @@
 .content-green {
   box-shadow: 0px 3px 5px #444; 
   padding: 5%; 
-  background-color: #82B955;
+  background-color: @mywheels-green;
 
 }
-.content-green h2 {
+.content-green h3 {
    color:  #fff;
+   font-size: 27px;
     }
 .content-green md-icon {
 	color: #fff;
@@ -124,19 +125,36 @@
 	margin: 1px 10px 0 0;
 }
 
-
 .content-white {
-padding: 5%; 
-border: 3px solid #82B955; 
-min-height: 18em;
+   padding: 5%; 
+   border: 2px solid @mywheels-green; 
+   min-height: 18em;
 }
-
-.content-white h2 {
-   color:  #82B955;
+.content-white h3 {
+   font-size: 27px;
+   color: @mywheels-green;
     }
 .content-white md-icon {
-	color: #82B955;
+	color: @mywheels-green;
 	vertical-align: top;
 	margin: 1px 10px 0 0;
 }
+.call-to-signup {
+	background-color: @mywheels-red;
+	border: 0px;
+	box-shadow: 0px 3px 5px #444;
+	color: #fff;
+}
+.call-to-signup:hover {
+	background-color: #B44123;
+	color:#fff;
+}
+.call-to-signup-text {
+	font-size: 27px;
+	text-shadow: 0px 3px 5px #444;
+}
+.content h2 {
+	font-size: 39px;
+}
+
 
