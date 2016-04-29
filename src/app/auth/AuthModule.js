@@ -12,7 +12,7 @@ angular.module( 'owm.auth', [
   $stateProvider
 
   .state('signup', {
-    parent: 'shell',
+    parent: 'base',
     url: '/signup?preference',
     views: {
       'main@shell':{
