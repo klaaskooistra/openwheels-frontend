@@ -69,8 +69,8 @@
             ng-click="cancelBooking(booking)">
             {{ 'CANCEL_BOOKING' | translate }}
           </button>
-          
-          
+
+
           <a ng-if="allowFinalize"
             class="btn btn-default"
             ui-sref="owm.booking.finalize({booking: booking.id})">
@@ -174,7 +174,7 @@
           </div>
 
           <!-- disclaimer -->
-          <div class="alert alert-danger" ng-if="booking.approved==='OK' && booking.bookingAlterationStrategy !== 'mywheels_member' && booking.bookingAlterationStrategy !== 'mywheels_dim' && booking.bookingAlterationStrategy !== 'mywheels_premium'">
+          <div id="bookingShowDisclaimer" class="alert alert-danger" ng-if="booking.approved==='OK' && booking.bookingAlterationStrategy !== 'mywheels_member' && booking.bookingAlterationStrategy !== 'mywheels_dim' && booking.bookingAlterationStrategy !== 'mywheels_premium'">
             <i class="fa fa-exclamation-triangle text-danger"></i>&nbsp;
             <span ng-switch="booking.bookingAlterationStrategy">
               <span ng-switch-when="default">{{ 'BOOKING_ALTERATION_STRATEGY_DEFAULT' | translate }}</span>
@@ -228,7 +228,7 @@
               </div>
               <button type="button" class="btn btn-success" ng-click="acceptBooking(booking)">Accepteren</button>
               <button type="button" class="btn btn-danger" ng-click="rejectBooking(booking)">Weigeren</button>
-            </div> 
+            </div>
 
           </div>
 
@@ -382,7 +382,7 @@
         <tr ng-repeat="invoiceline in invoiceLines">
           <td>{{ invoiceline.description }}</td>
           <td class="number xs-collapse">{{ invoiceline.quantity }}</td>
-          <td class="number xs-collapse">{{ invoiceline.type == 'sent' ? -invoiceline.price : invoiceline.price | currency }}</td> 
+          <td class="number xs-collapse">{{ invoiceline.type == 'sent' ? -invoiceline.price : invoiceline.price | currency }}</td>
           <td class="number" ng-class="{'text-pos': invoiceline.total < 0}">{{ invoiceline.total | currency }}</td>
           <td class="number xs-collapse">{{ invoiceline.taxRate }}%</td>
         </tr>
@@ -425,7 +425,7 @@
         <tr ng-repeat="invoiceline in invoiceLines">
           <td>{{ invoiceline.description }}</td>
           <td class="number xs-collapse">{{ invoiceline.quantity }}</td>
-          <td class="number xs-collapse">{{ invoiceline.type == 'sent' ? invoiceline.price : -invoiceline.price | currency }}</td> 
+          <td class="number xs-collapse">{{ invoiceline.type == 'sent' ? invoiceline.price : -invoiceline.price | currency }}</td>
           <td class="number" ng-if="invoiceline.type == 'sent'" ng-class="{'text-neg': invoiceline.total < 0}">{{ invoiceline.total | currency }}</td>
           <td class="number" ng-if="invoiceline.type == 'received'" ng-class="{'text-neg': invoiceline.total > 0}">{{ -invoiceline.total | currency }}</td>
           <td class="number xs-collapse">{{ invoiceline.taxRate }}%</td>
@@ -552,4 +552,3 @@
        <ui-gmap-marker ng-repeat="m in map.markers" idKey="m.idKey" coords="m" icon="m.icon"></ui-gmap-marker>
   </ui-gmap-google-map>
 </div>
-
