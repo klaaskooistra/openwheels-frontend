@@ -9,8 +9,8 @@
                 <span class="text-danger" ng-show="personalDataForm.firstName.$error.required">{{ 'REQUIRED' | translate }}</span>
             </div>
         </div>
-
         <!-- /firstName -->
+
         <div class="responsive">
             <!-- prepostion -->
             <div id="prepostion_group" class="icon user smallfrom" flex="33">
@@ -26,6 +26,14 @@
                 </div>
             </div>
             <!-- /surName -->
+        </div>
+
+        <!-- company -->
+        <div id="companyName_group" class="icon user">
+            <input type="text" name="companyName" id="companyName" ng-model="person.companyName" placeholder="{{ 'COMPANY_NAME_OPT' | translate }}">
+            <div class="" ng-show="person.companyName">
+              <p style="margin-top: 1em">Mywheels biedt een aantal voordelen voor zakelijke gebruikers. <a href="https://mywheels.nl/autodelen/zakelijk-autodelen/" target="_blank">Bekijk de zakelijke voordelen <i class="fa fa-fw fa-external-link"></i></a></p>
+            </div>
         </div>
 
         <div id="preference_group" ng-if="!person.preference" class="icon car select">

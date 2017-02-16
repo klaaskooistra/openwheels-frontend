@@ -31,6 +31,7 @@ angular.module('owm.contract', [])
   $scope.hasMember = contracts.some(function (c) { return c.type.id ===  62; });
   $scope.hasGo     = contracts.some(function (c) { return c.type.id ===  60; });
   $scope.hasPremium  = contracts.some(function (c) { return c.type.id ===  63; });
+  $scope.person = person;
 
   $scope.$mdMedia = $mdMedia;
 
