@@ -42,6 +42,7 @@
     "NAME": "Naam",
     "AGE": "Leeftijd",
     "FIRST_NAME": "Voornaam",
+    "COMPANY_NAME_OPT": "Bedrijfsnaam (optioneel)",
     "USER_PREFERENCE_LABEL": "Ik wil auto's...",
     "SIGNUP": "Meld je aan",
     "SIGNUP_SHORT": "Aanmelden",
