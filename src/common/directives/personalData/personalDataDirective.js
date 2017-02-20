@@ -67,6 +67,9 @@ angular.module('personalDataDirective', [])
             newProps.latitude = $scope.person.latitude;
             newProps.longitude = $scope.person.longitude;
           }
+          if($scope.person.companyName) {
+            newProps.isCompany = true;
+          }
 
           newProps.male = $scope.person.male;
           newProps.dateOfBirth = $scope.person.dateOfBirth;
