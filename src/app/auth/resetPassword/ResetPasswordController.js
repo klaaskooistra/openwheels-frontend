@@ -7,8 +7,21 @@ angular.module('owm.auth.resetPassword', [])
   $scope.isBusy = false;
   $scope.password = '';
   $scope.submit = savePassword;
+  $scope.showNotEqual = false;
+
+  $scope.updateShowNotEqual = function() {
+    if($scope.showNotEqual) {
+      $scope.showNotEqual = $scope.password !== $scope.password_check;
+      console.log($scope.showNotEqual);
+    }
+  };
 
   function savePassword() {
+    if($scope.password !== $scope.password_check) {
+      $scope.showNotEqual = true;
+      return;
+    }
+
     var params = {
       password: $scope.password,
       code: code
