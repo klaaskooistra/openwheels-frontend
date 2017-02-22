@@ -9,6 +9,6 @@ angular.module('datetimeDirective', [])
       datetime: '@'
     },
     replace: true,
-    templateUrl: 'directives/Datetime/datetime.tpl.html'
+    templateUrl: 'directives/datetime/datetime.tpl.html'
   };
 });
