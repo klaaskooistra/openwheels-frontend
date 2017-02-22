@@ -12,7 +12,6 @@ angular.module('owm.auth.resetPassword', [])
   $scope.updateShowNotEqual = function() {
     if($scope.showNotEqual) {
       $scope.showNotEqual = $scope.password !== $scope.password_check;
-      console.log($scope.showNotEqual);
     }
   };
 
