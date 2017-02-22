@@ -62,6 +62,7 @@ angular.module('openwheels', [
   'pickadate',
   'timeframe',
   'datetimeDirective',
+  'bookingListDirective',
   'licencePlateInfoDirective',
   'formGroupDirective',
   'bindingDirectives',

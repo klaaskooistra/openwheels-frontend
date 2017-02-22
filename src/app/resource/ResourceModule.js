@@ -338,10 +338,9 @@ angular.module('owm.resource', [
         });
       }],
       me: ['authService', function (authService) {
-        if (authService.isLoggedIn()) {
-          return authService.me();
-        }
-        return null;
+        return authService.userPromise().then(function (user) {
+          return user.isAuthenticated ? user.identity : null;
+        });
       }],
       resource: ['resourceService', '$stateParams', function (resourceService, $stateParams) {
         return resourceService.get({
@@ -438,6 +437,4 @@ angular.module('owm.resource', [
       }]
     }
   });
-})
-
-;
+});
