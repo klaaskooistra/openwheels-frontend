@@ -66,10 +66,6 @@ angular.module('bookingListDirective', [])
         });
       }
 
-      $scope.goMember = function (personId) {
-        $state.go('member', { personId: personId });
-      };
-
     }
   };
 });
