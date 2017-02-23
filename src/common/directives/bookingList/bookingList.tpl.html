@@ -25,10 +25,10 @@
     <td hide-xs>#{{ booking.id }}</td>
     <td>{{ booking.beginBooking | amDateFormat:'DD-MM-YY HH:mm' }}</td>
     <td>{{ booking.endBooking | amDateFormat:'DD-MM-YY HH:mm' }}</td>
-    <td><a ng-click="goMember(booking.person.id)">{{ booking.person.firstName|toTitleCase }}</a></td>
+    <td><a ui-sref="member({ personId: booking.person.id })">{{ booking.person.firstName|toTitleCase }}</a></td>
   </tr>
   <tr ng-if="bookings.length == 0 && !busy">
-    <td>Geen ritten gevonden.</td>
+    <td>Geen reserveringen gevonden.</td>
     <td></td>
     <td></td>
     <td></td>
