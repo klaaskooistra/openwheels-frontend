@@ -27,14 +27,16 @@
       <a ui-sref="owm.booking.show({ bookingId: b.id })" class="btn btn-link"><i class="fa fa-fw fa-cog"></i>{{ 'EDIT' | translate }}</a>
 
       <!-- TO BE PAID LINK -->
-      <div ng-if="b.approved === 'TO_BE_PAID'">
-        <a ui-sref="owm.finance.v4" class="btn btn-link text-danger">
-          <i class="fa fa-eur"></i> Nog te betalen</a>
-      </div>
+      <div id="booking-list-item_approved">
+        <div ng-if="b.approved === 'TO_BE_PAID'">
+          <a ui-sref="owm.finance.v4" class="btn btn-link text-danger">
+            <i class="fa fa-eur"></i> Nog te betalen</a>
+        </div>
 
-      <div ng-if="b.approved === 'BUY_VOUCHER'">
-        <a ui-sref="owm.finance.vouchers" class="btn btn-link text-danger">
-          <i class="fa fa-exclamation-circle"></i> Betaal rit</a> 
+        <div ng-if="b.approved === 'BUY_VOUCHER'">
+          <a ui-sref="owm.finance.vouchers" class="btn btn-link text-danger">
+            <i class="fa fa-exclamation-circle"></i> Betaal rit</a> 
+        </div>
       </div>
 
     </div>
