@@ -455,7 +455,7 @@
       <div class="row">
         <div class="col-sm-12" ng-repeat="declaration in booking.declarations">
           <div class="declarations__item">
-            <div class="declarations__item__image" ng-style="{'background-image': 'url(declaration/' + declaration.image + ')'}" ng-click="openDialog($event, declaration)"></div>
+            <div class="declarations__item__image" ng-style="{'background-image': 'url('+appConfig.serverUrl+'/declaration/' + declaration.image + ')'}" ng-click="openDialog($event, declaration)"></div>
             <div class="declarations__item__text">
               <p class="declarations__item__amount">&euro;{{::declaration.amount|number:2}}</p>
               <p><small>{{ 'DECL_LABEL_DATE' | translate }}</small><br>{{::declaration.created}}</p>

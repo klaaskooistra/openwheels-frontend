@@ -8,6 +8,8 @@ angular.module('owm.booking.show', [])
   authService, boardcomputerService, discountUsageService, chatPopupService, linksService,
   booking, me, declarationService, $mdDialog, contract, Analytics) {
 
+  $scope.appConfig = appConfig;
+
   /**
    * HACK
    * see issue MW-1206 "booking.resource.price not implemented"
@@ -600,8 +602,9 @@ angular.module('owm.booking.show', [])
 
   $scope.openDialog = function($event, declaration) {
     $mdDialog.show({
-      controller: ['$scope', '$mdDialog', function($scope, $mdDialog) {
+      controller: ['$scope', '$mdDialog', 'appConfig', function($scope, $mdDialog, appConfig) {
         $scope.image = 'declaration/' + declaration.image;
+        $scope.appConfig = appConfig;
         $scope.declaration = declaration;
         $scope.hide = function() {
           $mdDialog.hide();
