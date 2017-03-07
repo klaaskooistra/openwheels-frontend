@@ -15,8 +15,8 @@ angular.module('bookingListDirective', [])
 
       //Set begin and end day of the current month as the current timeframe
       $scope.currentTimeFrame = {
-        startDate: moment().startOf('month').format('YYYY-MM-DD'),
-        endDate: moment().endOf('month').format('YYYY-MM-DD')
+        startDate: moment().startOf('month').format('YYYY-MM-DD HH:mm'),
+        endDate: moment().endOf('month').format('YYYY-MM-DD HH:mm')
       };
 
       //Load booking with the current timeframe
@@ -25,8 +25,8 @@ angular.module('bookingListDirective', [])
       //Load bookings of the previous month
       $scope.previous = function () {
         $scope.currentTimeFrame = {
-          startDate: moment($scope.currentTimeFrame.startDate).subtract('months', 1).startOf('month').format('YYYY-MM-DD'),
-          endDate: moment($scope.currentTimeFrame.endDate).subtract('months', 1).endOf('month').format('YYYY-MM-DD')
+          startDate: moment($scope.currentTimeFrame.startDate).subtract('months', 1).startOf('month').format('YYYY-MM-DD HH:mm'),
+          endDate: moment($scope.currentTimeFrame.endDate).subtract('months', 1).endOf('month').format('YYYY-MM-DD HH:mm')
         };
         loadBookings();
       };
@@ -34,8 +34,8 @@ angular.module('bookingListDirective', [])
       //Load bookings of the next month
       $scope.next = function () {
         $scope.currentTimeFrame = {
-          startDate: moment($scope.currentTimeFrame.startDate).add('months', 1).startOf('month').format('YYYY-MM-DD'),
-          endDate: moment($scope.currentTimeFrame.endDate).add('months', 1).endOf('month').format('YYYY-MM-DD')
+          startDate: moment($scope.currentTimeFrame.startDate).add('months', 1).startOf('month').format('YYYY-MM-DD HH:mm'),
+          endDate: moment($scope.currentTimeFrame.endDate).add('months', 1).endOf('month').format('YYYY-MM-DD HH:mm')
         };
         loadBookings();
       };

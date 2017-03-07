@@ -117,7 +117,15 @@
                   <table class="table table-full-width table-no-margin-bottom">
                     <tr class="" ng-repeat="invoiceLine in invoice.invoiceLines">
                       <td class="table-finance-col-1">{{invoiceLine.description}}</td>
-                      <td class="table-finance-col-2 text-right" ng-class="{'neg': (invoiceLine.total < 0 && invoice.sender.id === me.id) || (invoiceLine.total > 0 && invoice.recipient.id === me.id), 'pos': (invoiceLine.total > 0 && invoice.sender.id === me.id) || (invoiceLine.total < 0 && invoice.recipient.id === me.id) }">{{invoice.recipient.id === me.id ? -1 * invoiceLine.total : invoiceLine.total| currency }}</td>
+                      <td class="table-finance-col-2 text-right" 
+                        ng-class="
+                        {'neg': (invoiceLine.total < 0 && invoice.sender.id === me.id) || (invoiceLine.total > 0 && invoice.recipient.id === me.id), 
+                         'pos': (invoiceLine.total > 0 && invoice.sender.id === me.id) || (invoiceLine.total < 0 && invoice.recipient.id === me.id)}
+                      ">
+                        <span ng-if="view == 'both'">{{invoice.recipient.id === me.id ? -1 * invoiceLine.total : invoiceLine.total | currency}}</span>
+                        <span ng-if="view == 'owner'">{{invoice.recipient.id === me.id ? -1 * invoiceLine.total : invoiceLine.total | currency}}</span>
+                        <span ng-if="view !== 'both' && view !== 'owner'">{{invoice.recipient.id === me.id ? invoiceLine.total : -1 * invoiceLine.total | currency}}</span>
+                      </td>
                       <td class="table-finance-col-3" ></td>
                     </tr>
                   </table>
