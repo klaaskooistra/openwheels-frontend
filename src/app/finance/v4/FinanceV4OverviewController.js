@@ -18,7 +18,8 @@ angular.module('owm.finance.v4', [])
   $scope.hasMoreToLoad = false;
   $scope.isLoadingMore = false;
   $scope.hasEverLoadedMore = false;
-  var limit = 1;
+
+  var limit = 10;
   var offset = 0;
   var openInvoicesRawCollector = [];
 
