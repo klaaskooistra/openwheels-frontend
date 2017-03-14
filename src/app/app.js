@@ -83,6 +83,7 @@ angular.module('openwheels', [
   'bindMetaDirective',
   'personalDataDirective',
   'sameHeightDirective',
+  'autoblurDirective',
 
   /* Filters */
   'filters.util',
@@ -264,6 +265,7 @@ angular.module('openwheels', [
       alertService.add('danger', error.message || 'Woops, er is iets mis gegaan', 5000);
     }
   });
+
 });
 
 // MANUAL BOOTSTRAP
