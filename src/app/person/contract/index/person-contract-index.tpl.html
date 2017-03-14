@@ -14,10 +14,10 @@
     <div class="well" ng-show="ownContracts.length" ng-repeat="contract in ownContracts">
       <div>
         <div class="pull-right" ng-if="contract.type.id !== 60">
-          <button class="btn btn-link" ng-click="blockContract($index)">{{ 'CONTRACT_END_ACTION' | translate }}</button>
+          <button class="btn btn-link" style="padding-top:0px;" ng-click="blockContract($index)">{{ 'CONTRACT_END_ACTION' | translate }}</button>
         </div>
         <div class="pull-right" ng-if="ownContracts.length == 1">
-          <a class="btn btn-link" ui-sref="contractchoice">{{ 'PERSON.CONTRACT.CHANGE_CONTRACT' | translate }}</a>
+          <a class="btn btn-link" style="padding-top:0px;" ui-sref="contractchoice">{{ 'PERSON.CONTRACT.CHANGE_CONTRACT' | translate }}</a>
         </div>
 
         <h4>{{ contract.type.name }}</h4>

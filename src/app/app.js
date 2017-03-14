@@ -83,6 +83,7 @@ angular.module('openwheels', [
   'bindMetaDirective',
   'personalDataDirective',
   'sameHeightDirective',
+  'autoblurDirective',
 
   /* Filters */
   'filters.util',
