@@ -133,6 +133,13 @@
               </tr>
             </tbody>
           </table>
+          
+          <!-- laad meer facturen button -->
+          <button class="btn btn-default" style="min-width: 12em" autoblur ng-disabled="!hasMoreToLoad" ng-click="loadMoreUngrouped()" ng-if="hasMoreToLoad || hasEverLoadedMore">
+            <big ng-if="isLoadingMore"><i class="fa fa-spinner fa-spin fa-fw"></i></big>
+            <span ng-if="!isLoadingMore && hasMoreToLoad">{{'FIN_LOAD_MORE_INV' | translate}}</span>
+            <span ng-if="hasEverLoadedMore && !hasMoreToLoad">{{'FIN_NO_MORE_INV' | translate}}</span>
+          </button>
 
           <div ng-if="provider !== 50">
             <div ng-if="view === 'renter'" class="text-right">

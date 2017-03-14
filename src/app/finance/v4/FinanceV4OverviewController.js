@@ -15,14 +15,32 @@ angular.module('owm.finance.v4', [])
   $scope.vouchersPerPage = 15;
   $scope.groupedInvoicesPerPage = 15;
 
+  $scope.hasMoreToLoad = false;
+  $scope.isLoadingMore = false;
+  $scope.hasEverLoadedMore = false;
+
+  var limit = 10;
+  var offset = 0;
+  var openInvoicesRawCollector = [];
+
   // get ungrouped invoices
-  invoice2Service.getUngroupedForPerson({person: me.id})
-  .then(addExtraInvoiceInformation)
-  .then(addGrantTotal)
-  .then(groupInvoicesByBookingRelation)
-  .then(function(results) { $scope.openInvoices = results; })
-  .finally(function() { $scope.loaded.ungrouped = true; })
-  ;
+  function loadUngroupedInvoices() {
+    invoice2Service.getUngroupedForPerson({person: me.id, limit: limit, offset: offset})
+    .then(handlePagination)
+    .then(addExtraInvoiceInformation)
+    .then(addGrantTotal)
+    .then(groupInvoicesByBookingRelation)
+    .then(function(results) { $scope.openInvoices = results; })
+    .finally(function() { $scope.loaded.ungrouped = true; $scope.isLoadingMore = false;})
+    ;
+  }
+  loadUngroupedInvoices();
+
+  $scope.loadMoreUngrouped = function () {
+    $scope.hasEverLoadedMore = true;
+    $scope.isLoadingMore = true;
+    loadUngroupedInvoices();
+  };
 
   // get grouped invoices (invoice2Module)
   var newInvoices = paymentService.getInvoiceGroups({person: me.id, max: 100})
@@ -86,6 +104,15 @@ angular.module('owm.finance.v4', [])
       console.log(label, toLog);
       return toLog;
     };
+  }
+
+  function handlePagination(results) {
+    $scope.hasMoreToLoad = (results.length >= limit);
+
+    offset = offset + results.length;
+    openInvoicesRawCollector = openInvoicesRawCollector.concat(results);
+
+    return openInvoicesRawCollector;
   }
 
   function addExtraInformationOldInvoices(invoices) {

@@ -698,5 +698,7 @@
     "DETAILS_PROFILE_BASIC_TEXT": "{{firstName}}, je eerste boeking is bijna gemaakt! We leren je graag nog wat beter kennen, wil je onderstaande gegevens aanvullen?",
     "DETAILS_PROFILE_SEARCH": "Bedankt voor het invullen van je gegevens. Tijd om je eerste boeking te maken! Je kunt kiezen uit een groot aantal auto's in de buurt. Auto's met het label Smartwheels open je met een OV-chipkaart of smartphone, auto’s zonder dit label open je met de sleutel. Spreek dan even met de verhuurder af wanneer je de sleutel ophaalt.",
     "COOKIES_ACCEPT": "Accepteer",
-    "COOKIES_TERMS": "MyWheels maakt gebruik van <a href=\"https://mywheels.nl/autodelen/veelgestelde-vragen/gebruik-van-cookies-op-mywheels/\">cookies</a>.<br/>"
+    "COOKIES_TERMS": "MyWheels maakt gebruik van <a href=\"https://mywheels.nl/autodelen/veelgestelde-vragen/gebruik-van-cookies-op-mywheels/\">cookies</a>.<br/>",
+    "FIN_NO_MORE_INV": "Geen extra facturen meer",
+    "FIN_LOAD_MORE_INV": "Laad meer facturen"
 }
