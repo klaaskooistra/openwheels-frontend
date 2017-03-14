@@ -95,7 +95,7 @@ angular.module('vouchersDirective', [])
           $scope.booking.details.riskReduction = newValue;
         })
         .catch(function (err) {
-          if (err.message === 'Bij je huidige gebruiksvorm is verlaging van het eigen risico verplicht.') {
+          if (err.message === 'Bij je huidige contract is verlaging van het eigen risico verplicht.') {
             $scope.vouchureError = {
               show: true,
               message: err.message
