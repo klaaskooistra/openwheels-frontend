@@ -8,10 +8,10 @@
       </a>
 
       <!-- menu button -->
-      <md-button hide-gt-xs class="md-icon-button" ng-click="openMenu()">
+      <md-button id="toolbarMenu" hide-gt-xs class="md-icon-button" ng-click="openMenu()">
         <md-icon>menu</md-icon>
       </md-button>
-      <md-button hide-xs ng-click="openMenu()">
+      <md-button id="toolbarMenu" hide-xs ng-click="openMenu()">
         <md-icon>menu</md-icon>
         <span>Menu</span>
       </md-button>
@@ -19,16 +19,16 @@
       <span flex></span>
 
       <!-- help button -->
-      <md-button hide-gt-xs ng-if="user.isAuthenticated && !centralb" class="md-icon-button" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
+      <md-button id="toolbarHelp" hide-gt-xs ng-if="user.isAuthenticated && !centralb" class="md-icon-button" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
         <md-icon>help_outline</md-icon>
       </md-button>
-      <md-button hide-xs ng-if="user.isAuthenticated  && !centralb" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
+      <md-button id="toolbarHelp" hide-xs ng-if="user.isAuthenticated  && !centralb" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
         <md-icon>help_outline</md-icon>
         <span>Help</span>
       </md-button>
 
       <!-- add resource -->
-      <md-button hide-xs hide-sm ng-if="!user.isAuthenticated" ui-sref="list-your-car">
+      <md-button id="toolbarListyourcar" hide-xs hide-sm ng-if="!user.isAuthenticated" ui-sref="list-your-car">
         <md-icon>directions_car</md-icon>
         <span>{{ 'LIST_YOUR_CAR' | translate }}</span>
       </md-button>
@@ -39,47 +39,47 @@
       </div>
 
       <!-- signup -->
-      <md-button ng-if="!user.isPending && !user.isAuthenticated" class="btn-green app--toolbar--button--text" ui-sref="owm.auth.signup">
+      <md-button id="toolbarSignup" ng-if="!user.isPending && !user.isAuthenticated" class="btn-green app--toolbar--button--text" ui-sref="owm.auth.signup">
         <md-icon hide-xs>person_outline</md-icon>
-        {{ 'SIGNUP' | translate }}
+        <span>{{ 'SIGNUP' | translate }}</span>
       </md-button>
 
       <!-- login -->
-      <md-button ng-if="isWindowSizeSM && !user.isPending && !user.isAuthenticated && !centralb" ng-click="login()">
+      <md-button id="toolbarLogin" ng-if="isWindowSizeSM && !user.isPending && !user.isAuthenticated && !centralb" ng-click="login()">
         <md-icon>person</md-icon>
-        {{ 'LOGIN' | translate }}
+        <span>{{ 'LOGIN' | translate }}</span>
       </md-button>
 
       <!-- user menu -->
       <md-menu md-position-mode="target-right target" ng-if="user.isAuthenticated" ng-class="{ 'user-name-visible': isWindowSizeSM }">
 
-        <md-button class="user-menu-button" ng-class="{ 'md-icon-button': !isWindowSizeSM }" ng-click="$mdOpenMenu($event)">
+        <md-button id="toolbarPersonmenu" class="user-menu-button" ng-class="{ 'md-icon-button': !isWindowSizeSM }" ng-click="$mdOpenMenu($event)">
           <md-icon md-menu-origin>person</md-icon>
           <span ng-if="isWindowSizeSM" class="user-name">{{ user.identity.firstName }}</span>
         </md-button>
 
         <md-menu-content width="4">
           <md-menu-item md-menu-align-target>
-            <md-button ui-sref="owm.person.dashboard">
+            <md-button id="toolbarPersonmenuDashboard" ui-sref="owm.person.dashboard">
               <md-icon>home</md-icon>
-              {{ 'MY_DASHBOARD' | translate }}
+              <span>{{ 'MY_DASHBOARD' | translate }}</span>
               <span md-menu-align-target></span>
             </md-button>
           </md-menu-item>
 
           <md-menu-item>
-            <md-button ui-sref="owm.person.profile">
+            <md-button id="toolbarPersonmenuGegevens" ui-sref="owm.person.profile">
               <md-icon>settings</md-icon>
-              {{ 'MY_PROFILE' | translate }}
+              <span>{{ 'MY_PROFILE' | translate }}</span>
             </md-button>
           </md-menu-item>
 
           <md-menu-divider></md-menu-divider>
 
           <md-menu-item>
-            <md-button ng-click="logout()">
+            <md-button id="toolbarPersonmenuLogout"ng-click="logout()">
               <md-icon>power_settings_new</md-icon>
-              {{ 'LOGOUT' | translate }}
+              <span>{{ 'LOGOUT' | translate }}</span>
             </md-button>
           </md-menu-item>
         </md-menu-content>
