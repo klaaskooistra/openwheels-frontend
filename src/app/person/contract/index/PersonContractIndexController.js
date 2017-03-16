@@ -75,7 +75,7 @@ angular.module('owm.person')
     });
   };
 
-  $scope.blockContract = function ($index) {
+  $scope.endContract = function ($index) {
     var original = $scope.ownContractsCopy[$index];
     var contract = $scope.ownContracts[$index];
 
@@ -90,7 +90,7 @@ angular.module('owm.person')
       contractService.alter({
         id: contract.id,
         newProps: {
-          status: 'blocked'
+          status: 'ended'
         }
       })
       .then(function (saved) {
