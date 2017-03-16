@@ -132,9 +132,14 @@ angular.module('owm.resource.search', [
 
       // construct api call
       var params = {};
-      // calculate offset
-      params.maxresults = numberOfPages * results_per_page;
-      params.offset = (startPage - 1) * results_per_page;
+      // set maxresults and calculate offset
+      if(startPage === 1) {
+        params.maxresults = results_per_page;
+        params.offset = 0;
+      } else {
+        params.maxresults = numberOfPages * results_per_page;
+        params.offset = (startPage - 1) * results_per_page;
+      }
       if (query.location) {
         params.location = query.location;
       }
@@ -171,7 +176,7 @@ angular.module('owm.resource.search', [
           // is not equal to the max_page. Calculate and update last_pag
           if (resources.length < 1) {
             $scope.last_page = startPage - 1;
-          } else if (resources.length < numberOfPages * results_per_page) {
+          } else {
             $scope.last_page = startPage + Math.ceil(resources.length / results_per_page) - 1;
           }
 
