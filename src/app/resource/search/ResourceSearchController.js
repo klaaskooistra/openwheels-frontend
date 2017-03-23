@@ -4,7 +4,8 @@ angular.module('owm.resource.search', [
     'owm.resource.search.list',
     'owm.resource.search.map'
   ])
-  .controller('ResourceSearchController', function ($location, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics) {
+  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics) {
+    $scope.me = me;
 
     var DEFAULT_LOCATION = {
       // Utrecht, The Netherlands
@@ -22,6 +23,8 @@ angular.module('owm.resource.search', [
     $scope.booking = {};
     $scope.resources = [];
     $scope.searchText = '';
+
+    $scope.selectResource = '';
 
     // set pagination variables
     resetPaginationCache();
@@ -80,6 +83,10 @@ angular.module('owm.resource.search', [
           latitude: place.latitude,
           longitude: place.longitude
         });
+        if(me.id === place.coordinator.id) {
+          $scope.filters.filters.smartwheels = true;
+          $state.go($state.$current, resourceQueryService.createStateParams());
+        }
       }
 
       $scope.searchText = query.text;
@@ -172,6 +179,7 @@ angular.module('owm.resource.search', [
         $scope.searching = true;
       }
       return resourceService.searchV2(params).then(function (resources) {
+          console.log($scope.selectedResource);
           // if there are less results than expected, the last page
           // is not equal to the max_page. Calculate and update last_pag
           if (resources.length < 1) {
@@ -187,6 +195,7 @@ angular.module('owm.resource.search', [
 
           // if needed, update UI
           if (gotoStartPage) {
+            $scope.selectedResource = resources[0];
             Analytics.trackEvent('discovery', 'search', user.isAuthenticated, undefined, true);
             $scope.showPage(startPage);
           }

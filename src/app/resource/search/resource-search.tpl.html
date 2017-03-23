@@ -44,8 +44,28 @@
 
                     <span ng-bind-html="place.body"></span>
                 </div>
+
+                <!--/ show overview of trips if me is coordinator of the place -->
+                <div class="card-body" style="padding-top:0px;" id="resourceSearchPlaceCoordinator" ng-if="me && me.id === place.coordinator.id">
+                    <hr>
+                    <h2>Rittenoverzicht Smartwheels</h2>
+                    <p>Je bent coördinator van deze plaats. Hieronder vind je een rittenoverzicht van alle Smartwheels in {{ place.name|toTitleCase }}.</p>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="form-group">
+                          <select class="form-control" 
+                            ng-model="selectedResource"
+                            ng-options="resource.alias for resource in resources | filter: {city: (place.name|toTitleCase)}">
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <booking-list resource="selectedResource" />
+                </div><!--/ card-body -->
+
             </div>
             <!-- /card -->
+
         </div>
     </div>
     <!-- /place -->
