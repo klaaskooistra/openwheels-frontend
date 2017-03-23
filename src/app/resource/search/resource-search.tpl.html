@@ -45,11 +45,15 @@
                     <span ng-bind-html="place.body"></span>
                 </div>
 
+            </div><!-- /card -->
+        </div>
+
+        <div class="col-xs-12 place-padding">
+            <div class="card">
                 <!--/ show overview of trips if me is coordinator of the place -->
-                <div class="card-body" style="padding-top:0px;" id="resourceSearchPlaceCoordinator" ng-if="me && me.id === place.coordinator.id">
-                    <hr>
+                <div class="card-body" id="resourceSearchPlaceCoordinator" ng-if="me && me.id === place.coordinator.id">
                     <h2>Rittenoverzicht Smartwheels</h2>
-                    <p>Je bent coördinator van deze plaats. Hieronder vind je een rittenoverzicht van alle Smartwheels in {{ place.name|toTitleCase }}.</p>
+                    <p>Je bent coördinator van deze plaats. Hieronder vind een rittenoverzicht per Smarthweels in {{ place.name|toTitleCase }}. Gebruik de filter om een Smartwheels te selecteren.</p>
                     <div class="row">
                       <div class="col-xs-12">
                         <div class="form-group">
@@ -62,13 +66,10 @@
                     </div>
                     <booking-list resource="selectedResource" />
                 </div><!--/ card-body -->
-
-            </div>
-            <!-- /card -->
-
+            </div><!-- /card -->
         </div>
-    </div>
-    <!-- /place -->
+
+    </div><!-- /place -->
 
     <div>
 

@@ -24,8 +24,6 @@ angular.module('owm.resource.search', [
     $scope.resources = [];
     $scope.searchText = '';
 
-    $scope.selectResource = '';
-
     // set pagination variables
     resetPaginationCache();
 
@@ -83,7 +81,7 @@ angular.module('owm.resource.search', [
           latitude: place.latitude,
           longitude: place.longitude
         });
-        if(me.id === place.coordinator.id) {
+        if(me && me.id === place.coordinator.id) {
           $scope.filters.filters.smartwheels = true;
           $state.go($state.$current, resourceQueryService.createStateParams());
         }
@@ -179,7 +177,6 @@ angular.module('owm.resource.search', [
         $scope.searching = true;
       }
       return resourceService.searchV2(params).then(function (resources) {
-          console.log($scope.selectedResource);
           // if there are less results than expected, the last page
           // is not equal to the max_page. Calculate and update last_pag
           if (resources.length < 1) {
