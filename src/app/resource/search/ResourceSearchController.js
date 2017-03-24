@@ -81,7 +81,7 @@ angular.module('owm.resource.search', [
           latitude: place.latitude,
           longitude: place.longitude
         });
-        if(me && me.id === place.coordinator.id) {
+        if(me && place.coordinator && me.id === place.coordinator.id) {
           $scope.filters.filters.smartwheels = true;
           $state.go($state.$current, resourceQueryService.createStateParams());
         }
