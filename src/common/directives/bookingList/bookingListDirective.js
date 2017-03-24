@@ -12,6 +12,7 @@ angular.module('bookingListDirective', [])
     controller: function functionName($scope, $log, bookingService, alertService, $state) {
       $scope.busy = false;
       $scope.bookings = [];
+      $scope.now = moment().format('YYYY-MM-DD HH:mm');
 
       //Set begin and end day of the current month as the current timeframe
       $scope.currentTimeFrame = {
