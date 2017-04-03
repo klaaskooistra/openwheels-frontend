@@ -15,6 +15,9 @@ angular.module('owm.resourceQueryService', [])
     filters  : null
   };
 
+  var sortModes = ['relevance', 'distance', 'price'];
+  var currentSort = sortModes[0];
+
   var optionApi2Url = {};
   var optionUrl2Api = {};
   (function () {
@@ -75,6 +78,17 @@ angular.module('owm.resourceQueryService', [])
       data.location = null;
     }
   }
+
+  function setSort(sort) {
+    if(sortModes.indexOf(sort) >= 0) {
+      currentSort = sort;
+    }
+  }
+
+  function getSort() {
+    return currentSort;
+  }
+
 
   /**
    * Expects API-date-formatted strings
@@ -141,6 +155,10 @@ angular.module('owm.resourceQueryService', [])
       stateParams.page = data.page;
     }
 
+    if(currentSort) {
+      stateParams.sort = currentSort;
+    }
+
     if (data.options) {
       stateParams.options = data.options.map(function (option) {
         return optionApi2Url[option];
@@ -177,6 +195,10 @@ angular.module('owm.resourceQueryService', [])
       }
     }
 
+    if(stateParams.sort) {
+      setSort(stateParams.sort);
+    }
+
     setRadius(stateParams.radius);
     setPage(stateParams.page);
 
@@ -209,6 +231,8 @@ angular.module('owm.resourceQueryService', [])
     setPage          : setPage,
     setOptions       : setOptions,
     setFilters       : setFilters,
+    setSort          : setSort,
+    getSort          : getSort,
     createStateParams: createStateParams,
     parseStateParams : parseStateParams
   };

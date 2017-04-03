@@ -11,6 +11,9 @@ angular.module('owm.resource')
     },
     templateUrl: 'resource/components/resource-card.tpl.html',
     controller: function ($scope) {
+      var ageInDays = moment().diff($scope.resource.created, 'days');
+      $scope.resource.isNew = ageInDays < 180;
+
       $scope.select = function () {
         if ($scope.onSelect) {
           $scope.onSelect($scope.resource);

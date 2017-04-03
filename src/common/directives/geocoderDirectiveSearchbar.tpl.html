@@ -22,5 +22,17 @@
         <md-icon>filter_list</md-icon><span hide-xs> Filter</span>
       </button>
     </div>
+    <div ng-show="showSort" class="button button--small button--sort md-ink-ripple" md-ink-ripple="#232521">
+      <md-menu>
+        <button class="btn btn-default text-right" type="button" ng-click="$mdOpenMenu()" title="Datum/tijd">
+          <span hide-xs> {{labelForSort(sort)}} </span><md-icon>keyboard_arrow_down</md-icon>
+        </button>
+        <md-menu-content width="4">
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='relevance'}" ng-click="setSort('relevance')">{{labelForSort('relevance')}}</md-button></md-menu-item>
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='distance'}" ng-click="setSort('distance')">{{labelForSort('distance')}}</md-button></md-menu-item>
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='price'}" ng-click="setSort('price')">{{labelForSort('price')}}</md-button></md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
   </form>
 </section>

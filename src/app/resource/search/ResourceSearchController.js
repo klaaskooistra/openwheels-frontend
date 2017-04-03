@@ -172,6 +172,10 @@ angular.module('owm.resource.search', [
         $scope.searching = true;
       }
       return resourceService.searchV2(params).then(function (resources) {
+          resourceService.searchV3(params).then(function(resourcesv3) {
+            console.log(resources);
+            console.log(resourcesv3.results);
+          });
           // if there are less results than expected, the last page
           // is not equal to the max_page. Calculate and update last_pag
           if (resources.length < 1) {
@@ -325,6 +329,10 @@ angular.module('owm.resource.search', [
       params.resourceId = resource.id;
       params.city = resource.city;
       $state.go('owm.resource.show', params);
+    };
+
+    $scope.sortChange = function(sort) {
+      updateUrl();
     };
 
   });
