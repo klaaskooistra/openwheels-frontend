@@ -1,36 +1,49 @@
-<div style="margin-bottom: 20px">
-  <button class="btn btn-default" ng-click="previous()">&laquo;&nbsp;Vorige</button>
-  <button class="btn btn-default" ng-click="next()">Volgende&nbsp;&raquo;</button>
-  <span hide-xs>{{ currentTimeFrame.startDate | amDateFormat: 'DD-MM-YYYY'}} - {{ currentTimeFrame.endDate | amDateFormat: 'DD-MM-YYYY'}}</span>
+<div ng-if="resource">
+  <div style="margin-bottom: 20px">
+    <button class="btn btn-default" ng-click="previous()">&laquo;&nbsp;Vorige</button>
+    <button class="btn btn-default" ng-click="next()">Volgende&nbsp;&raquo;</button>
+    <span hide-xs>{{ currentTimeFrame.startDate | amDateFormat: 'DD-MM-YYYY'}} - {{ currentTimeFrame.endDate | amDateFormat: 'DD-MM-YYYY'}}</span>
+  </div>
+
+  <div id="bookingListText">
+    <p ng-if="!busy && bookings.length === 0">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er nog <strong>geen reservering </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
+
+    <p ng-if="!busy && bookings.length === 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er <strong>{{ bookings.length }} reservering </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
+
+    <p ng-if="!busy && bookings.length > 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} zijn er <strong>{{ bookings.length }} reserveringen </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
+
+    <p ng-if="!busy">Een gemiddelde MyWheels auto heeft <strong>16 reserveringen</strong> per maand en wordt <strong>120 uur</strong> gereserveerd.</p>
+
+    <p ng-if="!busy && currentTimeFrame.endDate > now">
+      Het is vandaag {{ now | amDateFormat:'dddd DD MMMM YYYY' | lowercase }}.
+    </p>
+
+  </div>
+
+  <table class="table" style="margin-top: 20px">
+    <tr>
+      <th hide-xs>Ritnummer</th>
+      <th>Begintijd</th>
+      <th>Eindtijd</th>
+      <th>Huurder</th>
+    </tr>
+    <tr ng-repeat="booking in bookings | orderBy:'-beginBooking'" ng-if="bookings.length > 0">
+      <td hide-xs>#{{ booking.id }}</td>
+      <td>
+        <span style="float:left; width:27px;">{{ booking.beginBooking | amDateFormat:'dd.' | lowercase }}</span> 
+        {{ booking.beginBooking | amDateFormat:'DD-MM-YY HH:mm' }}
+      </td>
+      <td>
+        <span style="float:left; width:27px;">{{ booking.beginBooking | amDateFormat:'dd.' | lowercase }}</span> 
+        {{ booking.beginBooking | amDateFormat:'DD-MM-YY HH:mm' }}
+      </td>
+      <td><a ui-sref="member({ personId: booking.person.id })">{{ booking.person.firstName|toTitleCase }}</a></td>
+    </tr>
+    <tr ng-if="bookings.length == 0 && !busy">
+      <td>Geen reserveringen gevonden.</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
 </div>
-
-<div id="bookingListText">
-  <p ng-if="!busy && bookings.length === 0">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er nog <strong>geen reservering </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
-
-  <p ng-if="!busy && bookings.length === 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er <strong>{{ bookings.length }} reservering </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
-
-  <p ng-if="!busy && bookings.length > 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} zijn er <strong>{{ bookings.length }} reserveringen </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
-
-  <p ng-if="!busy">Een gemiddelde MyWheels auto heeft <strong>16 reserveringen</strong> per maand en wordt <strong>120 uur</strong> gereserveerd.</p>
-</div>
-
-<table class="table" style="margin-top: 20px">
-  <tr>
-    <th hide-xs>Ritnummer</th>
-    <th>Begintijd</th>
-    <th>Eindtijd</th>
-    <th>Huurder</th>
-  </tr>
-  <tr ng-repeat="booking in bookings | orderBy:'-beginBooking'" ng-if="bookings.length > 0">
-    <td hide-xs>#{{ booking.id }}</td>
-    <td>{{ booking.beginBooking | amDateFormat:'DD-MM-YY HH:mm' }}</td>
-    <td>{{ booking.endBooking | amDateFormat:'DD-MM-YY HH:mm' }}</td>
-    <td><a ui-sref="member({ personId: booking.person.id })">{{ booking.person.firstName|toTitleCase }}</a></td>
-  </tr>
-  <tr ng-if="bookings.length == 0 && !busy">
-    <td>Geen reserveringen gevonden.</td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-</table>

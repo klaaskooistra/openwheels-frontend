@@ -44,11 +44,32 @@
 
                     <span ng-bind-html="place.body"></span>
                 </div>
-            </div>
-            <!-- /card -->
+
+            </div><!-- /card -->
         </div>
-    </div>
-    <!-- /place -->
+
+        <div class="col-xs-12 place-padding">
+            <div class="card">
+                <!--/ show overview of trips if me is coordinator of the place -->
+                <div class="card-body" id="resourceSearchPlaceCoordinator" ng-if="me && me.id === place.coordinator.id">
+                    <h2>Rittenoverzicht Smartwheels</h2>
+                    <p>Je bent coördinator van deze plaats. Hieronder vind een rittenoverzicht per Smarthweels in {{ place.name|toTitleCase }}. Gebruik de filter om een Smartwheels te selecteren.</p>
+                    <div class="row">
+                      <div class="col-xs-12">
+                        <div class="form-group">
+                          <select class="form-control" 
+                            ng-model="selectedResource"
+                            ng-options="resource.alias for resource in resources | filter: {city: (place.name|toTitleCase)}">
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <booking-list resource="selectedResource" />
+                </div><!--/ card-body -->
+            </div><!-- /card -->
+        </div>
+
+    </div><!-- /place -->
 
     <div style="margin-bottom:1em; margin-top: 1px;">
       <ow-geocoder-searchbar on-sort-change="sortChange" on-new-place="update" on-click-time="selectTimeframe" on-click-filters="setFilters"></ow-geocoder-searchbar>

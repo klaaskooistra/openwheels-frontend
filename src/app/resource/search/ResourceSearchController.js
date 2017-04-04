@@ -4,8 +4,9 @@ angular.module('owm.resource.search', [
     'owm.resource.search.list',
     'owm.resource.search.map'
   ])
-  .controller('ResourceSearchController', function ($location, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore) {
+  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore) {
 
+    $scope.me = me;
     function getVersion() {
       if($stateParams.version && ($stateParams.version === '3' || $stateParams.version === '2')) {
         return parseInt($stateParams.version);
@@ -91,6 +92,10 @@ angular.module('owm.resource.search', [
           latitude: place.latitude,
           longitude: place.longitude
         });
+        if(me && place.coordinator && me.id === place.coordinator.id) {
+          $scope.filters.filters.smartwheels = true;
+          $state.go($state.$current, resourceQueryService.createStateParams());
+        }
       }
 
       $scope.searchText = query.text;
@@ -211,6 +216,7 @@ angular.module('owm.resource.search', [
 
           // if needed, update UI
           if (gotoStartPage) {
+            $scope.selectedResource = resources[0];
             Analytics.trackEvent('discovery', 'search', user.isAuthenticated, undefined, true);
             $scope.showPage(startPage);
           }

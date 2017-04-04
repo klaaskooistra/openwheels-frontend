@@ -58,7 +58,12 @@ angular.module('owm.resource', [
     resolve: {
       place: function () {
         return null;
-      }
+      },
+      me: ['authService', function (authService) {
+        return authService.userPromise().then(function (user) {
+          return user.isAuthenticated ? user.identity : null;
+        });
+      }]
     }
   });
 
@@ -94,6 +99,11 @@ angular.module('owm.resource', [
           }).catch(angular.noop); // ignore errors
         }
       ],
+      me: ['authService', function (authService) {
+        return authService.userPromise().then(function (user) {
+          return user.isAuthenticated ? user.identity : null;
+        });
+      }],
       metaInfo: ['$translate', 'place', 'metaInfoService',
         function ($translate, place, metaInfoService) {
           if (!place) {
