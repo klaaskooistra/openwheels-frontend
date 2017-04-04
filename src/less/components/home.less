@@ -1,3 +1,5 @@
+
+
 @hero-height: 29rem;
 .home {
     background-color: #F8F8F8;
@@ -8,10 +10,10 @@
 .container-home {
     width: 100%;
 }
-@media (min-width:996px) {
-    .container-home {
-        width: 100%;
-    }
+@media (max-width:325px) {
+  .hide-xxs {
+    display: none;
+  }
 }
 @media (min-width:80em) {
     .container-home {
@@ -45,9 +47,7 @@
 }
 .homepage-searchbar {
     width: 100%;
-    height: 5rem;
     padding: 0;
-    display: flex;
     form {
         z-index: 1000;
         // padding: 1em 1em;
@@ -55,6 +55,7 @@
         padding: 0em;
         text-align: left;
         display: flex;
+        height: 5rem;
     }
     input[type="text"] {
         display: inline-block;
@@ -74,7 +75,7 @@
     .button {
         position: relative;
 
-        &--small {
+        &--no-grow {
           margin-left: -2px;
           min-width: initial;
         }
@@ -83,10 +84,12 @@
         max-height: 100%;
         width: 100%;
         font-weight: 500;
-        font-size: 1.1em;
+        font-size: 1.0em;
         display: inline-block;
         border-radius: 0 0.21em 0.21em 0;
-        padding: 1.1rem;
+        padding: .55em;
+        padding-right: 1em;
+        padding-left: 1em;
     }
 }
 .home .hero {
@@ -131,6 +134,9 @@
 @media (min-width:37.5em) {
     .button {
         min-width: 10em;
+        &--small {
+          min-width: initial;
+        }
     }
 }
 @media (min-width:1024px) {
