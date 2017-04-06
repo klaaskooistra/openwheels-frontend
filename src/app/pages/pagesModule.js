@@ -4,6 +4,7 @@ angular.module('owm.pages', [
   'owm.pages.list-your-car',
   'owm.pages.member',
   'owm.pages.emailPreference',
+  'owm.pages.rentavan',
 ])
 
 .config(function ($stateProvider) {
@@ -70,6 +71,21 @@ angular.module('owm.pages', [
           person: $stateParams.personId
         });
       }]
+    }
+  })
+
+  .state('rentavan', {
+    parent: 'owm.pages',
+    url: '/bus-huren',
+    views: {
+      'main-full@shell': {
+        templateUrl: 'pages/landing/rentavan.tpl.html',
+        controller: 'LandingController'
+      }
+    },
+    data: {
+      title: 'META_RENTAVAN_TITLE',
+      description: 'META_RENTAVAN_DESCRIPTION',
     }
   })
 
