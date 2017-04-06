@@ -47,8 +47,8 @@
       <div class="media">
         <div class="media-object auto-height pull-left">
           <div ng-if="hasAcceptedTimeframe(booking)" class="booking__timeframe booking__timeframe--accepted">
-            <datetime datetime="{{ booking.beginBooking }}"></datetime>
-            <datetime datetime="{{ booking.endBooking }}"></datetime>
+            Begin boeking:<datetime datetime="{{ booking.beginBooking }}"></datetime>
+            Eind boeking:<datetime datetime="{{ booking.endBooking }}"></datetime>
             <span class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
             <i booking-approval-icon="booking"></i>
           </div>
@@ -70,11 +70,11 @@
             {{ 'CANCEL_BOOKING' | translate }}
           </button>
 
-
+          <p ng-if="allowFinalize">Er is <b>{{booking.trip.odoEnd - booking.trip.odoBegin}} kilometer</b> gereden. Klopt dit niet? Neem dan <a href="https://mywheels.nl/contact">contact</a> met ons op. </p>
           <a ng-if="allowFinalize"
             class="btn btn-default"
             ui-sref="owm.booking.finalize({booking: booking.id})">
-            {{booking.trip.odoEnd - booking.trip.odoBegin}}km gereden {{ 'FINALIZE_BOOKING' | translate }}
+            {{ 'FINALIZE_BOOKING' | translate }}
           </a>
 
         </div>
