@@ -6,14 +6,20 @@ angular.module('owm.resourceQueryService', [])
 
   var URL_DATE_TIME_FORMAT = 'YYMMDDHHmm';
 
+  var sortModes = ['relevance', 'distance', 'price'];
+  var defaultSortMode = 'relevance';
+
   var data = {
     text     : '',
     location : null,
     timeFrame: null,
     radius   : null,
     options  : null,
-    filters  : null
+    filters  : null,
+    sort     : defaultSortMode,
+    version  : null,
   };
+
 
   var optionApi2Url = {};
   var optionUrl2Api = {};
@@ -76,6 +82,17 @@ angular.module('owm.resourceQueryService', [])
     }
   }
 
+  function setSort(sort) {
+    if(sortModes.indexOf(sort) >= 0) {
+      data.sort = sort;
+    }
+  }
+
+  function getSort() {
+    return data.sort;
+  }
+
+
   /**
    * Expects API-date-formatted strings
    */
@@ -137,8 +154,16 @@ angular.module('owm.resourceQueryService', [])
     if (data.radius) {
       stateParams.radius = data.radius;
     }
-    if (data.page) {
+    if (data.page && data.page !== 1) {
       stateParams.page = data.page;
+    }
+
+    if(data.sort && data.sort !== defaultSortMode) {
+      stateParams.sort = data.sort;
+    }
+
+    if(data.version) {
+      stateParams.version = data.version;
     }
 
     if (data.options) {
@@ -154,6 +179,13 @@ angular.module('owm.resourceQueryService', [])
     }
 
     return stateParams;
+  }
+
+  function setVersion(version) {
+    version = window.parseInt(version);
+    if(version === 3 || version === 2) {
+      data.version = version;
+    }
   }
 
   function parseStateParams (stateParams) {
@@ -175,6 +207,14 @@ angular.module('owm.resourceQueryService', [])
           endDate  : momEnd.format(API_DATE_FORMAT)
         });
       }
+    }
+
+    if(stateParams.sort) {
+      setSort(stateParams.sort);
+    }
+
+    if(stateParams.version) {
+      setVersion(stateParams.version);
     }
 
     setRadius(stateParams.radius);
@@ -209,6 +249,8 @@ angular.module('owm.resourceQueryService', [])
     setPage          : setPage,
     setOptions       : setOptions,
     setFilters       : setFilters,
+    setSort          : setSort,
+    getSort          : getSort,
     createStateParams: createStateParams,
     parseStateParams : parseStateParams
   };

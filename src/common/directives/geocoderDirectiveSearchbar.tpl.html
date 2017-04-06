@@ -1,4 +1,5 @@
 <section class="homepage-searchbar"> 
+
   <form class="mywheels-form searchbar searchbar--no-opacity">
     <div class="icon location searchbar searchbar--no-opacity">
       <input type="text" g-places-autocomplete options="options" force-selection="true" ng-model="search.text" class="form-control" placeholder="Waar wil je huren?" style="font-weight: normal;" />
@@ -6,21 +7,58 @@
         <i class="fa fa-times text-muted" ></i>
       </div>
     </div>
-    <div class="button md-ink-ripple" md-ink-ripple="#232521">
-      <button ng-if="!searcher.loading" hide-xs type="button" class="btn btn-success" ng-click="doSearch()">Zoek een auto</button>
-      <button ng-if="searcher.loading" hide-xs disabled type="button" class="btn btn-success"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></button>
-      <button ng-if="!searcher.loading" hide-gt-xs type="button" class="btn auto-width btn-success" ng-click="doSearch()"><md-icon class="text-white">search</md-icon></button>
-      <button ng-if="searcher.loading" hide-gt-xs disabled type="button" class="btn auto-width btn-success"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></button>
-    </div>
-    <div ng-if="showTime" class="button button--small md-ink-ripple" md-ink-ripple="#232521">
+    <div ng-if="showTime" class="hide-xs button button--small md-ink-ripple" md-ink-ripple="#232521">
       <button class="btn btn-default" type="button" ng-click="doClickTime()" title="Datum/tijd">
-        <md-icon>access_time</md-icon><span hide-xs> Datum</span>
+        <md-icon>access_time</md-icon><span> Datum</span>
       </button>
     </div>
-    <div ng-if="showFilters" class="button button--small md-ink-ripple" md-ink-ripple="#232521">
+    <div ng-if="showFilters" class="hide-xs button button--small md-ink-ripple" md-ink-ripple="#232521">
       <button ng-clas="{active: filters.hasAny === true}" class="hidden-lg hidden-md btn btn-default" type="button" ng-click="doClickFilters()">
-        <md-icon>filter_list</md-icon><span hide-xs> Filter</span>
+        <md-icon>filter_list</md-icon><span> Filter</span>
       </button>
+    </div>
+    <div ng-show="showSort" class="hide-xs button button--small button--sort md-ink-ripple" md-ink-ripple="#232521">
+      <md-menu>
+        <button class="btn btn-default text-right" type="button" ng-click="$mdOpenMenu()" title="Datum/tijd">
+          <span> {{labelForSort(sort)}} </span><md-icon>keyboard_arrow_down</md-icon>
+        </button>
+        <md-menu-content width="4">
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='relevance'}" ng-click="setSort('relevance')">{{labelForSort('relevance')}}</md-button></md-menu-item>
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='distance'}" ng-click="setSort('distance')">{{labelForSort('distance')}}</md-button></md-menu-item>
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='price'}" ng-click="setSort('price')">{{labelForSort('price')}}</md-button></md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </div>
+    <div class="button button--no-grow md-ink-ripple" md-ink-ripple="#232521">
+      <button ng-if="!searcher.loading" hide-xs hide-sm type="button" class="btn btn-success" ng-click="doSearch()">Zoek een auto</button>
+      <button ng-if="searcher.loading" hide-xs hide-sm disabled type="button" class="btn btn-success"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></button>
+      <button ng-if="!searcher.loading" hide-gt-sm type="button" class="btn auto-width btn-success" ng-click="doSearch()"><md-icon class="text-white">search</md-icon></button>
+      <button ng-if="searcher.loading" hide-gt-sm disabled type="button" class="btn auto-width btn-success"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></button>
     </div>
   </form>
+
+  <div style="margin-top: .5em; margin-bottom: -.25em" layout hide-gt-xs layout-align="space-between" ng-if="showTime || showFilters || showSort">
+    <div flex="auto" ng-if="showTime" class="button button--small md-ink-ripple" md-ink-ripple="#232521">
+      <button class="btn btn-default" type="button" ng-click="doClickTime()" title="Datum/tijd">
+        <md-icon>access_time</md-icon><span class="hide-xxs"> Datum</span>
+      </button>
+    </div>
+    <div flex="auto" ng-if="showFilters" class="hide-gt-xs button button--small md-ink-ripple" md-ink-ripple="#232521">
+      <button ng-clas="{active: filters.hasAny === true}" class="hidden-lg hidden-md btn btn-default" type="button" ng-click="doClickFilters()">
+        <md-icon>filter_list</md-icon><span class="hide-xxs"> Filter</span>
+      </button>
+    </div>
+    <div flex="auto" ng-show="showSort" class="hide-gt-xs button button--small button--sort md-ink-ripple" md-ink-ripple="#232521">
+      <md-menu>
+        <button class="btn btn-default text-right" type="button" ng-click="$mdOpenMenu()" title="Datum/tijd">
+          <span> {{labelForSort(sort)}} </span><md-icon>keyboard_arrow_down</md-icon>
+        </button>
+        <md-menu-content width="4">
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='relevance'}" ng-click="setSort('relevance')">{{labelForSort('relevance')}}</md-button></md-menu-item>
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='distance'}" ng-click="setSort('distance')">{{labelForSort('distance')}}</md-button></md-menu-item>
+          <md-menu-item><md-button ng-class="{'sort-dropdown--active': sort=='price'}" ng-click="setSort('price')">{{labelForSort('price')}}</md-button></md-menu-item>
+        </md-menu-content>
+      </md-menu>
+  </div>
+
 </section>

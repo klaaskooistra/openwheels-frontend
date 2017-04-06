@@ -31,7 +31,23 @@ angular.module('openwheels.analytics', [])
   .useDisplayFeatures(true)
   ;
 })
-.run(function(Analytics) {
+.run(function(Analytics, $cookieStore) {
+
+  function checkCookieSearch() {
+    var version = $cookieStore.get('search_version');
+    if(!version || (version !== 2 && version !== 3)) {
+      if(Math.random() < 0.500) {
+        version = 2;
+      } else {
+        version = 3;
+      }
+      $cookieStore.put('search_version', version);
+    }
+    return version;
+  }
+
+  var version = checkCookieSearch();
+  Analytics.set('dimension2', version);
   //Analytics.pageView();
 })
 ;
@@ -39,12 +55,17 @@ angular.module('openwheels.analytics', [])
 LIST OF ALL EVENTS
 
 BOOKING - DONE
-  + created
+  + created_pre
     - label: (boolean) isAuthenticated
     - value: fixed number 11 iif owner 282, 4 iif isConfirmationRequiredOthers = false, else undefined
     - triggers:
         - reservationForm.tpl click button
           * condition: button not disabled
+          
+  + created_post
+    - label: booking.id
+    - triggers:
+        - reservationForm.js then after booking.create
     
   + cancelled_renter
     - label: booking.id
