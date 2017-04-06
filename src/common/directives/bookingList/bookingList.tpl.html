@@ -35,7 +35,7 @@
       </td>
       <td>
         <span style="float:left; width:27px;">{{ booking.endBooking | amDateFormat:'dd.' | lowercase }}</span> 
-        {{ booking.beginBooking | amDateFormat:'DD-MM-YY HH:mm' }}
+        {{ booking.endBooking | amDateFormat:'DD-MM-YY HH:mm' }}
       </td>
       <td><a ui-sref="member({ personId: booking.person.id })">{{ booking.person.firstName|toTitleCase }}</a></td>
     </tr>
