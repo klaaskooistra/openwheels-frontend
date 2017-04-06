@@ -12,6 +12,7 @@ angular.module('bookingListDirective', [])
     controller: function functionName($scope, $log, bookingService, alertService, $state) {
       $scope.busy = false;
       $scope.bookings = [];
+      $scope.now = moment().format('YYYY-MM-DD HH:mm');
 
       //Set begin and end day of the current month as the current timeframe
       $scope.currentTimeFrame = {
@@ -41,30 +42,37 @@ angular.module('bookingListDirective', [])
       };
 
       function loadBookings () {
-        $scope.busy = true;
-        alertService.load();
-        return bookingService.forResource({
-          resource: $scope.resource.id,
-          timeFrame: $scope.currentTimeFrame
-        }).then(function (bookings) {
-          $scope.busy = false;
-          alertService.loaded();
-          $scope.bookings = bookings;
-        }).then(function () {
-          //Get the total hours of the bookings in the current timeframe
-          $scope.getTotalHours = function(){
-            var total = 0;
-            for(var i = 0; i < $scope.bookings.length; i++){
-              var bookingHours = moment($scope.bookings[i].endBooking).diff(moment($scope.bookings[i].beginBooking), 'hours');
-              total += bookingHours;
-            }
-            return total;
-          };
-        })
-        .catch(function (err) {
-          $log.debug('error loading bookings', err);
-        });
+        if($scope.resource) {
+          $scope.busy = true;
+          alertService.load();
+          return bookingService.forResource({
+            resource: $scope.resource.id,
+            timeFrame: $scope.currentTimeFrame
+          }).then(function (bookings) {
+            $scope.busy = false;
+            alertService.loaded();
+            $scope.bookings = bookings;
+          }).then(function () {
+            //Get the total hours of the bookings in the current timeframe
+            $scope.getTotalHours = function(){
+              var total = 0;
+              for(var i = 0; i < $scope.bookings.length; i++){
+                var bookingHours = moment($scope.bookings[i].endBooking).diff(moment($scope.bookings[i].beginBooking), 'hours');
+                total += bookingHours;
+              }
+              return total;
+            };
+          })
+          .catch(function (err) {
+            $log.debug('error loading bookings', err);
+          });
+        }
       }
+
+      $scope.$watch('resource', function(newValue, oldValue) {
+        $scope.resource = newValue;
+        loadBookings();
+      }, true);
 
     }
   };

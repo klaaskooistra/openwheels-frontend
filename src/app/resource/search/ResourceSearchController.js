@@ -4,7 +4,8 @@ angular.module('owm.resource.search', [
     'owm.resource.search.list',
     'owm.resource.search.map'
   ])
-  .controller('ResourceSearchController', function ($location, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics) {
+  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics) {
+    $scope.me = me;
 
     var DEFAULT_LOCATION = {
       // Utrecht, The Netherlands
@@ -80,6 +81,10 @@ angular.module('owm.resource.search', [
           latitude: place.latitude,
           longitude: place.longitude
         });
+        if(me && place.coordinator && me.id === place.coordinator.id) {
+          $scope.filters.filters.smartwheels = true;
+          $state.go($state.$current, resourceQueryService.createStateParams());
+        }
       }
 
       $scope.searchText = query.text;
@@ -132,9 +137,14 @@ angular.module('owm.resource.search', [
 
       // construct api call
       var params = {};
-      // calculate offset
-      params.maxresults = numberOfPages * results_per_page;
-      params.offset = (startPage - 1) * results_per_page;
+      // set maxresults and calculate offset
+      if(startPage === 1) {
+        params.maxresults = results_per_page;
+        params.offset = 0;
+      } else {
+        params.maxresults = numberOfPages * results_per_page;
+        params.offset = (startPage - 1) * results_per_page;
+      }
       if (query.location) {
         params.location = query.location;
       }
@@ -171,7 +181,7 @@ angular.module('owm.resource.search', [
           // is not equal to the max_page. Calculate and update last_pag
           if (resources.length < 1) {
             $scope.last_page = startPage - 1;
-          } else if (resources.length < numberOfPages * results_per_page) {
+          } else {
             $scope.last_page = startPage + Math.ceil(resources.length / results_per_page) - 1;
           }
 
@@ -182,6 +192,7 @@ angular.module('owm.resource.search', [
 
           // if needed, update UI
           if (gotoStartPage) {
+            $scope.selectedResource = resources[0];
             Analytics.trackEvent('discovery', 'search', user.isAuthenticated, undefined, true);
             $scope.showPage(startPage);
           }
