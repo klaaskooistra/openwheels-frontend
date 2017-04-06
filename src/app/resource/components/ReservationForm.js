@@ -406,6 +406,7 @@ angular.module('owm.resource.reservationForm', [])
         //  * Apply discount (only if we have a discount code)
         //  */
         .then(function (response) {
+          Analytics.trackEvent('booking', 'created_post', response.id, undefined, true);
           if (!booking.discountCode) {
             return response;
           } else {

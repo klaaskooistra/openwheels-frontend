@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('openwheels', [
-
-  /* Framework */
+/* Framework */
   'ngAria',
   'ngAnimate',
   'ngCookies',
@@ -215,6 +214,9 @@ angular.module('openwheels', [
     $rootScope.previousStateParams = fromParams;
     // hide spinner
     alertService.loaded();
+
+
+
 
     // scroll to top, except for place pages (for toggling map <--> list)
     // depends on presence of DOM-element with id="scroll-to-top-anchor"
