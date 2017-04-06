@@ -19,7 +19,7 @@ angular.module('owm.person.dashboard', [])
     } else if(data.flow === 'booking') {
       setPreference('renter');
       $state.go('owm.person.details', data);
-    } else {
+    } else if (!me.preference){
       showModal();
     }
   } else {
