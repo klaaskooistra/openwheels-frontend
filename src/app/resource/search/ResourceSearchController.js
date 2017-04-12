@@ -16,6 +16,7 @@ angular.module('owm.resource.search', [
       }
       return 2;
     }
+    $scope.version = getVersion();
     var version3 = getVersion() === 3;
 
     var DEFAULT_LOCATION = {
