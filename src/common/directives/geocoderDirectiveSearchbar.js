@@ -11,12 +11,16 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
       'onClickTime': '=',
       'onClickFilters': '=',
       'onSortChange': '=',
+      'version': '='
     },
     link: function($scope, element) {
+
+      var version3 = $scope.version === 3;
 
       $scope.$mdMenu = $mdMenu;
       $scope.search = {};
       $scope.search.text = resourceQueryService.data.text;
+
 
       $scope.$on('g-places-autocomplete:select', function(event, res) {
         handleEvent(res);
@@ -27,7 +31,7 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
 
       $scope.showFilters = _.isFunction($scope.onClickFilters);
       $scope.showTime = _.isFunction($scope.onClickTime);
-      $scope.showSort = _.isFunction($scope.onSortChange);
+      $scope.showSort = _.isFunction($scope.onSortChange) && version3;
 
       $scope.sort = resourceQueryService.getSort();
 
