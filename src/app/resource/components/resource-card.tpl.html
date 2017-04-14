@@ -15,7 +15,7 @@
             <md-card-title-text layout="colum" layout-wrap>
                 <a ui-sref="owm.resource.show({city: resource.city, resourceId: resource.id})">
                     <h3 class="no-margin" style="font-size: 2rem" flex="100">
-                <span>{{ resource.alias || ('RESOURCE_NO_NAME' | translate) }}</span>
+                      <span>{{ resource.alias || ('RESOURCE_NO_NAME' | translate) }} </span>
                 </h3>
                 </a>
 
@@ -28,10 +28,11 @@
                     <md-icon>directions_car</md-icon>
                     <div flex>
                         <span ng-if="resource.brand || resource.model" flex="none">{{ (resource.brand + ' ' + resource.model) | toTitleCase }}</span>
-                        <span class="tag tag-warning" ng-if="['smartphone', 'chipcard'].indexOf(resource.locktype) >= 0" flex="none"> {{ 'SMART_WHEELS_TIP' | translate }} </span>
+                        <span class="tag tag-warning" ng-if="['smartphone', 'chipcard'].indexOf(resource.locktype) >= 0" flex="none"> {{ 'SMART_WHEELS_TIP' | translate }} 
                         <md-tooltip class="multiline" md-direction="bottom" ng-if="['smartphone', 'chipcard'].indexOf(resource.locktype) >= 0">
                             {{ 'SMART_WHEELS_INFO' | translate }}
-                        </md-tooltip>
+                        </md-tooltip></span>
+                        <span class="tag tag-success" ng-if="resource.isNew" flex="none"> {{ 'NEW_TIP' | translate }} </span>
                     </div>
                 </md-list-item>
                 <md-list-item>

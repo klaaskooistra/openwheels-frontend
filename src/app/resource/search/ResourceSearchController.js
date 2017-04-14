@@ -4,8 +4,20 @@ angular.module('owm.resource.search', [
     'owm.resource.search.list',
     'owm.resource.search.map'
   ])
-  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics) {
+  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore) {
+
     $scope.me = me;
+    function getVersion() {
+      if($stateParams.version && ($stateParams.version === '3' || $stateParams.version === '2')) {
+        return parseInt($stateParams.version);
+      }
+      if($cookieStore.get('search_version') === 3) {
+        return 3;
+      }
+      return 2;
+    }
+    $scope.version = getVersion();
+    var version3 = getVersion() === 3;
 
     var DEFAULT_LOCATION = {
       // Utrecht, The Netherlands
@@ -160,6 +172,9 @@ angular.module('owm.resource.search', [
       if (query.filters) {
         params.filters = query.filters;
       }
+      if(version3) {
+        params.sort = query.sort;
+      }
       if (!params.location) {
         if (user.isAuthenticated) {
           params.person = user.identity.id;
@@ -176,7 +191,17 @@ angular.module('owm.resource.search', [
         alertService.load();
         $scope.searching = true;
       }
-      return resourceService.searchV2(params).then(function (resources) {
+
+      var promise;
+      if(version3) {
+        promise = resourceService.searchV3(params);
+      } else {
+        promise = resourceService.searchV2(params);
+      }
+      return promise.then(function (resources) {
+          if(version3) {
+            resources = resources.results;
+          }
           // if there are less results than expected, the last page
           // is not equal to the max_page. Calculate and update last_pag
           if (resources.length < 1) {
@@ -331,6 +356,12 @@ angular.module('owm.resource.search', [
       params.resourceId = resource.id;
       params.city = resource.city;
       $state.go('owm.resource.show', params);
+    };
+
+    $scope.sortChange = function(sort) {
+      resetPaginationCache();
+      doSearch();
+      updateUrl();
     };
 
   });
