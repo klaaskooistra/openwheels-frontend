@@ -201,6 +201,13 @@ angular.module('owm.resource.search', [
       return promise.then(function (resources) {
           if(version3) {
             resources = resources.results;
+            resources = _.map(resources, function(resource) {
+              resource.rating = {
+                satisfaction: resource.rating_totals.satisfaction,
+                senders: resource.rating_totals.senders
+              };
+              return resource;
+            });
           }
           // if there are less results than expected, the last page
           // is not equal to the max_page. Calculate and update last_pag
