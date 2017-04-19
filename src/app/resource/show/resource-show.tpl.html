@@ -60,6 +60,7 @@
                                         {{ 'SMART_WHEELS_INFO' | translate }}
                                         </md-tooltip>
                                       </div>
+                                      <span class="tag tag-success" ng-if="resource.isNew" flex="none"> {{ 'NEW_TIP' | translate }} </span>
                                     </h3>
                                     <div ng-include="'resource/partials/resource-features.tpl.html'"></div>
                                 </div>
