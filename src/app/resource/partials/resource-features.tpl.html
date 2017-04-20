@@ -21,6 +21,6 @@
     </li>
     <li>
         <md-icon class="text-success list-margin">event_available</md-icon><span>{{ resource.numberOfBookings | wasBookedTimes }}</span></li>
-    <li>
+    <li ng-if="resource.numberOfBookings > 0">
         <md-icon class="text-success list-margin">check</md-icon><span>{{ resource.response_accept | percentage : 0 }} {{ 'ACCEPTED_REQUESTS' | translate}}</span></li>
 </ul>
