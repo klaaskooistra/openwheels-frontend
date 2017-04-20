@@ -19,6 +19,7 @@
 <div class="card" ng-if="!busy && requiredValue" ng-repeat="booking in requiredValue.bookings" ng-init="isOpen['_' + $index] = $index <= 1">
     <div class="card-heading">
       <span class="pull-right" ng-if="booking.isOpen">
+        <small style="padding-left: 1em" ng-if="booking.cancelAfter && booking.status != 'OK'">Betaal voor {{booking.cancelAfter|amDateFormat:'HH:mm D MMMM YYYY'}} om annulering te voorkomen</small>
         <md-icon ng-show="booking.statusValue" ng-class="{'text-success': booking.statusValue}">check</md-icon>
         <b ng-class="{'text-success': booking.statusValue}" ng-if="booking.details.discount">{{ booking.details.booking_price.total + booking.details.km_price - booking.details.discount | currency }}</b>
         <b ng-class="{'text-success': booking.statusValue}" ng-if="!booking.details.discount">{{ booking.details.booking_price.total + booking.details.km_price | currency }}</b>
