@@ -206,6 +206,7 @@ angular.module('owm.resource.search', [
                 satisfaction: resource.rating_totals.satisfaction,
                 senders: resource.rating_totals.senders
               };
+              delete resource.properties;
               return resource;
             });
           }
