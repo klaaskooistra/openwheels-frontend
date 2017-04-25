@@ -75,7 +75,7 @@
             <td class="text-right">{{ booking.details.km_price | currency }}</td>
         </tr>
         <tr>
-            <td><b>Totale huurprijs</b></td>
+          <td><b>Totale huurprijs</b><br><span style="padding-top:1em" ng-if="booking.cancelAfter && booking.status != 'OK'">Betaal voor {{booking.cancelAfter | amDateFormat:'HH:mm D MMMM YYYY'}}, anders wordt de rit geannuleerd</span></td>
             <td class="text-right"><b>{{ (booking.details.booking_price.total + booking.details.km_price) | currency }}</b></td>
         </tr>
 
