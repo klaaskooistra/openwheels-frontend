@@ -19,6 +19,7 @@
 <div class="card" ng-if="!busy && requiredValue" ng-repeat="booking in requiredValue.bookings" ng-init="isOpen['_' + $index] = $index <= 1">
     <div class="card-heading">
       <span class="pull-right" ng-if="booking.isOpen">
+        <small hide-xs style="padding-left: 1em" ng-if="booking.cancelAfter && booking.status != 'OK'">Betaal voor {{booking.cancelAfter|amDateFormat:'HH:mm D MMMM YYYY'}} om annulering te voorkomen</small>
         <md-icon ng-show="booking.statusValue" ng-class="{'text-success': booking.statusValue}">check</md-icon>
         <b ng-class="{'text-success': booking.statusValue}" ng-if="booking.details.discount">{{ booking.details.booking_price.total + booking.details.km_price - booking.details.discount | currency }}</b>
         <b ng-class="{'text-success': booking.statusValue}" ng-if="!booking.details.discount">{{ booking.details.booking_price.total + booking.details.km_price | currency }}</b>
@@ -28,6 +29,7 @@
           <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !isOpen['_' + $index], 'fa-chevron-down': isOpen['_' + $index] }"></i>
           Rit op {{ booking.beginBooking | amDateFormat:'DD-MM-YYYY' }} 
         </a>
+        <small hide-gt-xs style="padding-top: 1em;" ng-if="booking.isOpen && booking.cancelAfter && booking.status != 'OK'"><br>Betaal voor {{booking.cancelAfter|amDateFormat:'HH:mm D MMMM YYYY'}} om annulering te voorkomen</small>
       </h3>
     </div>
 
