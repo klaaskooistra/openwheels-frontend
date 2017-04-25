@@ -23,6 +23,8 @@ angular.module('owm.resource.show', [])
   $scope.shareUrl = featuresService.get('serverSideShare') ? linksService.resourceUrl(resource.id, resource.city) : $window.location.href;
   $log.debug('Share url = ' + $scope.shareUrl);
 
+  var ageInDays = moment().diff($scope.resource.created, 'days');
+  $scope.resource.isNew = ageInDays < 180;
 
   /**
    * Init

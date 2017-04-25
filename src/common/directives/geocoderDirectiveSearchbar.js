@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places'])
+angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMaterial'])
  
-.directive('owGeocoderSearchbar', function ($filter, Geocoder, resourceQueryService, $state) {
+.directive('owGeocoderSearchbar', function ($filter, Geocoder, resourceQueryService, $state, $mdMenu) {
   return {
     restrict: 'E',
     templateUrl: 'directives/geocoderDirectiveSearchbar.tpl.html',
@@ -10,11 +10,17 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places'])
       'onNewPlace': '=',
       'onClickTime': '=',
       'onClickFilters': '=',
+      'onSortChange': '=',
+      'version': '='
     },
     link: function($scope, element) {
 
+      var version3 = $scope.version === 3;
+
+      $scope.$mdMenu = $mdMenu;
       $scope.search = {};
       $scope.search.text = resourceQueryService.data.text;
+
 
       $scope.$on('g-places-autocomplete:select', function(event, res) {
         handleEvent(res);
@@ -25,6 +31,29 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places'])
 
       $scope.showFilters = _.isFunction($scope.onClickFilters);
       $scope.showTime = _.isFunction($scope.onClickTime);
+      $scope.showSort = _.isFunction($scope.onSortChange) && version3;
+
+      $scope.sort = resourceQueryService.getSort();
+
+      $scope.setSort = function(sort) {
+        $scope.sort = sort;
+        resourceQueryService.setSort(sort);
+        if(_.isFunction($scope.onSortChange)) {
+          $scope.onSortChange(sort);
+        }
+      };
+
+      $scope.labelForSort = function(sort) {
+        if(sort === 'relevance') {
+          return 'Relevantie';
+        }
+        if(sort === 'distance') {
+          return 'Afstand';
+        }
+        if(sort === 'price') {
+          return 'Prijs';
+        }
+      };
 
       $scope.doClickFilters = function() {
         if(_.isFunction($scope.onClickFilters)) {

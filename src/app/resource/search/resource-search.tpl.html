@@ -71,9 +71,12 @@
 
     </div><!-- /place -->
 
-    <div>
+    <div style="margin-bottom:1em; margin-top: 1px;">
+      <ow-geocoder-searchbar version="version" on-sort-change="sortChange" on-new-place="update" on-click-time="selectTimeframe" on-click-filters="setFilters"></ow-geocoder-searchbar>
+    </div>
 
-        <div ng-if="features.filtersSidebar && isWindowSizeMD" class="hidden-xs hidden-sm col-md-4 col-lg-3">
+    <div>
+        <div style="padding-left: 0px" ng-if="features.filtersSidebar && isWindowSizeMD" class="hidden-xs hidden-sm col-md-4 col-lg-3">
             <div class="card">
                 <div class="card-heading">
                     <h3><i class="fa fa-filter"></i> {{ 'FILTER' | translate }}</h3>
@@ -86,9 +89,6 @@
 
         <div ng-class="{ 'col-xs-12 col-md-8 col-lg-9' : features.filtersSidebar }" class="no-padding" id="topsearch">
 
-            <div style="margin-bottom:1em; margin-top: 1px;">
-              <ow-geocoder-searchbar on-new-place="update" on-click-time="selectTimeframe" on-click-filters="setFilters"></ow-geocoder-searchbar>
-            </div>
 
             <uib-alert type="info" close="removeTimeframe()" ng-if="booking.beginRequested && booking.endRequested">
                 <i class="fa fa-clock-o"></i> Beschikbare auto's voor <span class="text-success">{{ booking.beginRequested | amCalendar }}</span> tot <span class="text-success">{{ booking.endRequested  | amCalendar }}</span>
