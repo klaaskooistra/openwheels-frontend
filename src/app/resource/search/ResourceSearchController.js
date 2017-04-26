@@ -234,12 +234,14 @@ angular.module('owm.resource.search', [
             Analytics.trackEvent('discovery', 'search', user.isAuthenticated, undefined, true);
             $scope.showPage(startPage);
           } else {
-						var images = _.map(resources, function(resource) {
-              if(resource.pictures.length > 0 && resource.pictures[0] && resource.pictures[0].large) {
-                return appConfig.serverUrl + '/' + resource.pictures[0].large;
-              }
-						});
-            preloader.preloadImages(images);
+            if(version3) {
+              var images = _.map(resources, function(resource) {
+                if(resource.pictures && resource.pictures.length > 0 && resource.pictures[0] && resource.pictures[0].large) {
+                  return appConfig.serverUrl + '/' + resource.pictures[0].large;
+                }
+              });
+              preloader.preloadImages(images);
+            }
 					}
 
           return resources;
