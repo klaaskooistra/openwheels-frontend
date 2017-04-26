@@ -12,13 +12,12 @@
     </div>
     <div style="position: relative">
         <md-card-title>
-            <md-card-title-text layout="colum" layout-wrap>
-                <a ui-sref="owm.resource.show({city: resource.city, resourceId: resource.id})">
-                    <h3 class="no-margin" style="font-size: 2rem" flex="100">
-                      <span>{{ resource.alias || ('RESOURCE_NO_NAME' | translate) }} </span>
+            <md-card-title-text>
+              <a ui-sref="owm.resource.show({city: resource.city, resourceId: resource.id})">
+                <h3 class="no-margin" style="font-size: 2rem" >
+                  <span>{{ resource.alias || ('RESOURCE_NO_NAME' | translate) }} </span>
                 </h3>
-                </a>
-
+              </a>
             </md-card-title-text>
         </md-card-title>
         <md-card-body class="ow-list-compact">
