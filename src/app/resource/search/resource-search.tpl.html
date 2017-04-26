@@ -118,14 +118,14 @@
                  <ui-view />
                </div>
 
-                <div ng-if="page === last_page && version === 3" class="card">
+                <div ng-if="page === last_page && version === 3 && page !== 1" class="card">
                   <p style="padding: .7em; text-align: center; color: #727377;">
                   Verfijn je zoekopdracht voor betere resultaten
                   </p>
                 </div>
 
                 <!-- pagination -->
-                <md-card ng-if="version===3" layout="row" layout-align="center center">
+                <md-card layout="row" layout-align="center center">
                   <md-button ng-style="{visibility: page === 1 ? 'hidden' : 'visible'}" class="md-button-xs" ng-click="showPage(page - 1)">
                     <md-icon>arrow_back</md-icon> <span hide-xs>{{ 'PREVIOUS' | translate }}</span>
                   </md-button>
