@@ -200,6 +200,7 @@ angular.module('owm.resource.search', [
       }
       return promise.then(function (resources) {
           if(version3) {
+            $scope.numberOfResults = resources.totalResults;
             resources = resources.results;
             resources = _.map(resources, function(resource) {
               resource.rating = {

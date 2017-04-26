@@ -73,6 +73,11 @@
 
     <div style="margin-bottom:1em; margin-top: 1px;">
       <ow-geocoder-searchbar version="version" on-sort-change="sortChange" on-new-place="update" on-click-time="selectTimeframe" on-click-filters="setFilters"></ow-geocoder-searchbar>
+      <div class="card" hide-xs >
+        <p style="font-size: 0.9em; margin-top: .5em; padding: .7em; text-align: right; color: #727377;">
+        Er zijn <strong>10</strong> beschikbare auto's bij jou in de buurt gevonden
+        </p>
+      </div>
     </div>
 
     <div>
@@ -93,6 +98,12 @@
             <uib-alert type="info" close="removeTimeframe()" ng-if="booking.beginRequested && booking.endRequested">
                 <i class="fa fa-clock-o"></i> Beschikbare auto's voor <span class="text-success">{{ booking.beginRequested | amCalendar }}</span> tot <span class="text-success">{{ booking.endRequested  | amCalendar }}</span>
             </uib-alert>
+
+            <div ng-if="version === 3 && numberOfResults && numberOfResults > 0" class="card" hide-xs >
+              <p style="padding: .7em; text-align: right; color: #727377;">
+              Er zijn <strong>{{numberOfResults|number}}</strong> beschikbare auto's bij jou in de buurt gevonden
+              </p>
+            </div>
 
             <div class="card" ng-if="!searching && !(resources.length >= 1)">
                 <div class="card-body">
