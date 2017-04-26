@@ -48,7 +48,7 @@ angular.module('openwheels.analytics', [])
 
   var version = checkCookieSearch();
   Analytics.set('dimension2', version);
-  //Analytics.pageView();
+
 })
 ;
 /*
