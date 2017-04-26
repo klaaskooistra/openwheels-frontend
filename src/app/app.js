@@ -216,36 +216,24 @@ angular.module('openwheels', [
     // hide spinner
     alertService.loaded();
 
-    /**
-     * Calculate a 32 bit FNV-1a hash
-     * Found here: https://gist.github.com/vaiorabbit/5657561
-     * Ref.: http://isthe.com/chongo/tech/comp/fnv/
-     *
-     * @param {string} str the input value
-     * @param {boolean} [asString=false] set to true to return the hash value as 
-     *     8-digit hex string instead of an integer
-     * @param {integer} [seed] optionally pass the hash of the previous chunk
-     * @returns {integer | string}
-     */
-    var hashFnv32a = function(str, asString, seed) {
-      /*jshint bitwise:false */
-      var i, l,
-      hval = (seed === undefined) ? 0x811c9dc5 : seed;
-
-      for (i = 0, l = str.length; i < l; i++) {
-        hval ^= str.charCodeAt(i);
-        hval += (hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
+    var hash = function(s) {
+      /* Simple hash function. */
+      var a = 1, c = 0, h, o;
+      if (s) {
+        a = 0;
+        for (h = s.length - 1; h >= 0; h--) {
+          o = s.charCodeAt(h);
+          a = (a<<6&268435455) + o + (o<<14);
+          c = a & 266338304;
+          a = c!==0?a^c>>21:a;
+        }
       }
-      if( asString ){
-        // Convert to 8 digit hex string
-        return ('0000000' + (hval >>> 0).toString(16)).substr(-8);
-      }
-      return hval >>> 0;
+      return String(a);
     };
 
     if(authService.user.isAuthenticated) {
-      var userId = authService.user.identity.id;
-      var hashedUserId = hashFnv32a(userId);
+      var userId = authService.user.identity.firstName + authService.user.identity.id;
+      var hashedUserId = hash(userId);
       Analytics.set('&uid', hashedUserId);
     }
 

@@ -94,13 +94,14 @@
                 <i class="fa fa-clock-o"></i> Beschikbare auto's voor <span class="text-success">{{ booking.beginRequested | amCalendar }}</span> tot <span class="text-success">{{ booking.endRequested  | amCalendar }}</span>
             </uib-alert>
 
+
             <div class="card" ng-if="!searching && !(resources.length >= 1)">
                 <div class="card-body">
                     Er zijn geen beschikbare auto's gevonden
                 </div>
             </div>
 
-            <div ng-if="!searching && (resources.length >= 1)">
+            <div ng-if="resources.length >= 1">
                <!-- <div class="card">
                     <div class="card-heading text-center">
                         <button type="button" class="btn btn-link" ng-click="toggleMap()" ng-if="!($state.includes('owm.resource.search.map') || $state.includes('owm.resource.place.map'))">
@@ -112,20 +113,36 @@
                     </div>
                </div>-->
 
-                <ui-view />
+               <div style="position: relative">
+                 <div ng-show="searching" style="position: absolute; left: 0; right: 0; top: 0; bottom: 0; background: rgba(255, 255, 255, .5); z-index: 400"></div>
+                 <ui-view />
+               </div>
+
+                <div ng-if="page === last_page && version === 3" class="card">
+                  <p style="padding: .7em; text-align: center; color: #727377;">
+                  Verfijn je zoekopdracht voor betere resultaten
+                  </p>
+                </div>
 
                 <!-- pagination -->
-                <md-card layout="row" layout-padding layout-align="center center">
-                    <div class="backbutton">
-                        <md-button ng-hide="page === 1" ng-click="showPage(page - 1)">
-                            <md-icon>arrow_back</md-icon> <span hide-xs>{{ 'PREVIOUS' | translate }}</span>
-                        </md-button>
-                    </div>
-                    <div flex-gt-xs="50" flex-xs="33" class="text-center">{{page}}</div>
-                    <md-button ng-disabled="page == last_page" class="btn btn-link" ng-click="showPage(page + 1)">
-                        <span hide-xs>{{ 'NEXT' | translate }}</span> <md-icon>arrow_forward</md-icon>
-                    </md-button>
+                <md-card ng-if="version===3" layout="row" layout-align="center center">
+                  <md-button ng-style="{visibility: page === 1 ? 'hidden' : 'visible'}" class="md-button-xs" ng-click="showPage(page - 1)">
+                    <md-icon>arrow_back</md-icon> <span hide-xs>{{ 'PREVIOUS' | translate }}</span>
+                  </md-button>
+                  <div ng-if="version===3" flex class="text-center pagination">
+                    <span ng-click="showPage($index+1)" class="pagination--item" ng-class="{'active': $index+1 === page}" ng-repeat="n in getPages(last_page) track by $index">{{$index+1}}</span> 
+                  </div>
+                  <div ng-if="version!==3" flex class="text-center">{{page}}</div>
+                  <md-button ng-disabled="page == last_page" class="btn btn-link md-button-xs" ng-click="showPage(page + 1)">
+                    <span hide-xs>{{ 'NEXT' | translate }}</span> <md-icon>arrow_forward</md-icon>
+                  </md-button>
                 </md-card>
+
+                <div ng-if="version === 3 && numberOfResults && resources.length > 0" class="card">
+                  <p style="padding: .7em; text-align: center; color: #727377;">
+                  <strong>{{numberOfResults}}</strong> auto's gevonden
+                  </p>
+                </div>
                 <!-- /pagination -->
 
             </div>
