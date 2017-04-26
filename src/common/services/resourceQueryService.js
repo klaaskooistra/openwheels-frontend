@@ -8,12 +8,13 @@ angular.module('owm.resourceQueryService', [])
 
   var sortModes = ['relevance', 'distance', 'price'];
   var defaultSortMode = 'relevance';
+  var defaultRadius = 25000;
 
   var data = {
     text     : '',
     location : null,
     timeFrame: null,
-    radius   : null,
+    radius   : defaultRadius,
     options  : null,
     filters  : null,
     sort     : defaultSortMode,
@@ -65,7 +66,9 @@ angular.module('owm.resourceQueryService', [])
 
   function setRadius (radius) {
     try {
-      data.radius = parseInt(radius);
+      if(radius) {
+        data.radius = parseInt(radius);
+      }
     } catch (e) {
       data.radius = null;
     }
@@ -151,7 +154,7 @@ angular.module('owm.resourceQueryService', [])
     if (data.text) {
       stateParams.text = data.text;
     }
-    if (data.radius) {
+    if (data.radius && data.radius !== defaultRadius) {
       stateParams.radius = data.radius;
     }
     if (data.page && data.page !== 1) {

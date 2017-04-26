@@ -57,13 +57,13 @@ LIST OF ALL EVENTS
 BOOKING - DONE
   + created_pre
     - label: (boolean) isAuthenticated
-    - value: fixed number 11 iif owner 282, 4 iif isConfirmationRequiredOthers = false, else undefined
     - triggers:
         - reservationForm.tpl click button
           * condition: button not disabled
           
   + created_post
     - label: booking.id
+    - value: fixed number 11 iif owner 282, 4 iif isConfirmationRequiredOthers = false, else undefined
     - triggers:
         - reservationForm.js then after booking.create
     
