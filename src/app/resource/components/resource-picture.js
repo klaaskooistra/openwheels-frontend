@@ -6,7 +6,7 @@
   .directive('owResourcePicture', function (appConfig) {
     return {
       restrict: 'E',
-      template: '<img alt="{{alttext}}" ng-src="{{ imageUrl }}">',
+      template: '<img ng-cloak alt="{{alttext}}" ng-src="{{ imageUrl }}">',
       scope: {
         resource: '=',
       },

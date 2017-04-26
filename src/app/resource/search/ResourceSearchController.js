@@ -2,9 +2,9 @@
 
 angular.module('owm.resource.search', [
     'owm.resource.search.list',
-    'owm.resource.search.map'
+    'owm.resource.search.map',
   ])
-  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore) {
+  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore, preloader) {
 
     $scope.me = me;
     function getVersion() {
@@ -200,6 +200,8 @@ angular.module('owm.resource.search', [
       }
       return promise.then(function (resources) {
           if(version3) {
+            $scope.numberOfResults = resources.totalResults > 100 ? Math.floor(resources.totalResults / 100) * 100  + '+' : resources.totalResults;
+            $scope.last_page = Math.min(Math.ceil(parseInt(resources.totalResults) / results_per_page), max_pages);
             resources = resources.results;
             resources = _.map(resources, function(resource) {
               resource.rating = {
@@ -210,12 +212,15 @@ angular.module('owm.resource.search', [
               return resource;
             });
           }
-          // if there are less results than expected, the last page
-          // is not equal to the max_page. Calculate and update last_pag
-          if (resources.length < 1) {
-            $scope.last_page = startPage - 1;
-          } else {
-            $scope.last_page = startPage + Math.ceil(resources.length / results_per_page) - 1;
+
+          if(!version3) {
+            // if there are less results than expected, the last page
+            // is not equal to the max_page. Calculate and update last_pag
+            if (resources.length < 1) {
+              $scope.last_page = startPage - 1;
+            } else {
+              $scope.last_page = startPage + Math.ceil(resources.length / results_per_page) - 1;
+            }
           }
 
           // cache results
@@ -228,7 +233,17 @@ angular.module('owm.resource.search', [
             $scope.selectedResource = resources[0];
             Analytics.trackEvent('discovery', 'search', user.isAuthenticated, undefined, true);
             $scope.showPage(startPage);
-          }
+          } else {
+            if(version3) {
+              var images = _.map(resources, function(resource) {
+                if(resource.pictures && resource.pictures.length > 0 && resource.pictures[0] && resource.pictures[0].large) {
+                  return appConfig.serverUrl + '/' + resource.pictures[0].large;
+                }
+              });
+              preloader.preloadImages(images);
+            }
+					}
+
           return resources;
         })
         .catch(function (err) {
@@ -254,9 +269,7 @@ angular.module('owm.resource.search', [
       resourceQueryService.setPage(page);
       updateUrl();
 
-      if (page > 1) {
-        $anchorScroll('topsearch');
-      }
+      $anchorScroll('scroll-to-top-anchor');
 
       // page can be cached or not
       if ($scope.pagedResults[page] !== undefined) { // Hooray, page is already in cache
@@ -372,4 +385,9 @@ angular.module('owm.resource.search', [
       updateUrl();
     };
 
+    $scope.getPages = function(num) {
+      return new Array(num);
+    };
+
   });
+
