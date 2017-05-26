@@ -221,6 +221,8 @@
     "USER_BANK_MAIL_HELP_BLOCK": "USER_BANK_MAIL_HELP_BLOCK",
     "CANCEL": "Annuleer",
     "OK": "OK",
+    "STEP_NEXT": "Volgende",
+    "STEP_PREV": "Vorige",
     "SUBMIT": "Opslaan",
     "SAVE": "Opslaan",
     "CLOSE": "Sluiten",
