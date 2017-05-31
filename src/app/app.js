@@ -121,10 +121,25 @@ angular.module('openwheels', [
 ])
 
 .constant('API_DATE_FORMAT', 'YYYY-MM-DD HH:mm')
-  .constant('FRONT_DATE_FORMAT', 'dddd DD MMMM HH:mm')
+.constant('FRONT_DATE_FORMAT', 'dddd DD MMMM HH:mm')
 
 .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
+
   $locationProvider.html5Mode(true);
+
+  $urlRouterProvider.rule(function($injector, $location) {
+
+    var path = $location.path();
+    var hasTrailingSlash = path[path.length-1] === '/';
+
+    if(hasTrailingSlash) {
+
+      //if last charcter is a slash, return the same url without the slash
+      var newPath = path.substr(0, path.length - 1);
+      return newPath;
+    }
+
+  });
 
   /**
    * Prevent infinite loop when requesting non-existing url
