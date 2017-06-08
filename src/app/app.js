@@ -234,7 +234,13 @@ angular.module('openwheels', [
     if(authService.user.isAuthenticated) {
       var userId = authService.user.identity.firstName + authService.user.identity.id;
       var hashedUserId = hash(userId);
+      var userStatus = authService.user.identity.status;
+      var numberBookings = authService.user.identity.numberOfBookings;
+      var userPreference = authService.user.identity.preference;
       Analytics.set('&uid', hashedUserId);
+      Analytics.set('dimension1', userStatus);
+      Analytics.set('dimension3', numberBookings);
+      Analytics.set('dimension4', userPreference);
     }
 
 
