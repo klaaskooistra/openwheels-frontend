@@ -141,33 +141,6 @@
             <span ng-if="hasEverLoadedMore && !hasMoreToLoad">{{'FIN_NO_MORE_INV' | translate}}</span>
           </button>
 
-          <div ng-if="provider !== 50">
-            <div ng-if="view === 'renter'" class="text-right">
-              <button ng-if="openInvoices.totals.hasToPay" ng-click="renterPay()" type="button" class="btn btn-primary">
-                Sluit factuur en betaal {{openInvoices.totals.grandTotalToPay | currency}}
-              </button>
-              <button disabled ng-if="openInvoices.totals.hasToReceive" type="button" class="btn btn-primary">
-                Je opbrengsten zijn hoger dan je kosten, dus je hoeft nu niets te betalen
-              </button>
-            </div>
-            <div ng-if="view === 'owner'" class="text-right">
-              <button ng-if="openInvoices.totals.hasToPay" disabled type="button" class="btn btn-primary">
-                Je opbrengsten zijn negatief en kunnen dus niet worden uitgekeerd.
-              </button>
-              <button ng-if="openInvoices.totals.hasToReceive" ng-click="ownerPayout()" type="button" class="btn btn-primary">
-                Laat {{openInvoices.totals.grandTotalToReceive | currency}} uitbetalen
-              </button>
-            </div>
-            <div ng-if="view === 'both'" class="text-right">
-              <button ng-if="openInvoices.totals.hasToPay" ng-click="bothPay()" type="button" class="btn btn-primary">
-                Sluit factuur en betaal
-              </button>
-              <button ng-if="openInvoices.totals.hasToReceive" ng-click="bothPayout()" type="button" class="btn btn-primary">
-                Laat {{openInvoices.totals.grandTotalToReceive | currency}} uitbetalen
-              </button>
-            </div>
-          </div>
-
           <div ng-if="(view === 'both' && !openInvoices.null && !openInvoices.renter && !openInvoices.owner) || (view === 'renter' && !openInvoices.null && !openInvoices.renter) || (view === 'owner' && !openInvoices.null && !openInvoices.owner)">
             <p>
               Je hebt geen facturen in opbouw.
