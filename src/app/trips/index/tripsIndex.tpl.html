@@ -95,7 +95,7 @@
         </thead>
         <tbody>
           <tr
-            ng-class="{danger: booking.status === 'cancelled', danger: booking.status === 'owner_cancelled', warning: booking.status === 'rejected'}" 
+            ng-class="{danger: ['cancelled', 'owner_cancelled'].indexOf(booking.status) >= 0, warning: booking.status === 'rejected'}" 
             ng-repeat="booking in bookings.forOwner.data | orderBy:['booking.beginBooking','booking.beginRequested']"
           >
             <td>{{ (booking.beginBooking | amDateFormat:'DD-MM-YYYY') || (booking.beginRequested | amDateFormat:'DD-MM-YYYY') }}</td>
