@@ -3,14 +3,15 @@
 angular.module('owm.resource.show', [])
 
 .controller('ResourceShowController', function ($window, $log, $q, $timeout, $location, $scope, $state, $filter, authService, resourceService, bookingService, invoice2Service, boardcomputerService, alertService, chatPopupService, ratingService, API_DATE_FORMAT, resource, me, resourceQueryService, featuresService, $stateParams, linksService, Analytics, metaInfoService) {
-  if(resource === true) {
-    return;
-  }
-
   Analytics.trackEvent('discovery', 'show_car', resource.id, undefined, true);
 
-  metaInfoService.set({robots: resource.isActive ? 'all' : 'noindex'});
+  metaInfoService.set({robots: resource.isActive && !resource.removed ? 'all' : 'noindex'});
   metaInfoService.flush();
+
+  if(resource.removed) {
+    resourceQueryService.setText(resource.location);
+    resourceQueryService.setLocation({latitude: resource.latitude, longitude: resource.longitude});
+  }
   /**
    * Warning: 'me' will be null for anonymous users
    */
