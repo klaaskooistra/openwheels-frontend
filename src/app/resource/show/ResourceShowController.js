@@ -8,6 +8,7 @@ angular.module('owm.resource.show', [])
   metaInfoService.set({robots: resource.isActive && !resource.removed ? 'all' : 'noindex'});
   metaInfoService.flush();
 
+  if(resource.removed === undefined) { resource.removed = false; }
   if(resource.removed) {
     resourceQueryService.setText(resource.location);
     resourceQueryService.setLocation({latitude: resource.latitude, longitude: resource.longitude});
