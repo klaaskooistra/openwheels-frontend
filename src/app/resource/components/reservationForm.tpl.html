@@ -7,7 +7,7 @@
       {{ 'DATE_START' | translate }}
       <button id="resource_now_button" type="button" class="btn btn-warning btn-xs" ng-click="setTimeframe(0)">{{ 'NOW' | translate }}</button>
     </label>
-    <div class="row">
+    <div class="row no-button no-margin-input-container">
       <div class="col-xs-7">
         <input id="beginRequested" type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="booking.beginRequested" ng-change="onBeginDateChange()" pickadate="dateConfig">
       </div>
@@ -19,7 +19,7 @@
 
   <div class="form-group">
     <label for="endTrip">{{ 'DATE_END' | translate }}</label>
-    <div class="row">
+    <div class="row no-button no-margin-input-container">
       <div class="col-xs-7">
         <input type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="booking.endRequested" ng-change="onEndDateChange()" pickadate="dateConfig">
       </div>
