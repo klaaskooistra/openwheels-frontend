@@ -90,7 +90,7 @@
         <div ng-class="{ 'col-xs-12 col-md-8 col-lg-9' : features.filtersSidebar }" class="no-padding" id="topsearch">
 
 
-            <uib-alert class="alert-info-green" type="info" close="removeTimeframe()" ng-if="booking.beginRequested && booking.endRequested">
+            <uib-alert type="info" close="removeTimeframe()" ng-if="booking.beginRequested && booking.endRequested">
                 <i class="fa fa-clock-o"></i> Beschikbare auto's voor <span class="text-success">{{ booking.beginRequested | amCalendar }}</span> tot <span class="text-success">{{ booking.endRequested  | amCalendar }}</span>
             </uib-alert>
 
