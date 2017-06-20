@@ -170,7 +170,7 @@
               {{ 'DATE_START' | translate }}&nbsp;
               <button id="booking_now_button" type="button" class="btn btn-warning btn-xs" ng-click="setTimeframe(bookingRequest, 0)">{{ 'NOW' | translate }}</button>
             </label>
-            <div class="row">
+            <div class="no-margin-input-container row" ng-class="{'no-button': $mdMedia('xs')}">
               <div class="col-xs-7">
                 <input id="beginRequested" type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.beginRequested" pickadate="dateConfig">
               </div>
@@ -187,7 +187,7 @@
               <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 2)">{{ 'PLUS_2_HOUR' | translate }}</button>
               <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 4)">{{ 'PLUS_4_HOUR' | translate }}</button>
             </label>
-            <div class="row">
+            <div class="no-margin-input-container row" ng-class="{'no-button': $mdMedia('xs')}">
               <div class="col-xs-7">
                 <input type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.endRequested" pickadate="dateConfig">
               </div>

@@ -6,9 +6,10 @@ angular.module('owm.booking.show', [])
   $q, $timeout, $log, $scope, $location, $filter, $translate, $state, appConfig, API_DATE_FORMAT,
   bookingService, resourceService, invoice2Service, alertService, dialogService,
   authService, boardcomputerService, discountUsageService, chatPopupService, linksService,
-  booking, me, declarationService, $mdDialog, contract, Analytics) {
+  booking, me, declarationService, $mdDialog, contract, Analytics, $mdMedia) {
 
   $scope.appConfig = appConfig;
+  $scope.$mdMedia = $mdMedia;
 
   /**
    * HACK

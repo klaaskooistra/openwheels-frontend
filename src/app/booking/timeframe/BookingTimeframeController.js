@@ -2,8 +2,12 @@
 
 angular.module('owm.booking.timeframe', [])
 
-.controller('BookingTimeframeController', function ($scope, $stateParams, $uibModalInstance, booking, API_DATE_FORMAT) {
+.controller('BookingTimeframeController', function ($scope, $stateParams, $uibModalInstance, booking, API_DATE_FORMAT, $mdMedia) {
   $scope.booking = booking;
+
+  $scope.$watch(function() { return $mdMedia('xs'); }, function(isSmall) {
+    $scope.small = isSmall;
+  });
 
   $scope.dateConfig = {
     //model

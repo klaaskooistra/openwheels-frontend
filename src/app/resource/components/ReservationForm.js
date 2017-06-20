@@ -23,6 +23,7 @@ angular.module('owm.resource.reservationForm', [])
 
   // Check if this page is being called after login/singup in booking process
   handleAuthRedirect();
+  $scope.$mdMedia = $mdMedia;
 
   $scope.age = -1;
   if(authService.user.isAuthenticated && authService.user.identity.dateOfBirth) {
