@@ -1,0 +1,29 @@
+<md-dialog aria-label="Mango (Fruit)">
+
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Upload foto</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()">
+				<md-icon>close</md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content layout="column">
+    <div flex>Select an image file: <file-input-change on-change="newImage" /></div>
+    <div flex class="cropArea"><ui-cropper class="testert" style="margin: 0;" image="inputImage" area-type="rectangle" aspect-ratio="1.7" result-image="image" canvas-scalemode="true" result-image-size='{w: 340,h: 200}'></ui-cropper></div>
+    <div flex><p>Resultaat</p><img ng-src="{{image}}" /></div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<span flex></span>
+		<md-button ng-click="cancel()">
+			Annuleren
+		</md-button>
+		<md-button ng-click="return(inputImage)">
+			Opslaan
+		</md-button>
+	</md-dialog-actions>
+
+</md-dialog>
