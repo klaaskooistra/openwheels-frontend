@@ -195,6 +195,30 @@ angular.module('openwheels', [
   /* Intentionally left blank */
 })
 
+.run(function ($rootScope, $mdDialog, $cookies, appConfig) {
+  var showAd = $cookies.get('show_ad_programmer');
+
+  if(appConfig.appUrl === 'https://mywheels.nl' &&  (showAd === undefined || showAd === true)) {
+    dialog()
+    .then(setCookie)
+    .catch(setCookie)
+    ;
+  }
+	
+  function dialog() {
+    return $mdDialog.show({
+      controller: 'ProgrammeurController',
+      templateUrl: 'home/programmeur.tpl.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose:false,
+    });
+  }
+  function setCookie() {
+		var expires = moment().add(180, 'days').toDate();
+		$cookies.put('show_ad_programmer', false, {expires: expires});
+  }
+})
+
 .run(function ($window, $log, $timeout, $state, $stateParams, $rootScope, $anchorScroll,
   alertService, featuresService, linksService, metaInfoService, Analytics, authService) {
 
