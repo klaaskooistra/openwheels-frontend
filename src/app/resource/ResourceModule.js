@@ -288,6 +288,9 @@ angular.module('owm.resource', [
       }],
       metaInfo: ['$state', '$translate', '$filter', 'resource', 'metaInfoService', 'appConfig',
         function ($state, $translate, $filter, resource, metaInfoService, appConfig) {
+          if(resource.removed) {
+            return {};
+          }
 
           var substitutions = {
             city: resource.city,
