@@ -3,7 +3,7 @@
 angular.module('owm.person.dashboard', [])
 
 .controller('PersonDashboardController', function ($q, $scope, $sce, $state, me, bookingList, rentalList, actions,
-  authService, bookingService, alertService, boardcomputerService, actionService, resourceService, resourceQueryService, blogItems, $localStorage, personService, dialogService, $translate) {
+  authService, bookingService, alertService, boardcomputerService, actionService, resourceService, resourceQueryService, blogItems, $localStorage, personService, dialogService, $translate, $timeout) {
 
   // If booking_before_signup in local storage exists that means we have been redirected to this page after facebook signup
   // decide where to go next and try to guess user preference. If we do not know what flow to redirect
@@ -20,21 +20,39 @@ angular.module('owm.person.dashboard', [])
       setPreference('renter');
       $state.go('owm.person.details', data);
     } else if (!me.preference){
-      showModal();
+      showModal()
+      .then(redirect);
     }
   } else {
     if(me.status === 'new' && !me.preference) {
-      showModal();
+      showModal()
+      .then(redirect);
     } else if(me.status === 'new' && me.preference !== 'owner') {
       $state.go('owm.person.intro');
     }
   }
 
+  function redirect(a) {
+    if(me.preference === 'renter' || me.preference === 'both') {
+      $state.go('owm.person.intro');
+    } else {
+      $timeout(function() {
+        actionService.all({
+          person: me.id
+        })
+        .then(function(res) {
+          angular.extend($scope.actions, res);
+        });
+      });
+    }
+  }
+
   function setPreference(pref) {
     if(!me.preference) {
-      personService.alter({person: me.id, newProps: {preference: pref}})
+      return personService.alter({person: me.id, newProps: {preference: pref}})
       .then(function(res) {
         me = res;
+        return me;
       })
       .catch(function(err) {
       })
