@@ -121,10 +121,25 @@ angular.module('openwheels', [
 ])
 
 .constant('API_DATE_FORMAT', 'YYYY-MM-DD HH:mm')
-  .constant('FRONT_DATE_FORMAT', 'dddd DD MMMM HH:mm')
+.constant('FRONT_DATE_FORMAT', 'dddd DD MMMM HH:mm')
 
 .config(function ($locationProvider, $stateProvider, $urlRouterProvider) {
+
   $locationProvider.html5Mode(true);
+
+  $urlRouterProvider.rule(function($injector, $location) {
+
+    var path = $location.path();
+    var hasTrailingSlash = path[path.length-1] === '/';
+
+    if(hasTrailingSlash) {
+
+      //if last charcter is a slash, return the same url without the slash
+      var newPath = path.substr(0, path.length - 1);
+      return newPath;
+    }
+
+  });
 
   /**
    * Prevent infinite loop when requesting non-existing url
@@ -195,6 +210,30 @@ angular.module('openwheels', [
   /* Intentionally left blank */
 })
 
+.run(function ($rootScope, $mdDialog, $cookies, appConfig) {
+  var showAd = $cookies.get('show_ad_programmer');
+
+  if(appConfig.appUrl === 'https://mywheels.nl' &&  (showAd === undefined || showAd === true)) {
+    dialog()
+    .then(setCookie)
+    .catch(setCookie)
+    ;
+  }
+	
+  function dialog() {
+    return $mdDialog.show({
+      controller: 'ProgrammeurController',
+      templateUrl: 'home/programmeur.tpl.html',
+      parent: angular.element(document.body),
+      clickOutsideToClose:false,
+    });
+  }
+  function setCookie() {
+		var expires = moment().add(180, 'days').toDate();
+		$cookies.put('show_ad_programmer', false, {expires: expires});
+  }
+})
+
 .run(function ($window, $log, $timeout, $state, $stateParams, $rootScope, $anchorScroll,
   alertService, featuresService, linksService, metaInfoService, Analytics, authService) {
 
@@ -234,7 +273,13 @@ angular.module('openwheels', [
     if(authService.user.isAuthenticated) {
       var userId = authService.user.identity.firstName + authService.user.identity.id;
       var hashedUserId = hash(userId);
+      var userStatus = authService.user.identity.status;
+      var numberBookings = authService.user.identity.numberOfBookings;
+      var userPreference = authService.user.identity.preference;
       Analytics.set('&uid', hashedUserId);
+      Analytics.set('dimension1', userStatus);
+      Analytics.set('dimension3', numberBookings);
+      Analytics.set('dimension4', userPreference);
     }
 
 

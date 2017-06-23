@@ -58,7 +58,7 @@
   </div>
   <div class="card-body" id="resource-info">
     <ul class="list-row booking-list">
-      <li ng-repeat="b in rentals" ui-sref="owm.booking.show({ bookingId: b.id })"
+      <li ng-repeat="b in rentals" ng-if="b.status !== 'rejected'" ui-sref="owm.booking.show({ bookingId: b.id })"
           ng-include="'booking/list/partial/booking-list-item--owner.tpl.html'">
       </li>
       <!-- extra links -->

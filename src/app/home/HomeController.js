@@ -44,4 +44,8 @@ angular.module('owm.home', ['owm.resource', 'slick'])
   };
 
   $scope.version = VERSION;
-});
+})
+.controller('ProgrammeurController', function($scope, $mdDialog) {
+  $scope.close = $mdDialog.cancel;
+})
+;

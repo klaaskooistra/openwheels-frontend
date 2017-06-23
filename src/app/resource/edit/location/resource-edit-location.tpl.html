@@ -1,25 +1,47 @@
 <div ng-controller="ResourceEditLocationController">
 
     <form name="locationForm" class="mywheels-form">
+
+      <div ng-if="location_step === 1">
+        <h4>Selecteer op locatie op de kaart</h4>
+
         <div class="icon location resource-location-searchbar">
-            <input class="form-control" ow-geocoder="{onDetails: newLocationSelectedDropdown}" placeholder="{{ 'RESOURCE_LOCATION_ADDRESS_LABEL' | translate }}" ng-model="locationtext" required />
+          <input class="form-control" ow-geocoder="{onDetails: newLocationSelectedDropdown}" placeholder="{{ 'RESOURCE_LOCATION_ADDRESS_LABEL' | translate }}" ng-model="locationtext" required />
         </div>
 
         <ui-gmap-google-map center="map.center" control="map.control" zoom="map.zoom" draggable="true" dragging="map.dragging" bounds="map.bounds" events="map.events" options="map.options">
-            <!-- prefedined markers -->
-            <ui-gmap-marker coords="map.resourceMarker" idKey="1"></ui-gmap-marker>
-            <!-- marker for clicked position -->
-            <!-- can not put google.map.animations.BOUNCE , since it is not initiaized yet -->
-            <div ng-init="opts = {animation:1}">
-                <ui-gmap-marker coords="map.clickedMarker" idKey="1" options="opts" click="map.clickedMarker.onClicked"></ui-gmap-marker>
-            </div>
+          <!-- prefedined markers -->
+          <ui-gmap-marker coords="map.resourceMarker" idKey="1"></ui-gmap-marker>
+          <!-- marker for clicked position -->
+          <!-- can not put google.map.animations.BOUNCE , since it is not initiaized yet -->
+          <div ng-init="opts = {animation:1}">
+            <ui-gmap-marker coords="map.clickedMarker" idKey="1" options="opts" click="map.clickedMarker.onClicked"></ui-gmap-marker>
+          </div>
         </ui-gmap-google-map>
 
+
         <div class="form-group" ng-if="!ownerflow">
-            <br><br>
-            <button type="button" class="btn btn-default" ng-disabled="locationForm.$pristine" ng-click="reset()">{{ 'CANCEL' | translate }}</button>
-            <button type="submit" class="btn btn-primary" ng-disabled="locationForm.$pristine" ng-click="submit()">{{ 'SUBMIT' | translate }}</button>
+          <br><br>
+          <button type="button" class="btn btn-primary" ng-disabled="locationForm.$pristine" ng-click="stepTwo()">{{ 'STEP_NEXT' | translate }}</button>
         </div>
+      </div>
+
+      <div ng-if="location_step === 2">
+        <h4>Controleer het adres</h4>
+        <p>Is het onderstaande adres correct?<p>
+
+        <p>
+        <input class="form-control" style="width: 60%; display: inline;" ng-model="clickedAddress.route" required />
+        <input class="form-control" style="width: 30%; display: inline;" ng-model="clickedAddress.streetNumber" required />
+        </p>
+
+
+        <div class="form-group" ng-if="!ownerflow">
+          <br><br>
+          <button type="button" class="btn btn-default" ng-disabled="locationForm.$pristine" ng-click="stepOne()">{{ 'STEP_PREV' | translate }}</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="locationForm.$pristine" ng-click="submit()">{{ 'SUBMIT' | translate }}</button>
+        </div>
+      </div>
 
         <!-- call to action buttons -->
         <div class="details--card--form__navigation-buttons" ng-if="ownerflow">

@@ -3,6 +3,18 @@
     <a ui-sref="owm.finance.v4"><i class="fa fa-fw fa-chevron-left"></i>Terug naar financieel overzicht</a>
   </div>
 </div>
+<div class="card" ng-if="previousState.name == 'owm.trips'">
+  <div class="card-body card-inverse">
+    <a ui-sref="owm.trips" ng-if="userPerspective === 'renter'"><i class="fa fa-fw fa-chevron-left"></i>Terug naar ritgeschiedenis</a>
+    <a ui-sref="owm.trips" ng-if="userPerspective === 'owner'"><i class="fa fa-fw fa-chevron-left"></i>Terug naar verhuurgeschiedenis</a>
+  </div>
+</div>
+<div class="card" ng-if="previousState.name == 'owm.person.dashboard'">
+  <div class="card-body card-inverse">
+    <a ui-sref="owm.person.dashboard"><i class="fa fa-fw fa-chevron-left"></i>Terug naar dashboard</a>
+  </div>
+</div>
+
 <div class="card">
   <div class="card-heading">
 
@@ -50,7 +62,6 @@
             Begin boeking:<datetime datetime="{{ booking.beginBooking }}"></datetime>
             Eind boeking:<datetime datetime="{{ booking.endBooking }}"></datetime>
             <span class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
-            <i booking-approval-icon="booking"></i>
           </div>
         </div>
         <div class="media-body no-padding">
@@ -115,8 +126,26 @@
   </div>
 </div>
 
+<!-- OK not OK messages -->
+<div class="card" ng-if="userPerspective==='renter' && booking.approved === 'BUY_VOUCHER'">
+  <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
+    <span>Deze rit is nog niet betaald. <a style="color: #832f2f" ui-sref="owm.finance.vouchers">Koop rijtegoed</a> om deze rit te betalen.</span>
+  </div>
+</div>
+<div class="card" ng-if="userPerspective==='owner' && booking.ok && !allowAcceptReject">
+  <div class="card-body card-inverse" style="background-color:#3bab78; color: white;">
+    <span>Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.</span>
+  </div>
+</div>
+<div class="card" ng-if="userPerspective==='owner' && !booking.ok">
+  <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
+    <span>Voor deze rit is nog niet alles in orde. Mogelijk moet de huurder nog betalen of andere gegevens doorgeven. Geef de auto daarom niet mee aan de huurder zolang deze meldig zichtbaar is.
+      <span ng-if="allowAcceptReject"><br>Je kan de rit wel alvast accepteren of weigeren</span></span>
+  </div>
+</div>
+
 <!-- FORM -->
-<div id="bookingFormContainer" uib-collapse="!showBookingForm">
+<div id="bookingFormContainer" uib-collapse="!showBookingForm" ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
   <div class="card">
     <div class="card-heading"><h2 class="card-title">Reservering wijzigen</h2></div>
     <div class="card-body">
@@ -124,10 +153,10 @@
       <div class="resource__boardcomputer text-center" id="resource__boardcomputer" ng-if="allowBoardComputer">
         <ul class="list-inline">
           <li>
-            <button  ng-click="openDoor(resource)" class="btn btn-lg btn-default btn-success"><i class="fa fa-unlock fa-fw fa-lg"></i></button>
+            <button ng-click="openDoor(resource)" class="btn btn-lg btn-default btn-success"><i class="fa fa-unlock fa-fw fa-lg"></i></button>
           </li>
           <li>
-            <button  ng-click="closeDoor(resource)" class="btn btn-lg btn-default btn-danger"><i class="fa fa-lock fa-fw fa-lg"></i></button>
+            <button ng-click="closeDoor(resource)" class="btn btn-lg btn-default btn-danger"><i class="fa fa-lock fa-fw fa-lg"></i></button>
           </li>
         </ul>
       </div>
@@ -259,24 +288,6 @@
   </div>
 </div>
 
-<!-- OK not OK messages -->
-<div class="card" ng-if="userPerspective==='renter' && booking.approved === 'BUY_VOUCHER'">
-  <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
-    <span>Deze rit is nog niet betaald. <a style="color: #832f2f" ui-sref="owm.finance.vouchers">Koop rijtegoed</a> om deze rit te betalen.</span>
-  </div>
-</div>
-<div class="card" ng-if="userPerspective==='owner' && booking.ok && !allowAcceptReject">
-  <div class="card-body card-inverse" style="background-color:#3bab78; color: white;">
-    <span>Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.</span>
-  </div>
-</div>
-<div class="card" ng-if="userPerspective==='owner' && !booking.ok">
-  <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
-    <span>Voor deze rit is nog niet alles in orde. Mogelijk moet de huurder nog betalen of andere gegevens doorgeven. Geef de auto daarom niet mee aan de huurder zolang deze meldig zichtbaar is.
-      <span ng-if="allowAcceptReject"><br>Je kan de rit wel alvast accepteren of weigeren</span></span>
-  </div>
-</div>
-
 <!-- renter -->
 <div class="card" ng-if="userPerspective==='owner'">
   <div class="card-heading">
@@ -362,11 +373,7 @@
 <div class="card" ng-if="receivedInvoices.length > 0 && (sentInvoices.length === 0 || userPerspective === 'renter')">
   <div class="card-heading">
     <h3 class="card-title">
-      <a href="" ng-click="isInvoicesCollapsed = !isInvoicesCollapsed">
-        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': isInvoicesCollapsed, 'fa-chevron-down': !isInvoicesCollapsed }">
-      </i>
-      Kosten
-      </a>
+      {{ 'COSTS' | translate }}
     </h3>
   </div>
   <div uib-collapse="isInvoicesCollapsed">
@@ -405,11 +412,7 @@
 <div class="card" ng-if="sentInvoices.length > 0">
   <div class="card-heading">
     <h3 class="card-title">
-      <a href="" ng-click="isSentInvoicesCollapsed = !isSentInvoicesCollapsed">
-        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': isSentInvoicesCollapsed, 'fa-chevron-down': !isSentInvoicesCollapsed }">
-      </i>
       {{ 'BOOKING_SENT_INVOICES_TITLE' | translate }}
-      </a>
     </h3>
   </div>
   <div uib-collapse="isSentInvoicesCollapsed">
@@ -528,7 +531,7 @@
 <div class="card">
   <div class="card-heading">
     <h3 class="card-title">
-      {{ resource.brand || ('UNKNOWN_BRAND' | translate) }} <span ng-if="resource.model">, {{ resource.model }}</span>
+      {{ resource.brand || ('UNKNOWN_BRAND' | translate) }} <span ng-if="resource.model"> {{ resource.model }}</span>
     </h3>
   </div>
   <div class="card-body">

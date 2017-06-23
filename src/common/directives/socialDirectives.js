@@ -1,6 +1,23 @@
 'use strict';
 
 angular.module('socialDirectives', [])
+.directive('shareButtonsFlex', function ($rootScope, twitter, linksService) {
+    return {
+      restrict: 'A',
+      scope: {
+        url: '=',
+      },
+      template: '<div layout>' +
+        '<span style="text-align: center" flex ng-if="features.facebook"><span facebook-share-button url="url"></span></span>' +
+        '<span style="text-align: center" flex ng-if="features.googlePlus"><span google-plus-share-button url="url"></span></span>' +
+        '<span style="text-align: center" flex ng-if="features.twitter"><span twitter-share-button url="url"></span></span>' +
+        '</div>',
+      link: function (scope, elm) {
+        var FB = window.FB;
+        scope.features = $rootScope.features;
+      }
+    };
+  })
 .directive('shareButtons', function ($rootScope, twitter, linksService) {
     return {
       restrict: 'A',
