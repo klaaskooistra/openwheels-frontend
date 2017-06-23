@@ -2,11 +2,17 @@
 
 angular.module('owm.resource.show', [])
 
-.controller('ResourceShowController', function ($window, $log, $q, $timeout, $location, $scope, $state, $filter,
-  authService, resourceService, bookingService, invoice2Service, boardcomputerService, alertService, chatPopupService,
-  ratingService, API_DATE_FORMAT, resource, me, resourceQueryService, featuresService, $stateParams, linksService, Analytics) {
-
+.controller('ResourceShowController', function ($window, $log, $q, $timeout, $location, $scope, $state, $filter, authService, resourceService, bookingService, invoice2Service, boardcomputerService, alertService, chatPopupService, ratingService, API_DATE_FORMAT, resource, me, resourceQueryService, featuresService, $stateParams, linksService, Analytics, metaInfoService) {
   Analytics.trackEvent('discovery', 'show_car', resource.id, undefined, true);
+
+  metaInfoService.set({robots: resource.isActive && !resource.removed ? 'all' : 'noindex'});
+  metaInfoService.flush();
+
+  if(resource.removed === undefined) { resource.removed = false; }
+  if(resource.removed) {
+    resourceQueryService.setText(resource.location);
+    resourceQueryService.setLocation({latitude: resource.latitude, longitude: resource.longitude});
+  }
   /**
    * Warning: 'me' will be null for anonymous users
    */
@@ -30,6 +36,7 @@ angular.module('owm.resource.show', [])
    * Init
    */
   loadSearchState();
+
   if (me) { loadFavorite(); } else { $scope.isFavoriteResolved = true; }
   if (featuresService.get('ratings')) {
     loadRatings();

@@ -108,6 +108,8 @@ angular.module('api', [])
       rpcError.level = ['danger', 'info', 'warning'].indexOf(res.data.error.level) >= 0 ? res.data.error.level : 'danger';
       rpcError.status = res.status;
       rpcError.config = res.config;
+      rpcError.data = res.data.error.data;
+      rpcError.type = res.data.error.type;
 
       if (!res.config.isAnonymousMethod && (!res.config.headers[AUTH_HEADER] || (res.data.authenticated===false)) && res.data.error.code === -32104) {
         // simulate http 401 (to be caught by error handler)

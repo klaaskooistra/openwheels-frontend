@@ -397,6 +397,9 @@ angular.module('owm.booking.show', [])
 
   function errorHandler (err) {
     if (err && err.level && err.message) {
+      if(err.message.indexOf('onvoldoende')) {
+        err.message = err.message + '.<br>Je hebt nog <strong>&euro;' + err.data.extra_credit + '</strong> extra rijtegoed nodig voordat je de boeking kan verlengen';
+      }
       alertService.add(err.level, err.message, 5000);
     } else {
       //alertService.addGenericError();

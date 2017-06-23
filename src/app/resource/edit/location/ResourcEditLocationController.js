@@ -1,15 +1,24 @@
 'use strict';
 angular.module('owm.resource.edit.location', ['geocoderDirective'])
   .controller('ResourceEditLocationController', function ($q, $filter, $timeout, $log, alertService, personService, resourceService, $scope, $state) {
-    
+
     $scope.ownerflow = $state.current.name === 'owm.resource.create.location' ? true : false;
     $scope.locationtext = null;
+    $scope.location_step = 1;
 
     var DEFAULT_LOCATION = { // Utrecht CS
       lat: 52.08950077150554,
       lng: 5.110294818878174
     };
     var masterResource = $scope.$parent.resource;
+    $scope.clickedAddress = {};
+
+    $scope.stepTwo = function() {
+      $scope.location_step = 2;
+    };
+    $scope.stepOne = function() {
+      $scope.location_step = 1;
+    };
 
     $scope.map = {
       center: {},
@@ -51,9 +60,14 @@ angular.module('owm.resource.edit.location', ['geocoderDirective'])
     };
 
     $scope.submit = function () {
+      if(!$scope.clickedAddress.route || !$scope.clickedAddress.streetNumber) {
+        return;
+      }
+
       alertService.closeAll();
       var newProps = {
-        location: $scope.resource.location,
+        location: $scope.clickedAddress.route,
+        streetNumber: $scope.clickedAddress.streetNumber,
         city: $scope.resource.city,
         latitude: $scope.resource.latitude,
         longitude: $scope.resource.longitude
@@ -123,6 +137,7 @@ angular.module('owm.resource.edit.location', ['geocoderDirective'])
 
     $scope.newLocationSelectedDropdown = function (a) {
       var address = parseAddressComponents(a.address_components);
+      $scope.clickedAddress = address;
       $scope.resource.city = address.city;
       $scope.resource.location = address.route + ' ' + address.streetNumber;
       $scope.resource.latitude = a.geometry.location.lat();
@@ -159,15 +174,14 @@ angular.module('owm.resource.edit.location', ['geocoderDirective'])
           lat: lat,
           lng: lng
         });
+
         reverseGeocode({
           lat: lat,
           lng: lng
-        }).then(function (address) {
-          angular.extend($scope.resource, {
-            location: address.route + ' ' + address.streetNumber,
-            city: address.city
-          });
+        })
+        .then(function (address) {
 
+          $scope.clickedAddress = address;
           if ($scope.ownerflow) { //if in the ownerflow
             //set me
             $scope.me.city = address.city;
@@ -176,14 +190,18 @@ angular.module('owm.resource.edit.location', ['geocoderDirective'])
             $scope.me.latitude = address.latitude;
             $scope.me.longitude = address.longitude;
           }
-          $scope.locationForm.$setDirty();
         });
+        $scope.locationForm.$setDirty();
       }
     }
 
     function setMarker(location) {
-      $scope.map.resourceMarker.latitude = location.lat;
+      //$scope.map.resourceMarker.latitude = location.lat;
       $scope.map.resourceMarker.longitude = location.lng;
+      angular.extend($scope.map.resourceMarker, {
+        latitude: location.lat,
+        longitude: location.lng,
+      });
     }
 
     function setCenter(location) {
