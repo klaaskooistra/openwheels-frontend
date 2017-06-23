@@ -225,7 +225,7 @@ angular.module('openwheels', [
       controller: 'ProgrammeurController',
       templateUrl: 'home/programmeur.tpl.html',
       parent: angular.element(document.body),
-      clickOutsideToClose:false,
+      clickOutsideToClose:true,
     });
   }
   function setCookie() {
