@@ -54,13 +54,17 @@ angular.module('fileInputDirective', [])
 
   return {
     restrict: 'EA',
-    template: '<input type="file" />',
+    template: '<span><input id="{{id}}" type="file" class="inputfile" /><label for="{{id}}"><md-icon class="text-white">file_upload</md-icon> Selecteer een foto</label></span>',
     replace: true,
     scope: {
       onChange: '=',
       reset: '@',
     },
     link: function (scope, elm, attrs) {
+
+      scope.id = 'file123';
+      console.log(elm);
+      console.log(elm.firstChild);
 
       if (angular.isFunction(scope.onChange)) {
         elm.on('change', onChange);
@@ -70,7 +74,9 @@ angular.module('fileInputDirective', [])
         });
       }
 
+
       function onChange (e) {
+        console.log(e);
         scope.$apply(function () {
           scope.onChange(e.target.files[0]);
           if(scope.reset && scope.reset === 'noreset') {
@@ -89,6 +95,13 @@ angular.module('fileInputDirective', [])
   $scope.newImage = function($event) {
     $scope.inputImage = $event;
 		console.log('set inputImage');
+  };
+
+  $scope.clear = function() {
+    $scope.image = '';
+    $scope.inputImage = '';
+    $scope.crapject = {};
+    $scope.showEditor = false;
   };
 
   $scope.return = function(returnValue) {
