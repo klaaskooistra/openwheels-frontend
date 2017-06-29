@@ -14,6 +14,7 @@ angular.module('fileInputDirective', [])
     },
     link: function (scope, elm, attrs) {
 
+
       scope.openModal = function() {
         $mdDialog.show({
           controller: 'fileUploaderController',
@@ -22,11 +23,10 @@ angular.module('fileInputDirective', [])
 					fullscreen: $mdMedia('xs'),
           clickOutsideToClose:true,
         })
-        .then(function(answer) {
-          console.log(answer);
+        .then(function(blob) {
+          scope.onChange(blob);
         })
-        .catch(function(answer) {
-          console.log(answer);
+        .catch(function(err) {
         });
       };
     }
@@ -47,7 +47,13 @@ angular.module('fileInputDirective', [])
     },
     link: function (scope, elm, attrs) {
 
-      scope.id = 'file123';
+      function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+
+      scope.id = 'file_input_'+getRandomInt(11111,99999);
 
       function clearFileProps() {
         scope.uploaded = {
@@ -116,32 +122,12 @@ angular.module('fileInputDirective', [])
   $scope.image = '';
   $scope.inputImage = '';
 
-  $scope.aspectratio = 1.51;
-  $scope.resultImageSize = {w: 1000, h: 660};
-  $scope.rotated = false;
+  $scope.aspectratio = 1.5151;
+  $scope.resultImageSize  = {w: 1000, h: 660};
 
   $scope.newImage = function($event) {
     var src = URL.createObjectURL($event);
     $scope.inputImage = $event;
-  };
-
-  $scope.rotate = function(rotated) {
-
-    if(rotated !== undefined) {
-      $scope.rotated = rotated;
-    } else {
-      $scope.rotated = !$scope.rotated;
-    }
-    var aspectratio = 1.5151;
-
-    if($scope.rotated) {
-      $scope.aspectratio = 1 / aspectratio;
-      $scope.resultImageSize = {w: 660, h: 1000};
-    } else {
-      $scope.aspectratio = aspectratio;
-      $scope.resultImageSize = {w: 1000, h: 660};
-    }
-
   };
 
   $scope.clear = function() {
@@ -150,11 +136,11 @@ angular.module('fileInputDirective', [])
     $scope.crapject = {};
     $scope.showEditor = false;
     $scope.fileProps = {};
-    $scope.rotate(false);
   };
 
-  $scope.return = function(returnValue) {
-    $mdDialog.hide(returnValue);
+  $scope.return = function() {
+    var blob = dataURItoBlob($scope.image);
+    $mdDialog.hide(blob);
   };
 
   $scope.cancel = function(reason) {
@@ -163,39 +149,20 @@ angular.module('fileInputDirective', [])
 
   $scope.doneEditing = function() {
     $scope.showEditor = false;
-    if($scope.rotated) {
-      $scope.image = rotateBase64Image90deg($scope.image);
-    }
   };
 
-  $scope.rotate180 = function() {
-  };
+  function dataURItoBlob(dataURI) {
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
 
-  function rotateBase64Image90deg(base64Image, isClockwise) {
-    // create an off-screen canvas
-    var offScreenCanvas = document.createElement('canvas');
-    var offScreenCanvasCtx = offScreenCanvas.getContext('2d');
-
-    // cteate Image
-    var img = new Image();
-    img.src = base64Image;
-
-    // set its dimension to rotated size
-    offScreenCanvas.height = img.width;
-    offScreenCanvas.width = img.height;
-
-    // rotate and draw source image into the off-screen canvas:
-    if (isClockwise) {
-      offScreenCanvasCtx.rotate(90 * Math.PI / 180);
-      offScreenCanvasCtx.translate(0, -offScreenCanvas.width);
-    } else {
-      offScreenCanvasCtx.rotate(-90 * Math.PI / 180);
-      offScreenCanvasCtx.translate(-offScreenCanvas.height, 0);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
     }
-    offScreenCanvasCtx.drawImage(img, 0, 0);
 
-    // encode image to data-uri with base64
-    return offScreenCanvas.toDataURL('image/png', 100);
+    var blob = new Blob([ab], {type: mimeString});
+    return blob;
   }
 
 })

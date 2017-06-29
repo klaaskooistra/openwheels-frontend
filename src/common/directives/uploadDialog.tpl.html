@@ -32,11 +32,9 @@
           <ui-cropper flex cropject="crapject" init-max-area="true" max-canvas-dimensions="{w: 500, h: 500}" image="inputImage" area-type="rectangle" class="text-center" aspect-ratio="aspectratio" result-image="image" canvas-scalemode="full-width" result-image-size="resultImageSize"></ui-cropper>
 
           <div layout="row">
-            <md-button ng-click="rotate()"><md-icon>rotate_left</md-icon></md-button>
             <span flex></span>
             <md-button class="no-margin" ng-click="doneEditing()">Klaar</md-button>
             <span flex></span>
-            <md-button ng-click="rotate(true)"><md-icon>rotate_right</md-icon></md-button>
           </div>
         </div>
 
@@ -46,7 +44,6 @@
           <div layout="row">
             <span flex></span>
             <md-button class="no-margin" ng-show="!showEditor && image" ng-click="showEditor=true">Bewerken</md-button>
-            <md-button ng-if="rotated" ng-click="rotate180()">Omdraaien</md-button>
             <span flex></span>
           </div>
         </div>
@@ -58,7 +55,7 @@
 	<md-dialog-actions layout="row">
 		<md-button ng-hide="showEditor" ng-click="cancel()">Annuleren</md-button>
     <span flex></span>
-		<md-button class="md-primary" ng-hide="showEditor" ng-disabled="showEditor || !image" md-no-ink ng-click="return(inputImage)">Opslaan</md-button>
+		<md-button class="md-primary" ng-hide="showEditor" ng-disabled="showEditor || !image" md-no-ink ng-click="return()">Opslaan</md-button>
     <md-button class="no-margin md-primary" ng-show="showEditor && image" ng-click="doneEditing()">Klaar</md-button>
 	</md-dialog-actions>
 
