@@ -88,11 +88,13 @@ angular.module('owm.person.dashboard', [])
   $scope.rentals = rentalList.bookings;
   $scope.actions = actions;
   $scope.favoriteResources = null;
+  $scope.membersResources = null;
   $scope.search = {
     text: ''
   };
   if (me.preference !== 'owner') {
     loadFavoriteResources();
+    loadMemberResources();
   }
 
   $scope.renderHtml = function (html_code) {
@@ -190,11 +192,22 @@ angular.module('owm.person.dashboard', [])
       });
   }
 
+  function loadMemberResources() {
+    resourceService.getMemberResources({
+      person: $scope.me.id
+    })
+    .then(function (membersResources) {
+      $scope.membersResources = membersResources || [];
+    })
+    .catch(function () {
+      $scope.membersResources = [];
+    });
+  }
+
   $scope.selectFavoriteResource = function (resource) {
     $state.go('owm.resource.show', {
       resourceId: resource.id,
       city: resource.city
     });
   };
-
 });

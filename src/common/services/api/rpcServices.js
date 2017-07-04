@@ -91,6 +91,7 @@ angular.module('rpcServices', [])
   this.getFavorites = m('getFavorites');
   this.addFavorite = m('addFavorite');
   this.removeFavorite = m('removeFavorite');
+  this.getMemberResources = m('getMemberResources');
   this.addProperty = m('addProperty');
   this.removeProperty = m('remProperty');
   this.createParkingpermit = m('createParkingpermit');
