@@ -210,7 +210,6 @@ angular.module('openwheels', [
   /* Intentionally left blank */
 })
 
-
 .run(function ($window, $log, $timeout, $state, $stateParams, $rootScope, $anchorScroll,
   alertService, featuresService, linksService, metaInfoService, Analytics, authService) {
 
