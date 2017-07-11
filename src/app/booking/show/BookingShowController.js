@@ -475,8 +475,8 @@ angular.module('owm.booking.show', [])
   };
 
   function redirect(url) {
-    var redirectTo = appConfig.appUrl + $state.href('owm.booking.show', { bookingId: $scope.booking.id });
-    $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
+    var redirectTo = appConfig.appUrl + $state.href('owm.booking.show', { bookingId: $scope.booking.id }) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
+    $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo);
   }
 
   // PRICE & AVAILABILITY
@@ -495,6 +495,7 @@ angular.module('owm.booking.show', [])
 
   var timer;
   function onTimeFrameChange () {
+    $scope.extraCredit = false;
     $timeout.cancel(timer);
     timer = $timeout(function () {
       loadAvailability().then(function (availability) {
