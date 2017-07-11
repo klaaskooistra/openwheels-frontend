@@ -40,8 +40,14 @@ angular.module('owm.pages.list-your-car', [])
   //the four buttons to add add an remove the number of days and dayPrice
   $scope.changePrice = function (e, change, elm, max) {
     if (change === '-') {
-      if ($scope.calculateYourPrice[elm] > 0) {
-        $scope.calculateYourPrice[elm]--;
+      if($scope.calculateYourPrice[elm] <= 15) {
+        $scope.calculateYourPrice[elm] = 15;
+      }
+      else
+      {
+        if ($scope.calculateYourPrice[elm] > 0) {
+          $scope.calculateYourPrice[elm]--;
+        }
       }
     } else if (change === '+') {
       if ($scope.calculateYourPrice[elm] < max) {

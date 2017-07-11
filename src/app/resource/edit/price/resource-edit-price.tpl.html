@@ -7,13 +7,16 @@
         {{ 'PRICE_PER_DAY' | translate }}
         <info-icon tooltip-html="'INFO_RESOURCE_EDIT_PRICE_PER_DAY' | translate"></info-icon>
       </label>
-      <div class="input-group">
+      <div class="input-group" ng-class="form.dayRateTotal.$touched ? checkInput('dayRateTotal') ? 'has-error' : '' : ''">
         <span class="input-group-addon">€</span>
         <input type="text" smart-float id="dayRateTotal" name="dayRateTotal" class="form-control"
                ng-model="resource.dayRateTotal" placeholder="per day">
         <span class="input-group-addon"><input type="checkbox" id="kmFree" name="kmFree" ng-model="resource.kmFree" class="ng-pristine ng-valid"> {{ 'INCLUDING_100_KM_FREE' | translate }}</span>
       </div>
       <div class="help-block" ng-bind-html="'PRICE_PER_DAY_INFO_HTML' | translate">
+      </div>
+      <div ng-if="form.dayRateTotal.$touched ? checkInput('dayRateTotal') ? 'has-error' : '' : ''" class="col col-sm-12">
+        <p class="text-danger">Prijs per dag moet hoger zijn dan €15,00</p>
       </div>
     </div>
 
@@ -22,18 +25,23 @@
         {{ 'PRICE_PER_HOUR' | translate }}
         <info-icon tooltip-html="'INFO_RESOURCE_EDIT_PRICE_PER_HOUR' | translate"></info-icon>
       </label>
-      <div class="input-group">
+      <div class="input-group" ng-class="form.hourRate.$touched ? checkInput('hourRate') ? 'has-error' : '' : ''">
         <span class="input-group-addon">€</span>
         <input type="text" smart-float id="hourRate" name="hourRate" class="form-control"
                ng-model="resource.hourRate" placeholder="per day">
       </div>
+      <div ng-if="form.hourRate.$touched ? checkInput('hourRate') ? 'has-error' : '' : ''" class="col col-sm-12">
+        <p class="text-danger">Prijs per uur moet hoger zijn dan €1,50</p>
+      </div>
     </div>
 
     <div id="resource_settings_price_per_km"  form-group label="{{ 'PRICE_PER_KM' | translate }}">
-      <div class="input-group">
+      <div class="input-group" ng-class="form.kilometerRate.$touched ? checkInput('kilometerRate') ? 'has-error' : '' : ''" >
         <span class="input-group-addon">€</span>
-        <input type="text" smart-float id="kilometerRate" name="kilometerRate" class="form-control"
-               ng-model="resource.kilometerRate" placeholder="per km">
+        <input type="text" smart-float id="kilometerRate" name="kilometerRate" class="form-control" ng-model="resource.kilometerRate" placeholder="per km">
+      </div>
+      <div ng-if="form.kilometerRate.$touched ? checkInput('kilometerRate') ? 'has-error' : '' : ''" class="col col-sm-12">
+        <p class="text-danger">Prijs per kilometer moet hoger zijn dan €0,05</p>
       </div>
     </div>
 
@@ -64,7 +72,7 @@
 
     <div class="form-group">
       <button type="button" class="btn btn-default" ng-disabled="form.$pristine" ng-click="reset()">{{ 'CANCEL' | translate }}</button>
-      <button type="button" class="btn btn-primary" ng-disabled="form.$pristine" ng-click="save()">{{ 'SUBMIT' | translate }}</button>
+      <button type="button" class="btn btn-primary" ng-disabled="form.$pristine || checkInput('all')" ng-click="save()">{{ 'SUBMIT' | translate }}</button>
     </div>
 
   </div><!-- /form -->
