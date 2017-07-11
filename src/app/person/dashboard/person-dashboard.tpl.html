@@ -105,3 +105,23 @@
     </ul>
   </div>
 </div>
+
+
+<!-- RESOURCES -->
+
+<div id="members_resource_buttons" class="card" ng-if="membersResources.length >= 1">
+
+  <div class="card-heading">
+    <h2 class="card-title">{{ 'MEMBERS_RESOURCES' | translate }}<info-icon tooltip-html="'INFO_MEMBERS_RESOURCES' | translate"></info-icon></h2>
+  </div>
+
+  <div class="card-body">
+    <div ng-if="membersResources.length >= 1">
+      <ul class="list-row">
+        <li ng-repeat="resource in membersResources" ng-click="selectFavoriteResource(resource)">
+          <div ng-include="'resource/partials/resource-header1.tpl.html'"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
