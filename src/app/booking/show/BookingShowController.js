@@ -24,7 +24,7 @@ angular.module('owm.booking.show', [])
 
   /**
    * change booking times if user has bought voucher via Pay
-   */  
+   */
   if ($stateParams.end) {
     bookingService.alterRequest({
       booking: booking.id,
@@ -430,8 +430,6 @@ angular.module('owm.booking.show', [])
     if (err && err.level && err.message) {
       $scope.extraCredit = false;
       if(err.message.match('onvoldoende')) {
-        console.log(moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm'));
-        console.log(moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm'));
         $scope.extraCredit = err.data.extra_credit;
         err.message = err.message + '. Je hebt nog <strong>&euro;' + err.data.extra_credit + '</strong> extra rijtegoed nodig voordat je de boeking kan verlengen.';
         alertService.add(err.level, err.message, 5000);
@@ -478,8 +476,7 @@ angular.module('owm.booking.show', [])
 
   function redirect(url) {
     var redirectTo = appConfig.appUrl + $state.href('owm.booking.show', { bookingId: $scope.booking.id });
-    console.log(url + '?redirectTo=' + encodeURIComponent(redirectTo) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm'));
-    // $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
+    $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
   }
 
   // PRICE & AVAILABILITY
