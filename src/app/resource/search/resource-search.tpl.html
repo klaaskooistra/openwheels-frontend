@@ -72,7 +72,7 @@
     </div><!-- /place -->
 
     <div style="margin-bottom:1em; margin-top: 1px;">
-      <ow-geocoder-searchbar version="version" on-sort-change="sortChange" on-new-place="update" on-click-time="selectTimeframe" on-click-filters="setFilters"></ow-geocoder-searchbar>
+      <ow-geocoder-searchbar on-sort-change="sortChange" on-new-place="update" on-click-time="selectTimeframe" on-click-filters="setFilters"></ow-geocoder-searchbar>
     </div>
 
     <div>
@@ -118,7 +118,7 @@
                  <ui-view />
                </div>
 
-                <div ng-if="page === last_page && version === 3 && page !== 1" class="card">
+                <div ng-if="page === last_page && page !== 1" class="card">
                   <p style="padding: .7em; text-align: center; color: #727377;">
                   Verfijn je zoekopdracht voor betere resultaten
                   </p>
@@ -129,16 +129,15 @@
                   <md-button ng-style="{visibility: page === 1 ? 'hidden' : 'visible'}" class="md-button-xs" ng-click="showPage(page - 1)">
                     <md-icon>arrow_back</md-icon> <span hide-xs>{{ 'PREVIOUS' | translate }}</span>
                   </md-button>
-                  <div ng-if="version===3" flex class="text-center pagination">
+                  <div flex class="text-center pagination">
                     <span ng-click="showPage($index+1)" class="pagination--item" ng-class="{'active': $index+1 === page}" ng-repeat="n in getPages(last_page) track by $index">{{$index+1}}</span> 
                   </div>
-                  <div ng-if="version!==3" flex class="text-center">{{page}}</div>
                   <md-button ng-disabled="page == last_page" class="btn btn-link md-button-xs" ng-click="showPage(page + 1)">
                     <span hide-xs>{{ 'NEXT' | translate }}</span> <md-icon>arrow_forward</md-icon>
                   </md-button>
                 </md-card>
 
-                <div ng-if="version === 3 && numberOfResults && resources.length > 0" class="card">
+                <div ng-if="numberOfResults && resources.length > 0" class="card">
                   <p style="padding: .7em; text-align: center; color: #727377;">
                   <strong>{{numberOfResults}}</strong> auto's gevonden
                   </p>

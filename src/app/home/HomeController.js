@@ -3,7 +3,7 @@
 angular.module('owm.home', ['owm.resource', 'slick'])
 
 //Module in app/pages/pagesModule.js
-.controller('HomeController', function ($scope, $translate, resourceQueryService, $state, VERSION, resourceService) {
+.controller('HomeController', function ($scope, $translate, resourceQueryService, $state, resourceService) {
 
   $scope.$watch(function () {
     return $translate.use();
@@ -43,9 +43,4 @@ angular.module('owm.home', ['owm.resource', 'slick'])
     $state.go('owm.resource.search.list', resourceQueryService.createStateParams());
   };
 
-  $scope.version = VERSION;
-})
-.controller('ProgrammeurController', function($scope, $mdDialog) {
-  $scope.close = $mdDialog.cancel;
-})
-;
+});

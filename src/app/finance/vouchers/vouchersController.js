@@ -14,13 +14,20 @@ angular.module('owm.finance.vouchers', [])
   $scope.showVoucherOptions = false;
   $scope.redemptionPending = {}; /* by booking id */
   $scope.accountApproved = false;
-  account2Service.forMe({
-    'onlyApproved': true
-  }).then(function (value) {
-    if (value.length > 0) {
-      $scope.accountApproved = true;
-    }
 
+  account2Service.forMe()
+  .then(function (value) {
+    $scope.accounts = value;
+    for(var i = 0; i < value.length; i++){
+      if (value[i].approved === true) {
+        $scope.accountApproved = true;
+      }
+      if (value[i].approved === false) {
+        $scope.name = value[i].lastName;
+        $scope.person = value[i].person;
+        $scope.accountDisapproved = true;
+      }
+    }
   });
 
   // when one of the bookings has been changed we need to fetch the new total we need to pay
@@ -87,7 +94,6 @@ angular.module('owm.finance.vouchers', [])
         alertService.loaded($scope);
       });
   };
-
 
   function getRequiredValue() {
     return voucherService.calculateRequiredCredit({
