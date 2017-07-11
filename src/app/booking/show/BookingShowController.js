@@ -38,7 +38,6 @@ angular.module('owm.booking.show', [])
       $scope.booking = booking;
       initBookingRequestScope(booking);
       initPermissions();
-      $location.search({});
       $scope.alteredAfterBuyVoucher = true;
       if (booking.beginRequested) {
         alertService.add('info', $filter('translate')('BOOKING_ALTER_REQUESTED'), 5000);
