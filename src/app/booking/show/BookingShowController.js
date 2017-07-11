@@ -3,12 +3,13 @@
 angular.module('owm.booking.show', [])
 
 .controller('BookingShowController', function (
-  $q, $timeout, $log, $scope, $location, $filter, $translate, $state, appConfig, API_DATE_FORMAT,
+  $q, $timeout, $log, $scope, $location, $filter, $translate, $state, $stateParams, appConfig, API_DATE_FORMAT,
   bookingService, resourceService, invoice2Service, alertService, dialogService,
   authService, boardcomputerService, discountUsageService, chatPopupService, linksService,
-  booking, me, declarationService, $mdDialog, contract, Analytics) {
+  booking, me, declarationService, $mdDialog, contract, Analytics, paymentService, voucherService, $window) {
 
   $scope.appConfig = appConfig;
+  $scope.alteredAfterBuyVoucher = false;
 
   /**
    * HACK
@@ -21,6 +22,35 @@ angular.module('owm.booking.show', [])
     });
   }
 
+  /**
+   * change booking times if user has bought voucher via Pay
+   */  
+  if ($stateParams.end) {
+    bookingService.alterRequest({
+      booking: booking.id,
+      timeFrame: {
+        startDate: moment($stateParams.start, 'YYMMDDHHmm').format(API_DATE_FORMAT),
+        endDate: moment($stateParams.end, 'YYMMDDHHmm').format(API_DATE_FORMAT)
+      }
+    })
+    .then(function (booking) {
+      Analytics.trackEvent('altered', 'success', booking.id, undefined, true);
+      $scope.booking = booking;
+      initBookingRequestScope(booking);
+      initPermissions();
+      $location.search({});
+      $scope.alteredAfterBuyVoucher = true;
+      if (booking.beginRequested) {
+        alertService.add('info', $filter('translate')('BOOKING_ALTER_REQUESTED'), 5000);
+      } else {
+        alertService.add('success', $filter('translate')('BOOKING_ALTER_ACCEPTED'), 5000);
+      }
+    })
+    .catch(errorHandler)
+    .finally(function () {
+      alertService.loaded();
+    });
+  }
 
   function initBookingRequestScope(booking) {
     $scope.bookingRequest = angular.copy(booking);
@@ -258,6 +288,7 @@ angular.module('owm.booking.show', [])
       remark: booking.remarkRequester
     })
     .then(function (booking) {
+      Analytics.trackEvent('altered', 'success', booking.id, undefined, true);
       $scope.booking = booking;
       initPermissions();
       if (booking.beginRequested) {
@@ -397,16 +428,59 @@ angular.module('owm.booking.show', [])
 
   function errorHandler (err) {
     if (err && err.level && err.message) {
-      if(err.message.indexOf('onvoldoende')) {
-        err.message = err.message + '.<br>Je hebt nog <strong>&euro;' + err.data.extra_credit + '</strong> extra rijtegoed nodig voordat je de boeking kan verlengen';
+      $scope.extraCredit = false;
+      if(err.message.match('onvoldoende')) {
+        console.log(moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm'));
+        console.log(moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm'));
+        $scope.extraCredit = err.data.extra_credit;
+        err.message = err.message + '. Je hebt nog <strong>&euro;' + err.data.extra_credit + '</strong> extra rijtegoed nodig voordat je de boeking kan verlengen.';
+        alertService.add(err.level, err.message, 5000);
+      } else {
+        alertService.add(err.level, err.message, 5000);
       }
-      alertService.add(err.level, err.message, 5000);
     } else {
       //alertService.addGenericError();
     }
-    initBookingRequestScope($scope.booking);
+    if(!err.message.match('onvoldoende')) {
+      initBookingRequestScope($scope.booking);
+    }
   }
 
+  $scope.buyVoucher = function (value) {
+    Analytics.trackEvent('payment', 'started', undefined, undefined, true);
+    if (!value || value < 0) {
+      return;
+    }
+    alertService.load($scope);
+    voucherService.createVoucher({
+        person: me.id,
+        value: value
+      })
+      .then(function (voucher) {
+        return paymentService.payVoucher({
+          voucher: voucher.id
+        });
+      })
+      .then(function (data) {
+        if (!data.url) {
+          throw new Error('Er is een fout opgetreden');
+        }
+        /* redirect to payment url */
+        redirect(data.url);
+      })
+      .catch(function (err) {
+        alertService.addError(err);
+      })
+      .finally(function () {
+        alertService.loaded($scope);
+      });
+  };
+
+  function redirect(url) {
+    var redirectTo = appConfig.appUrl + $state.href('owm.booking.show', { bookingId: $scope.booking.id });
+    console.log(url + '?redirectTo=' + encodeURIComponent(redirectTo) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm'));
+    // $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
+  }
 
   // PRICE & AVAILABILITY
 
