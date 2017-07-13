@@ -37,6 +37,10 @@ angular.module('openwheels.analytics', [])
 /*
 LIST OF ALL EVENTS
 
+AUTH
+  + signup
+    - label: (boolean) isFacebook
+
 BOOKING - DONE
   + created_pre
     - label: (boolean) isAuthenticated
