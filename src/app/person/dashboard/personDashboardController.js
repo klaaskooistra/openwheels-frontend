@@ -3,7 +3,7 @@
 angular.module('owm.person.dashboard', [])
 
 .controller('PersonDashboardController', function ($q, $scope, $sce, $state, me, bookingList, rentalList, actions,
-  authService, bookingService, alertService, boardcomputerService, actionService, resourceService, resourceQueryService, blogItems, $localStorage, personService, dialogService, $translate, $timeout) {
+  authService, bookingService, alertService, boardcomputerService, actionService, resourceService, resourceQueryService, blogItems, $localStorage, personService, dialogService, $translate, $timeout, Analytics) {
 
   // If booking_before_signup in local storage exists that means we have been redirected to this page after facebook signup
   // decide where to go next and try to guess user preference. If we do not know what flow to redirect
@@ -60,6 +60,7 @@ angular.module('owm.person.dashboard', [])
     }
   }
 
+
   function showModal() {
     var initOptions = function () {
       return [{
@@ -96,6 +97,12 @@ angular.module('owm.person.dashboard', [])
     loadFavoriteResources();
     loadMemberResources();
   }
+
+  if(me.registerSource === 'facebook_register') {
+    Analytics.trackEvent('auth', 'signup', 'isFacebook', true, undefined, true);
+    saveResource('facebook_login');
+  }
+
 
   $scope.renderHtml = function (html_code) {
     return $sce.trustAsHtml(html_code);
@@ -180,6 +187,28 @@ angular.module('owm.person.dashboard', [])
         alertService.loaded();
       });
   };
+
+  function saveResource(result) {
+    var params = {
+      person: me.id,
+      newProps: {
+        registerSource: result
+      }
+    };
+
+    alertService.load();
+    $scope.busy = true;
+    personService.alter(params).then(function () {
+
+    })
+      .catch(function (err) {
+        alertService.addError(err);
+      })
+      .finally(function () {
+        alertService.loaded();
+        $scope.busy = false;
+      });
+  }
 
   function loadFavoriteResources() {
     resourceService.getFavorites({
