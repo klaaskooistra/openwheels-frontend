@@ -7,17 +7,6 @@ angular.module('owm.resource.search', [
   .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore, preloader) {
 
     $scope.me = me;
-    function getVersion() {
-      if($stateParams.version && ($stateParams.version === '3' || $stateParams.version === '2')) {
-        return parseInt($stateParams.version);
-      }
-      if($cookieStore.get('search_version') === 3) {
-        return 3;
-      }
-      return 2;
-    }
-    $scope.version = getVersion();
-    var version3 = getVersion() === 3;
 
     var DEFAULT_LOCATION = {
       // Utrecht, The Netherlands
@@ -172,9 +161,7 @@ angular.module('owm.resource.search', [
       if (query.filters) {
         params.filters = query.filters;
       }
-      if(version3) {
-        params.sort = query.sort;
-      }
+      params.sort = query.sort;
       if (!params.location) {
         if (user.isAuthenticated) {
           params.person = user.identity.id;
@@ -193,66 +180,49 @@ angular.module('owm.resource.search', [
       }
 
       var promise;
-      if(version3) {
-        promise = resourceService.searchV3(params);
-      } else {
-        promise = resourceService.searchV2(params);
-      }
+      promise = resourceService.searchV3(params);
+
       return promise.then(function (resources) {
-          if(version3) {
-            $scope.numberOfResults = resources.totalResults > 100 ? Math.floor(resources.totalResults / 100) * 100  + '+' : resources.totalResults;
-            $scope.last_page = Math.min(Math.ceil(parseInt(resources.totalResults) / results_per_page), max_pages);
-            resources = resources.results;
-            resources = _.map(resources, function(resource) {
-              resource.rating = {
-                satisfaction: resource.rating_totals.satisfaction,
-                senders: resource.rating_totals.senders
-              };
-              delete resource.properties;
-              return resource;
-            });
-          }
-
-          if(!version3) {
-            // if there are less results than expected, the last page
-            // is not equal to the max_page. Calculate and update last_pag
-            if (resources.length < 1) {
-              $scope.last_page = startPage - 1;
-            } else {
-              $scope.last_page = startPage + Math.ceil(resources.length / results_per_page) - 1;
-            }
-          }
-
-          // cache results
-          for (var i = 0; i < numberOfPages; i++) {
-            $scope.pagedResults[startPage + i] = resources.slice((i) * results_per_page, (i + 1) * results_per_page);
-          }
-
-          // if needed, update UI
-          if (gotoStartPage) {
-            $scope.selectedResource = resources[0];
-            Analytics.trackEvent('discovery', 'search', user.isAuthenticated, undefined, true);
-            $scope.showPage(startPage);
-          } else {
-            if(version3) {
-              var images = _.map(resources, function(resource) {
-                if(resource.pictures && resource.pictures.length > 0 && resource.pictures[0] && resource.pictures[0].large) {
-                  return appConfig.serverUrl + '/' + resource.pictures[0].large;
-                }
-              });
-              preloader.preloadImages(images);
-            }
-					}
-
-          return resources;
-        })
-        .catch(function (err) {
-          alertService.addError(err);
-        })
-        .finally(function () {
-          $scope.searching = false;
-          alertService.loaded();
+        $scope.numberOfResults = resources.totalResults > 100 ? Math.floor(resources.totalResults / 100) * 100  + '+' : resources.totalResults;
+        $scope.last_page = Math.min(Math.ceil(parseInt(resources.totalResults) / results_per_page), max_pages);
+        resources = resources.results;
+        resources = _.map(resources, function(resource) {
+          resource.rating = {
+            satisfaction: resource.rating_totals.satisfaction,
+            senders: resource.rating_totals.senders
+          };
+          delete resource.properties;
+          return resource;
         });
+
+        // cache results
+        for (var i = 0; i < numberOfPages; i++) {
+          $scope.pagedResults[startPage + i] = resources.slice((i) * results_per_page, (i + 1) * results_per_page);
+        }
+
+        // if needed, update UI
+        if (gotoStartPage) {
+          $scope.selectedResource = resources[0];
+          Analytics.trackEvent('discovery', 'search', user.isAuthenticated, undefined, true);
+          $scope.showPage(startPage);
+        } else {
+          var images = _.map(resources, function(resource) {
+            if(resource.pictures && resource.pictures.length > 0 && resource.pictures[0] && resource.pictures[0].large) {
+              return appConfig.serverUrl + '/' + resource.pictures[0].large;
+            }
+          });
+          preloader.preloadImages(images);
+				}
+
+        return resources;
+      })
+      .catch(function (err) {
+        alertService.addError(err);
+      })
+      .finally(function () {
+        $scope.searching = false;
+        alertService.loaded();
+      });
     }
 
     $scope.showPage = function (page) {
@@ -287,7 +257,6 @@ angular.module('owm.resource.search', [
         }, 0);
       }
     };
-
 
     //select timeframe modal
     $scope.selectTimeframe = function () {

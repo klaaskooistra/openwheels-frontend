@@ -17,3 +17,5 @@ src/branding/config.json
 test/coverage
 /vendor
 /nbproject/private/
+/\[object Object\]/branding/config.json
+/\[object Object\]/branding/features.json

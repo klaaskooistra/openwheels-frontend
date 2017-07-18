@@ -33,24 +33,7 @@ angular.module('openwheels.analytics', [])
 })
 .run(function(Analytics, $cookieStore) {
 
-  function checkCookieSearch() {
-    var version = $cookieStore.get('search_version');
-    if(!version || (version !== 2 && version !== 3)) {
-      if(Math.random() < 0.500) {
-        version = 2;
-      } else {
-        version = 3;
-      }
-      $cookieStore.put('search_version', version);
-    }
-    return version;
-  }
-
-  var version = checkCookieSearch();
-  Analytics.set('dimension2', version);
-
-})
-;
+});
 /*
 LIST OF ALL EVENTS
 
@@ -92,6 +75,12 @@ BOOKING - DONE
     - triggers
       - BookingModule.js OnEnter state owm.booking.accept
       - BookingShowController.js then after bookingService.acceptRequest
+
+  + altered
+    - label: booking.id
+    - value:
+    - triggers
+      - BookingShowController.js then after bookingService.alterRequest
   
   + form_interaction
     - label:

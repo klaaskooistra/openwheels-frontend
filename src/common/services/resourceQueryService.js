@@ -17,8 +17,7 @@ angular.module('owm.resourceQueryService', [])
     radius   : defaultRadius,
     options  : null,
     filters  : null,
-    sort     : defaultSortMode,
-    version  : null,
+    sort     : defaultSortMode
   };
 
 
@@ -165,10 +164,6 @@ angular.module('owm.resourceQueryService', [])
       stateParams.sort = data.sort;
     }
 
-    if(data.version) {
-      stateParams.version = data.version;
-    }
-
     if (data.options) {
       stateParams.options = data.options.map(function (option) {
         return optionApi2Url[option];
@@ -182,13 +177,6 @@ angular.module('owm.resourceQueryService', [])
     }
 
     return stateParams;
-  }
-
-  function setVersion(version) {
-    version = window.parseInt(version);
-    if(version === 3 || version === 2) {
-      data.version = version;
-    }
   }
 
   function parseStateParams (stateParams) {
@@ -215,11 +203,7 @@ angular.module('owm.resourceQueryService', [])
     if(stateParams.sort) {
       setSort(stateParams.sort);
     }
-
-    if(stateParams.version) {
-      setVersion(stateParams.version);
-    }
-
+    
     setRadius(stateParams.radius);
     setPage(stateParams.page);
 

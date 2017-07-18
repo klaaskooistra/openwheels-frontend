@@ -10,12 +10,9 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
       'onNewPlace': '=',
       'onClickTime': '=',
       'onClickFilters': '=',
-      'onSortChange': '=',
-      'version': '='
+      'onSortChange': '='
     },
     link: function($scope, element) {
-
-      var version3 = $scope.version === 3;
 
       $scope.$mdMenu = $mdMenu;
       $scope.search = {};
@@ -31,7 +28,7 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
 
       $scope.showFilters = _.isFunction($scope.onClickFilters);
       $scope.showTime = _.isFunction($scope.onClickTime);
-      $scope.showSort = _.isFunction($scope.onSortChange) && version3;
+      $scope.showSort = _.isFunction($scope.onSortChange);
 
       $scope.sort = resourceQueryService.getSort();
 

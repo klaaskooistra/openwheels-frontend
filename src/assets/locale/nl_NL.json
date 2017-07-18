@@ -601,6 +601,8 @@
     "INFO_RESOURCE_EDIT_INSURANCE_POLICY": "Jouw auto is automatisch goed verzekerd, voor elke verhuurperiode sluiten wij een all-risk ritverzekering af. Je hebt dus geen omkijken naar de verzekering. Is jouw auto al goed verzekerd voor gebruik als deelauto? Neem dan contact met ons op zodat we geen ritverzekering meer voor je afsluiten",
     "INFO_SELF_PROFILE": "Wat mensen van je zien hangt af van hun rol. Je kunt je profielpagina in een incognito venster bekijken om te zien wat niet-ingelogde mensen zien. Of kijk als je uitgelogd bent",
     "INFO_MY_PROFILE_CONTACT": "Let op: de locatie van jouw auto verandert niet automatisch na het wijzigen van je woonadres. De locatie van jouw auto wijzig je bij",
+    "INFO_MEMBERS_RESOURCES" : "Dit zijn auto's waaraan je als vriend bent toegevoegd",
+    "MEMBERS_RESOURCES": "Auto's waar je vriend van bent",
     "FAVORITE_RESOURCES": "Favorieten",
     "SHOW_MORE_RESOURCES": "Zoek meer auto's",
     "RESOURCE_NO_NAME": "Naamloos",
