@@ -100,6 +100,8 @@ angular.module('owm.person')
         angular.extend(original, saved);
         $scope.ownContracts = $filter('filter')($scope.ownContracts, { status: 'active' });
         $scope.ownContractsCopy = angular.copy($scope.ownContracts);
+        $scope.isLoadingContracts = true;
+        loadContracts();
       })
       .catch(function (err) {
         alertService.addError(err);
