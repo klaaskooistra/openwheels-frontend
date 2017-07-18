@@ -144,6 +144,13 @@
   </div>
 </div>
 
+<!-- Booking altered after buy voucher -->
+<div class="card" ng-if="alteredAfterBuyVoucher">
+  <div class="card-body card-inverse" style="background-color:#3bab78; color: white;">
+    <span>Gelukt! De betaling is ontvangen en de reservering is gewijzigd.</span>
+  </div>
+</div>
+
 <!-- FORM -->
 <div id="bookingFormContainer" uib-collapse="!showBookingForm" ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
   <div class="card">
@@ -226,8 +233,17 @@
             </div>
           </div>
 
+          <!-- pay button -->
+          <div class="form-group" ng-if="extraCredit">
+            <div class="text-center">
+              <button type="button" class="btn btn-success" ng-click="buyVoucher(extraCredit)">
+                  Koop {{ extraCredit | currency }} rijtegoed
+              </button>
+            </div>
+          </div>
+
           <!-- buttons -->
-          <div class="text-center">
+          <div class="text-center" ng-if="!extraCredit">
             <p>
               <button class="btn btn-primary" ng-if="allowEdit"
                 ng-disabled="bookingRequest.beginRequested === booking.beginBooking && bookingRequest.endRequested === booking.endBooking"

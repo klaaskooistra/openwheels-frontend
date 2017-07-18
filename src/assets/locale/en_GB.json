@@ -441,6 +441,8 @@
     "INFO_RESOURCE_EDIT_REFUEL_BY_RENTER": "Enable this checkbox if you want to have your car picked up and returned fully refuelled. The fuel price will not be charged.",
     "INFO_RESOURCE_EDIT_INSURANCE_POLICY": "Your car will be properly insured. Per booking period, we will provide an all-risk trip insurance. Please contact us if your car has already been insured for car sharing.",
     "INFO_SELF_PROFILE": "What people see here depends on their role. Log out or view this page in an incognito window to see what it looks like to others who are not logged in.",
+    "INFO_MEMBERS_RESOURCES" : "Dit zijn auto's waaraan je als vriend bent toegevoegd",
+    "MEMBERS_RESOURCES": "Auto's waar je vriend van bent",
     "FAVORITE_RESOURCES": "Favorites",
     "SHOW_MORE_RESOURCES": "Find more cars",
     "RESOURCE_NO_NAME": "No name",
