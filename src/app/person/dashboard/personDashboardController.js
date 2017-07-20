@@ -100,7 +100,7 @@ angular.module('owm.person.dashboard', [])
 
   if(me.registerSource === 'facebook_register') {
     Analytics.trackEvent('person', 'isFacebookSignUp', me.id, undefined, true);
-    saveResource('facebook_login');
+    saveRegisterSource('facebook_login');
   }
 
 
@@ -188,7 +188,7 @@ angular.module('owm.person.dashboard', [])
       });
   };
 
-  function saveResource(result) {
+  function saveRegisterSource(result) {
     var params = {
       person: me.id,
       newProps: {
