@@ -99,7 +99,7 @@ angular.module('owm.person.dashboard', [])
   }
 
   if(me.registerSource === 'facebook_register') {
-    Analytics.trackEvent('auth', 'signup', 'isFacebook', true, undefined, true);
+    Analytics.trackEvent('person', 'isFacebookSignUp', me.id, undefined, true);
     saveResource('facebook_login');
   }
 
