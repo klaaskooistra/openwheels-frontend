@@ -43,32 +43,32 @@ BOOKING - DONE
     - triggers:
         - reservationForm.tpl click button
           * condition: button not disabled
-          
+
   + created_post
     - label: booking.id
     - value: fixed number 11 iif owner 282, 4 iif isConfirmationRequiredOthers = false, else undefined
     - triggers:
         - reservationForm.js then after booking.create
-    
+
   + cancelled_renter
     - label: booking.id
     - value:
     - triggers:
         - BookingShowController.js then after bookingService.cancel
-  
+
   + cancelled_owner
     - label: booking.id
     - value:
     - triggers:
         - BookingShowController.js then after bookingService.cancel
-  
+
   + rejected
     - label: booking.id
     - value:
     - triggers
       - BookingModule.js OnEnter state owm.booking.reject
       - BookingShowController.js then after bookingService.rejectRequest
-  
+
   + accepted
     - label: booking.id
     - value: 4
@@ -81,11 +81,11 @@ BOOKING - DONE
     - value:
     - triggers
       - BookingShowController.js then after bookingService.alterRequest
-  
+
   + form_interaction
     - label:
     - value:
-  
+
   + discount_applied
     - label:
     - value:
@@ -98,7 +98,7 @@ BOOKING - DONE
     - triggers
       - BookingAdministerController then after bookingService.setTrip
 
-  
+
 RESOURCE - DONE
   + resource_created
     - label: resource.id
@@ -145,6 +145,12 @@ PERSON - DONE
     - triggers
       - PersonDataDirective.js then after PersonService
       - AboutMeController then after PersonService
+
+    + isFacebookSignUp
+      - label: person.id
+      - value:
+      - triggers
+      - PersonDashboardController.js
 
   + driverlicense_uploaded
     - label: person.id
@@ -198,7 +204,7 @@ DISCOVERY - DONE
     - triggers
       - chatPopupController then after messageService.sendMessageTo
 
-  
+
 PAYMENT - DONE
   + started
     - label:
