@@ -203,6 +203,8 @@ angular.module('openwheels', [
   })
   .run(function (optimizely) {
     optimizely.loadProject();
+    window.optimizely = window.optimizely || [];
+    window.optimizely.push('activateUniversalAnalytics');
   })
 
 
