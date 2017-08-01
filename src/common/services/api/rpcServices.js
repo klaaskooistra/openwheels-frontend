@@ -26,6 +26,9 @@ angular.module('rpcServices', [])
   this.setProfileImage = m('setProfileImage');
   this.emailBookingLink = m('emailBookingLink');
   this.emailPreferenceToNone = m('emailPreferenceToNone');
+  this.sendVerificationCode = m('sendVerificationCode');
+  this.verifyPhoneNumber = m('verifyPhoneNumber');
+  this.addPhoneNumber = m('addPhoneNumber');
 })
 
 .service('placeService', function (api) {
