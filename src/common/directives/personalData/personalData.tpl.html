@@ -77,6 +77,10 @@
 
         <!-- phone number -->
         <div phone-number></div>
+        
+        <div class="err-block" ng-show="personalDataForm.$submitted && !verifiedPhoneNumbers">
+            <span class="text-danger" ng-show="!verifiedPhoneNumbers">Verplicht</span>
+        </div>
         <!-- /phone number -->
 
         <h3>{{ 'MY_PROFILE_ADDRESS' | translate }}</h3>

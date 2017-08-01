@@ -57,6 +57,10 @@ angular.module('personalDataDirective', [])
           var _this = this;
           alertService.closeAll();
           alertService.load();
+
+          // check if person had verified phone numbers
+          that.initPhoneNumbers();
+
           $scope.person.dateOfBirth = $scope.date.year + '-' + $scope.date.month + '-' + $scope.date.day;
           var newProps = $filter('returnDirtyItems')(angular.copy($scope.person), $scope.personalDataForm);
 
@@ -80,7 +84,7 @@ angular.module('personalDataDirective', [])
             month = $scope.date.month,
             day = $scope.date.day,
             male = $scope.genderText,
-            phoneNumbers = $scope.person.phoneNumbers,
+            phoneNumbers = $scope.verifiedPhoneNumbers,
             city = $scope.person.city,
             zipcode = $scope.person.zipcode,
             streetNumber = $scope.person.streetNumber;
@@ -110,7 +114,7 @@ angular.module('personalDataDirective', [])
           // first check if all person data is filled in
           if (firstName && surname) {
             if (year && month && day) {
-              if (phoneNumbers[0].number) {
+              if (phoneNumbers) {
                 if (streetNumber && zipcode && city) {
                   // save persons info
                   personService.alter({
@@ -158,7 +162,7 @@ angular.module('personalDataDirective', [])
                   alertService.loaded();
                 }
               } else {
-                alertService.add('danger', 'Vul je telefoonnummmer in zodat we je kunnen bellen.', 5000);
+                alertService.add('danger', 'Verifieer een telefoonnummer zodat we contact met je kunnen opnemen.', 5000);
                 alertService.loaded();
               }
             } else {
@@ -219,8 +223,14 @@ angular.module('personalDataDirective', [])
             version: 2
           }).then(function (person) {
             masterPerson = person;
-            _this.initAccount(person);
             $scope.person = angular.copy(person);
+
+            //check if person has iban account
+            _this.initAccount(person);
+
+            // check if person has verified phone number
+            _this.initPhoneNumbers();
+
             // certain fields may only be edited if driver license is not yet checked by the office (see template)
             $scope.allowLicenseRelated = (person.driverLicenseStatus !== 'ok');
 
@@ -237,6 +247,15 @@ angular.module('personalDataDirective', [])
               year: Number(moment($scope.person.dateOfBirth).format('YYYY'))
             };
           });
+        },
+        initPhoneNumbers: function () {
+          $scope.verifiedPhoneNumbers = false;
+
+          for(var i=0; i<$scope.person.phoneNumbers.length; i++) {
+            if($scope.person.phoneNumbers[i].verified === true) {
+              $scope.verifiedPhoneNumbers = true;
+            }
+          }
         }
       };
 

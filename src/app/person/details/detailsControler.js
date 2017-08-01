@@ -86,22 +86,19 @@ angular.module('owm.person.details', [])
       // setHeight($scope.pageNumber);
     };
     $scope.prevSection = function (elementNumber, elementNumberTwo) {
-      if($scope.isBlocked)
-      {
-        if ($scope.pageNumber > 1) {
-          var number = JSON.parse(elementNumber);
-          var numberTwo = JSON.parse(elementNumberTwo);
+      if ($scope.pageNumber > 1) {
+        var number = JSON.parse(elementNumber);
+        var numberTwo = JSON.parse(elementNumberTwo);
 
-          angular.element('.details--card__section')[number].classList.add('prevSection');
-          angular.element('.details--card__section')[numberTwo].classList.add('prevSection');
-          $timeout(function () {
-            angular.element('.details--card__section')[number].classList.remove('prevSection');
-            angular.element('.details--card__section')[numberTwo].classList.remove('prevSection');
-          }, 2000);
-          $scope.pageNumber--;
-          goToNextState($scope.pageNumber);
-          $anchorScroll('scroll-to-top-anchor');
-        }
+        angular.element('.details--card__section')[number].classList.add('prevSection');
+        angular.element('.details--card__section')[numberTwo].classList.add('prevSection');
+        $timeout(function () {
+          angular.element('.details--card__section')[number].classList.remove('prevSection');
+          angular.element('.details--card__section')[numberTwo].classList.remove('prevSection');
+        }, 2000);
+        $scope.pageNumber--;
+        goToNextState($scope.pageNumber);
+        $anchorScroll('scroll-to-top-anchor');
       }
     };
 
@@ -162,6 +159,30 @@ angular.module('owm.person.details', [])
       });
       initAlerts();
     }
+
+    var inputs = {
+      init: function () {
+        this.autoDate();
+      },
+      autoDate: function () { //date input field
+        var autoDateInput = angular.element('.autoDateInput')[0];
+        autoDateInput.onkeyup = function (e) {
+          var target = e.srcElement;
+          var maxLength = parseInt(target.attributes.maxlength.value, 10);
+          var myLength = target.value.length;
+          if (myLength >= maxLength) {
+            var next = target;
+            next = next.nextElementSibling;
+            if (next !== null) {
+              if (next.tagName.toLowerCase() === 'input') {
+                next.focus();
+              }
+            }
+          }
+        };
+      }
+    };
+    inputs.init();
 
     function initAlerts() {
       var p = $scope.person;
