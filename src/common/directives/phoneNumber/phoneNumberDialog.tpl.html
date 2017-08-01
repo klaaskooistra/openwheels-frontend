@@ -1,0 +1,35 @@
+<md-dialog flex-xs="100" flex-sm="70" flex-md="50" flex-lg="30" flex-xl="25">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Mobiel nummer verifiëren</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon>close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content  class="md-dialog-content">
+
+        <p>We hebben een code gestuurd naar het opgegeven telefoonnummer Vul hieronder de code in om je telefoonnummer te verifiëren.</p>
+
+        <p ng-if="codeIsResend" class="text-success">Er is een nieuwe code naar je gestuurd.</p>
+
+        <div flex style="min-height: 8em;">
+            <!-- enter verification code -->
+            <div id="enter_verification_code">
+                <input type="number" inputmode="numeric" pattern="[0-9]*" name="verificationCode" class="form-control" ng-model="verificationCode" placeholder="Code" maxlength="4" max="9999" min="0">
+            </div>
+
+            <!-- send verification code -->
+            <div id="send_verification_code">
+                <button class="mywheels-btn mywheels-btn-default" ng-click="verifyPhoneNumber(id, number, person)">
+                    Bevestigen
+                </button>
+                <button class="mywheels-btn mywheels-btn-transparant" ng-click="sendVerificationCode(id, number, person, true)">
+                    Nogmaals verzenden
+                </button>
+            </div>
+        </div>
+
+    </md-dialog-content>
+</md-dialog>

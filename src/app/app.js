@@ -63,6 +63,7 @@ angular.module('openwheels', [
   'datetimeDirective',
   'bookingListDirective',
   'licencePlateInfoDirective',
+  'phoneNumberDirective',
   'formGroupDirective',
   'bindingDirectives',
   'ratingThumbDirective',

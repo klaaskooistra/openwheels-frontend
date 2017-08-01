@@ -279,6 +279,7 @@
     "CITY": "Woonplaats",
     "ENTER_ZIPCODE_STREET_NUMBER": "Vul eerst een correcte postcode en huisnummer in",
     "PHONENUMBER": "Telefoonnummer",
+    "MOBILE_PHONENUMBER": "Mobiel nummer",
     "PHONENUMBER_TYPE": "Type",
     "PHONENUMBER_ADD": "Telefoonnummer toevoegen",
     "REMOVE": "Verwijder",
