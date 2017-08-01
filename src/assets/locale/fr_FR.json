@@ -172,6 +172,7 @@
     "ENTER_ZIPCODE_STREET_NUMBER": "Insérer d'abord un code postal et un numéro de domicile valide",
     "PROFILE_PICTURE": "Photo de profil",
     "PHONENUMBER": "N° de téléphone",
+    "MOBILE_PHONENUMBER": "N° de téléphone",
     "PHONENUMBER_TYPE": "Type",
     "PHONENUMBER_ADD": "Insérer votre N° de téléphone",
     "REMOVE": "Supprimer",
