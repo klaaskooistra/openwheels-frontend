@@ -114,6 +114,7 @@
     "CITY": "City",
     "ENTER_ZIPCODE_STREET_NUMBER": "Enter a correct zip code and house number",
     "PHONENUMBER": "Phone number",
+    "MOBILE_PHONENUMBER": "Mobile number",
     "MY_PROFILE_SETTINGS": "My settings",
     "TYPE_OF_USER": "User type",
     "PICK_PREFERENCE": "Select a preference",
