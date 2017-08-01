@@ -8,7 +8,7 @@
     <!-- PERSONAL DATA  -->
     <div class="card details--card__section" id="personal-data" ng-show="showFirst">
         <div class="card-body details--card">
-            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking"></section>
+            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking && showFirst"></section>
             <!-- HERE -->
             <section class="details--card--form">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_BASIC' | translate }}</h2>
@@ -23,7 +23,7 @@
     <!-- card -->
     <div class="card details--card__section" id="license-upload" ng-show="showSecond">
         <div class="card-body details--license-upload details--card">
-            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking"></section>
+            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking && showSecond"></section>
             <!-- upload license -->
             <section class="details--card--form" ng-show="!checkedLater">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_LICENCE' | translate }}</h2>
@@ -136,7 +136,11 @@
     <!-- card -->
     <div class="card details--card__section" ng-show="showThird">
         <div class="card-body details--card">
-            <section resource-sidebar class="details--profile__sidebar" ng-if="!isBusy && isbooking && !isBlocked"></section>
+            <section ng-if="isBusy && isbooking">
+                <h2 class="card-title">Je boeking wordt gemaakt..</h2>
+                <p>Nog heel even wachten.</p>
+            </section>
+            <section resource-sidebar class="details--profile__sidebar" ng-if="!isBusy && isbooking && !isBlocked && showThird"></section>
             <section class="details--card--form" ng-if="!isBusy && isbooking && !isBlocked" ng-hide="!isAvailable && !isBlocked">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_NEARLY' | translate }}</h2>
 
