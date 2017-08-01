@@ -1,4 +1,4 @@
-<div class="progress--steps">
+<div class="progress--steps" ng-if="!isBlocked">
     <section class="step" data-section="1" title="Basisgegevens" ng-class="{'selected': pageNumber === 1 ? true : false, 'done': pageNumber > 1 ? true : false }" ui-sref="owm.person.details({pageNumber: '1'})"></section>
     <section class="step" data-section="2" title="Rijbewijs uploaden" ng-class="{'selected': pageNumber === 2 ? true : false, 'done': pageNumber > 2 ? true : false}" ui-sref="owm.person.details({pageNumber: '2'})"></section>
     <section class="step last-step" data-section="3" title="{{isbooking !== true ? 'Auto zoeken' : 'Betalen'}}" ng-class="{'selected': pageNumber === 3 ? true : false, 'done': pageNumber > 3 ? true : false }" ng-click="nextSection()"></section>
@@ -8,13 +8,13 @@
     <!-- PERSONAL DATA  -->
     <div class="card details--card__section" id="personal-data" ng-show="showFirst">
         <div class="card-body details--card">
-            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking"></section>
+            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking && showFirst"></section>
             <!-- HERE -->
             <section class="details--card--form">
-              <h2 class="card-title">{{ 'DETAILS_PROFILE_BASIC' | translate }}</h2>
-              <p ng-if="isbooking" translate="DETAILS_PROFILE_BASIC_TEXT" translate-values="{firstName: person.firstName}"> </p>
-              <h3>{{ 'MY_PROFILE_PERSONAL' | translate }}</h3>
-              <personal-data next="nextSection()"></personal-data> 
+                <h2 class="card-title">{{ 'DETAILS_PROFILE_BASIC' | translate }}</h2>
+                <p ng-if="isbooking" translate="DETAILS_PROFILE_BASIC_TEXT" translate-values="{firstName: person.firstName}"> </p>
+                <h3>{{ 'MY_PROFILE_PERSONAL' | translate }}</h3>
+                <personal-data next="nextSection()"></personal-data>
             </section>
         </div>
     </div>
@@ -23,7 +23,7 @@
     <!-- card -->
     <div class="card details--card__section" id="license-upload" ng-show="showSecond">
         <div class="card-body details--license-upload details--card">
-            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking"></section>
+            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking && showSecond"></section>
             <!-- upload license -->
             <section class="details--card--form" ng-show="!checkedLater">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_LICENCE' | translate }}</h2>
@@ -49,8 +49,44 @@
                 </div>
 
                 <div ng-show="containsLicence && !licenceUploaded">
-                    <p>{{ 'LICENSE_CONFIRM' | translate }}</p>
-                    <button title="upload" type="button" class="mywheels-btn mywheels-btn-normal btn--navigation__previous mywheels-btn-big" md-ink-ripple="#4b702c" ng-disabled="isBusy" ng-click="startUpload()">
+
+                    <section class="details--card--form">
+                        <div class="ng-isolate-scope" aria-hidden="true">
+                            <form class="mywheels-form details--profile--form ng-pristine ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength ng-valid" name="licenceDataForm" style="">
+
+                                <p class="ng-scope">Vul aan de hand van je geüploade rijbewijs de onderstaande gegevens in.</p>
+                                <div class="licenceNumberGroup">
+                                    <h3 class="ng-binding">Rijbewijsnummer</h3>
+                                    <div id="licenceNumber_group" class="icon payment">
+                                        <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+                                    </div>
+                                    <div class="err-block" ng-if="!licenceNumberValid" aria-hidden="true">
+                                        <span class="text-danger ng-binding" aria-hidden="true">Rijbewijsnummer is ongeldig</span>
+                                    </div>
+                                </div>
+
+                                <div class="autoDateInput">
+                                    <h3 class="ng-binding">Verloopdatum</h3>
+                                    <div id="date" class="icon date">
+                                        <input id="day" name="day" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.day" placeholder="DD" maxlength="2" max="31" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
+                                        <input id="month" name="month" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.month" placeholder="MM" maxlength="2" max="12" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
+                                        <input id="year" name="year" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.year" placeholder="JJJJ" maxlength="4" max="{{ validLicenceMax }}" min="{{ validLicenceMin }}" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
+                                    </div>
+
+                                    <div class="err-block" ng-if=" !licenceDateValid || !licenceDataForm.day.$valid || !licenceDataForm.month.$valid || !licenceDataForm.year.$valid" aria-hidden="true">
+                                        <span class="text-danger ng-binding" aria-hidden="true">De verloopdatum van je rijbewijs is ongeldig</span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <div>
+                        <br/>
+                        <p>{{ 'LICENSE_CONFIRM' | translate }}</p>
+                    </div>
+
+                    <button title="upload" type="button" class="mywheels-btn mywheels-btn-normal btn--navigation__previous mywheels-btn-big" md-ink-ripple="#4b702c" ng-disabled="isBusy" ng-click="prepareUpload()">
                         {{'YES' | translate }}
                     </button>
                     <button type="button" class="mywheels-btn mywheels-btn-error btn--navigation__previous mywheels-btn-big" md-ink-ripple="#9a3d26" ng-click="cancelUpload()">
@@ -77,7 +113,7 @@
                 </div>
 
                 <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="skipFlow()" ng-show="!$root.isWindowSizeSM && !containsLicence && isbooking || !$root.isWindowSizeSM && !licenceUploaded && isbooking"
-                    style="float: right; margin: 1em 0 0 0;">
+                        style="float: right; margin: 1em 0 0 0;">
                     {{ 'LATER' | translate}}
                     <md-icon>navigate_next</md-icon>
                 </button>
@@ -100,8 +136,12 @@
     <!-- card -->
     <div class="card details--card__section" ng-show="showThird">
         <div class="card-body details--card">
-            <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking"></section>
-            <section class="details--card--form" ng-if="isbooking" ng-hide="!isAvailable">
+            <section ng-if="isBusy && isbooking">
+                <h2 class="card-title">Je boeking wordt gemaakt..</h2>
+                <p>Nog heel even wachten.</p>
+            </section>
+            <section resource-sidebar class="details--profile__sidebar" ng-if="!isBusy && isbooking && !isBlocked && showThird"></section>
+            <section class="details--card--form" ng-if="!isBusy && isbooking && !isBlocked" ng-hide="!isAvailable && !isBlocked">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_NEARLY' | translate }}</h2>
 
                 <p ng-if="booking.approved === 'BUY_VOUCHER'">
@@ -134,7 +174,7 @@
                     </div>
                 </div>
             </section>
-            <section ng-if="!isbooking" class="details--card--form">
+            <section ng-if="!isBusy && !isbooking && !isBlocked" class="details--card--form">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_PHOTO' | translate }}</h2>
                 <p>{{ 'DETAILS_PROFILE_SEARCH' | translate }} </p>
 
@@ -151,7 +191,7 @@
                 </div>
                 <!-- /call to action buttons -->
             </section>
-            <section ng-if="!isAvailable" class="details--card--form">
+            <section ng-if="!isBusy && !isAvailable && !isBlocked" class="details--card--form">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_NOT_AVAILABLE' | translate }}</h2>
                 <p>{{ 'DETAILS_PROFILE_NOT_AVAILABLE_text' | translate }} </p>
 
@@ -168,6 +208,11 @@
                 </div>
                 <!-- /call to action buttons -->
             </section>
+            <section ng-if="!isBusy && isBlocked" class="details--card--form">
+                <h2 class="card-title">Deze boeking is helaas niet mogelijk</h2>
+                <p>Om een betrouwbare community te kunnen garanderen, controleren we alle leden van MyWheels. Op basis van deze controle is een verhoogd risico geconstateerd. Daarom is je account gedeactiveerd. Je heb hierover een mail ontvangen met meer informatie. </p>
+            </section>
+
         </div>
     </div>
     <!--/ card -->

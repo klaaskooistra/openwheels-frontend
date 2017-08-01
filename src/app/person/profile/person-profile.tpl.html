@@ -218,29 +218,11 @@
           <a ui-sref="owm.resource.own">{{ 'MY_RESOURCES' | translate }}</a>.
         </div>
 
-        <div ng-repeat="p in person.phoneNumbers">
-          <div class="form-group">
-            <label ng-if="$index === 0" for="number-{{ $index }}">{{ 'PHONENUMBER' | translate }}</label>
-            <div class="input-group">
-              <span class="input-group-btn" ng-if="person.phoneNumbers.length > 1">
-                <button type="button" class="btn btn-default" ng-click="removePhone(p, $index)"><i class="fa fa-trash-o"></i></button>
-              </span>
-              <input type="text" class="form-control" id="number-{{ $index }}" class="form-control" ng-model="p.number">
-              <span class="input-group-addon">
-                <input type="checkbox" name="confidential" ng-model="p.confidential"> {{ 'CONFIDENTIAL' | translate }}
-            </span>
-            </div>
-          </div>
-        </div>
+        <div phone-number></div>
 
         <p class="help-block" style="margin-top:-10px" ng-show="!person.phoneNumbers.length || (person.phoneNumbers.length === 1 && !person.phoneNumbers[0].number)">
           <span class="text-danger">{{ 'REQUIRED' | translate }}</span>
         </p>
-        <div class="form-group">
-          <a href="" ng-click="addPhone()" ng-if="person.phoneNumbers.length && person.phoneNumbers[person.phoneNumbers.length-1].number">
-            <i class="fa fa-plus fa-fw"></i> {{ 'PHONENUMBER_ADD' | translate }}
-          </a>
-        </div>
 
         <button id="submitForm" type="button" class="btn btn-primary"
           ng-disabled="contactFormProcessing || contactDataForm.$pristine || !contactDataForm.$valid || !person.phoneNumbers.length || (person.phoneNumbers.length > 0 && !person.phoneNumbers[0].number)"

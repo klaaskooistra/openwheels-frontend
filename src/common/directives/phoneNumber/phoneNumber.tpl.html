@@ -1,0 +1,65 @@
+<div class="mywheels-form">
+	<h3>{{ 'MOBILE_PHONENUMBER' | translate }}</h3>
+
+	<!-- show on screens greater than 600px -->
+	<div id="phone_number_group" class="responsive hide-xs" ng-repeat="p in person.phoneNumbers" layout="row" layout-wrap>
+		<!-- edit phone number -->
+	    <div id="edit_phone_number_group" flex="80" class="form-group">
+        	<div class="input-group">
+		        <span class="input-group-btn" ng-if="person.phoneNumbers.length > 1">
+		          <button type="button" class="btn btn-default" ng-click="removePhone(p, $index)">
+		          	<md-icon ng-style="{'font-size': '16px', height: '18px'}">delete</md-icon>
+		          </button>
+		        </span>
+	            <input type="tel" name="phone_number" class="form-control" id="number-{{ $index }}" ng-model="p.number" ng-disabled="p.verified">
+	        </div>
+	    </div>
+
+		<!-- verify phone number -->
+	    <div id="verify_phone_number_group" flex="20" ng-if="!p.verified">
+        	<a class="mywheels-btn mywheels-btn-normal verify_button" ng-click="addOrVerifyNumber(p.id, p.number, p.confidential)">
+        		Verifiëren
+        	</a>
+	    </div>
+
+		<!-- if already verified -->
+	    <div id="verified_phone_number_group" flex="20" ng-if="p.verified">
+        	<span class="text-success">Geverifieerd!</span>
+	    </div>
+	</div>
+
+	<!-- show on screens smaller than 600px -->
+	<div id="phone_number_group" class="responsive hide-gt-xs" ng-repeat="p in person.phoneNumbers">
+		<!-- edit phone number -->
+	    <div id="edit_phone_number_group" class="form-group">
+        	<div class="input-group">
+		        <span class="input-group-btn" ng-if="person.phoneNumbers.length > 1">
+		          <button type="button" class="btn btn-default" ng-click="removePhone(p, $index)">
+		          	<md-icon ng-style="{'font-size': '16px', height: '18px'}">delete</md-icon>
+  				  </button>
+		        </span>
+	            <input type="tel" name="phone_number" class="form-control" id="number-{{ $index }}" ng-model="p.number" ng-disabled="p.verified">
+	        </div>
+	    </div>
+
+		<!-- verify phone number -->
+	    <div id="verify_phone_number_group" ng-if="!p.verified">
+        	<a class="mywheels-btn mywheels-btn-normal verify_button" ng-click="addOrVerifyNumber(p.id, p.number, p.confidential)">
+        		Verifiëren
+        	</a>
+	    </div>
+
+		<!-- verify phone number -->
+	    <div id="verified_phone_number_group" ng-if="p.verified">
+        	<span class="text-success">Geverifieerd!</span>
+	    </div>
+	</div>
+
+    <div class="form-group" style="margin-top:10px;">
+      <a href="" ng-click="addPhone()" ng-if="person.phoneNumbers.length && person.phoneNumbers[person.phoneNumbers.length-1].number">
+        <md-icon ng-style="{color: '#5faac8', 'font-size': '20px', height: '22px'}">add</md-icon>{{ 'PHONENUMBER_ADD' | translate }}
+      </a>
+    </div>
+
+
+</div>

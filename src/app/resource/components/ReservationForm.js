@@ -341,7 +341,21 @@ angular.module('owm.resource.reservationForm', [])
     });
   };
 
+  $scope.initPhoneNumbers = function () {
+    $scope.verifiedPhoneNumbers = false;
+
+    for(var i=0; i<$scope.person.phoneNumbers.length; i++) {
+      if($scope.person.phoneNumbers[i].verified === true) {
+        $scope.verifiedPhoneNumbers = true;
+      }
+    }
+  };
+
   function createBookingDoCalls(booking) {
+    if($scope.person) {
+      $scope.initPhoneNumbers();
+    }
+
     if (!booking.beginRequested || !booking.endRequested) {
       $scope.loading.createBooking = false;
       return alertService.add('danger', $filter('translate')('DATETIME_REQUIRED'), 5000);
@@ -368,6 +382,18 @@ angular.module('owm.resource.reservationForm', [])
       $scope.loading.createBooking = false;
       return alertService.add('danger', 'Voordat je een auto kunt boeken, hebben we nog wat gegevens van je nodig.', 5000);
     } else if ($scope.person.status === 'new' && $scope.features.signupFlow) { // upload driver's license
+      $scope.loading.createBooking = false;
+      return $state.go('owm.person.details', { // should register
+        pageNumber: '1',
+        city: $scope.resource.city ? $scope.resource.city : 'utrecht',
+        resourceId: $scope.resource.id,
+        startDate: booking.beginRequested,
+        endDate: booking.endRequested,
+        discountCode: booking.discountCode,
+        remarkRequester: booking.remarkRequester,
+        riskReduction: booking.riskReduction
+      });
+    } else if ($scope.person.status === 'book-only' && $scope.features.signupFlow && $scope.person.numberOfBookings === 0 && !$scope.verifiedPhoneNumbers) { // verify phone number
       $scope.loading.createBooking = false;
       return $state.go('owm.person.details', { // should register
         pageNumber: '1',

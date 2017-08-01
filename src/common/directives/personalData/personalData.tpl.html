@@ -76,18 +76,10 @@
         <!-- /gender -->
 
         <!-- phone number -->
-        <h3>{{ 'PHONENUMBER' | translate }}</h3>
-        <div ng-repeat="p in person.phoneNumbers" class="field-margin">
-            <div class="input-group">
-                <span class="input-group-btn" ng-if="person.phoneNumbers.length > 1">
-                  <button type="button" class="btn btn-default" ng-click="removePhone(p, $index)"><i class="fa fa-trash-o"></i></button>
-                </span>
-                <input type="tel" class="form-control" id="number-{{ $index }}" ng-model="p.number">
-                <div class="checkbox input-group-addon">
-                  <input type="checkbox" name="confidential" id="confidential" ng-model="p.confidential">
-                  <label for="confidential">{{ 'CONFIDENTIAL' | translate }}</label>
-                </div>
-            </div>
+        <div phone-number></div>
+        
+        <div class="err-block" ng-show="personalDataForm.$submitted && !verifiedPhoneNumbers">
+            <span class="text-danger" ng-show="!verifiedPhoneNumbers">Verplicht</span>
         </div>
         <!-- /phone number -->
 
