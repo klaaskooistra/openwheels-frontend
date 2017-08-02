@@ -36,6 +36,7 @@ angular.module('phoneNumberDirective', [])
           $scope.updatePhoneNumbers(phoneNumber);
         })
         .catch(function(e) {
+          alertService.loaded();
           alertService.addError(e);
         });
       };
@@ -54,6 +55,7 @@ angular.module('phoneNumberDirective', [])
           $scope.updatePhoneNumbers(phoneNumber);
         })
         .catch(function(e) {
+          alertService.loaded();
           alertService.addError(e);
         });
       };
@@ -109,6 +111,7 @@ angular.module('phoneNumberDirective', [])
           }
         })
         .catch(function(e) {
+          alertService.loaded();
           if (e.message === 'Too many verification codes sent') {
             alertService.add(e.level, 'Je hebt het maximaal aantal verificatiecodes bereikt.', 5000);
           } else {
