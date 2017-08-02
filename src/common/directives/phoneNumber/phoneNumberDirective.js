@@ -71,7 +71,7 @@ angular.module('phoneNumberDirective', [])
           //send the code for the first time
           if(phoneNumber && !$scope.verificationCodeAlreadySent) {
             $scope.sendVerificationCode(phoneNumber.id, phoneNumber.number, $scope.person);
-          } 
+          }
           //don't send the code again on opening the dialog
           else if (phoneNumber && $scope.verificationCodeAlreadySent) {
             $scope.verifyPhoneNumberDialog(phoneNumber.id, phoneNumber.number, $scope.person);
