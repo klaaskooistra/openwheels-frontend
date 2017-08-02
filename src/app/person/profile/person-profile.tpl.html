@@ -392,18 +392,6 @@
   </div><!--/ collapse -->
 </div><!--/ card -->
 
-<!-- upload license -->
-<div id="license-upload" class="card" ng-show="person.status === 'new' && person.preference !== 'owner'">
-  <div class="card-heading">
-    <h3 class="card-title">
-      <a ui-sref="owm.person.license">
-        {{ 'LICENSE_UPLOAD' | translate }}
-      </a>
-      &nbsp;<i class="text-danger fa fa-exclamation-triangle" ng-show="alerts.licenseData" uib-tooltip="Upload je rijbewijs"></i>
-    </h3>
-  </div>
-</div>
-
 <!-- change password -->
 <div class="card">
   <div class="card-heading">
@@ -414,7 +402,7 @@
 </div>
 
 <!-- create resource -->
-<div class="card" id="create-resource">
+<div class="card" id="create-resource" ng-show="person.preference !== 'renter'">
   <div class="card-heading">
     <h3 class="card-title">
       <a href="" ui-sref="owm.resource.own">{{ 'CREATE_RESOURCE_BUTTON' | translate }}</a>

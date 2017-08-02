@@ -57,6 +57,7 @@ angular.module('owm.person.details', [])
     $scope.booking = {};
     $scope.requiredValue = null;
     $scope.isAvailable = true;
+    $scope.errorCreateBooking = false;
     $scope.isbooking = $stateParams.resourceId !== undefined ? true : false;
     $scope.bookingStart = moment($stateParams.startDate).format(URL_DATE_TIME_FORMAT);
     $scope.bookingEnd = moment($stateParams.endDate).format(URL_DATE_TIME_FORMAT);
@@ -205,12 +206,22 @@ angular.module('owm.person.details', [])
 
     $scope.cancelUpload = function () {
       $scope.containsLicence = false;
+      $scope.licenceUploaded = false;
+      $scope.licenceImage = me.status === 'book-only' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
+      $scope.licenceFileName = 'Selecteer je rijbewijs';
+      angular.element('#licenseFrontFile').val('');
     };
 
     $scope.prepareUpload = function () {
       if($scope.driverLicenseNumber !== undefined && $scope.driverLicenseNumber.length < 11)
       {
-        if($scope.licenceDataForm.day.$valid && $scope.licenceDataForm.month.$valid && $scope.licenceDataForm.year.$valid)
+        if(
+          !isNaN($scope.licenceDate.day) &&
+          $scope.licenceDataForm.day.$valid &&
+          !isNaN($scope.licenceDate.month) &&
+          $scope.licenceDataForm.month.$valid &&
+          !isNaN($scope.licenceDate.year) &&
+          $scope.licenceDataForm.year.$valid)
         {
           $scope.licenceDateValid = true;
           var newProps = $filter('returnDirtyItems')( angular.copy($scope.person), $scope.licenceDataForm);
@@ -385,11 +396,15 @@ angular.module('owm.person.details', [])
         $scope.isAvailable = true; //set isAvailable to true to render the table
         return value;
       }).catch(function (err) {
+        $log.debug(err.message);
         if (err.message === 'De auto is niet beschikbaar') {
           $scope.isAvailable = false; //set isAvailable to false to show the trip is not Available page
         }
         else if(err.message === 'Deze boeking kan niet gemaakt worden, je account is gedeactiveerd.') {
           $scope.isBlocked = true;
+        }
+        else if (err.message === 'Er is een fout opgetreden') {
+          $scope.errorCreateBooking = true;
         }
         alertService.loaded();
         $scope.isBusy = false;

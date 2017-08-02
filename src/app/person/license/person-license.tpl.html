@@ -1,28 +1,82 @@
 <div class="card">
-  <div class="card-heading">
-    <h2 class="card-title">
-      Upload je rijbewijs
-    </h2>
-  </div>
+  <div class="details--card--form">
 
-  <div class="card-body">
-    <form>
+    <div class="card-heading">
+      <h2 class="card-title">
+        Upload je rijbewijs
+      </h2>
+    </div>
 
-      <div class="form-group">
-        <label>Voorkant</label>
-        <input id="licenseFrontFile" type="file" />
-      </div>
-      
+    <div class="card-body">
 
-      <button type="button" class="btn btn-primary" ng-click="startUpload()" ng-disabled="!images.front || isBusy">
-          <span class="fa fa-upload"></span> Upload
-      </button>
+        <form class="mywheels-form ng-pristine ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength ng-valid" name="licenceDataForm">
 
-      <p class="help-block" style="margin-top:15px">
-        <i class="fa fa-info-circle text-primary"></i>
-        <span ng-bind-html="'LICENSEUPLOAD_INFO' | translate | trustAsHtml"></span>
-      </p>
+          <div class="checklist">
+              <ul>
+                  <li>
+                      <md-icon>check</md-icon><span>{{ 'LICENSE_READABLE' | translate }}</span></li>
+                  <li>
+                      <md-icon>check</md-icon><span>{{ 'LICENSE_FRONT' | translate }}</span></li>
+                  <li>
+                      <md-icon>check</md-icon><span>{{ 'LICENSE_VALID' | translate }}</span></li>
+              </ul>
+          </div>
 
-    </form>
+          <div class="file-input" ng-show="!containsLicence">
+              <span class="filename" id="filename"> {{licenceFileName}}</span>
+              <label for="licenseFrontFile" class="mywheels-btn mywheels-btn-normal">Selecteer
+                  <input type="file" name="imageFile" for="licenseFrontFile" value="" class="uploadfile-input" id="licenseFrontFile" accept="image/x-png, image/gif, image/jpeg, image/jpg, application/pdf">
+              </label>
+          </div>
+
+          <div class="details--card--form__preview">
+              <img ng-src="{{licenceImage}}" alt="lincence preview" id="licence-preview">
+          </div>
+
+          <div ng-show="containsLicence && !licenceUploaded">
+            <p class="ng-scope">Vul aan de hand van je geüploade rijbewijs de onderstaande gegevens in.</p>
+
+            <div class="licenceNumberGroup">
+                <h3 class="ng-binding">Rijbewijsnummer</h3>
+                <div id="licenceNumber_group" class="icon payment">
+                    <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" required>
+                </div>
+                <div class="err-block" ng-if="!licenceNumberValid" aria-hidden="true">
+                    <span class="text-danger ng-binding" aria-hidden="true">Rijbewijsnummer is ongeldig</span>
+                </div>
+            </div>
+
+            <div class="autoDateInput">
+                <h3 class="ng-binding">Verloopdatum</h3>
+                <div id="date" class="icon date">
+                    <input id="day" name="day" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.day" placeholder="DD" maxlength="2" max="31" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required>
+                    <input id="month" name="month" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.month" placeholder="MM" maxlength="2" max="12" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required>
+                    <input id="year" name="year" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.year" placeholder="JJJJ" maxlength="4" max="{{ validLicenceMax }}" min="{{ validLicenceMin }}" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required>
+                </div>
+
+                <div class="err-block" ng-if="!licenceDateValid || !licenceDataForm.day.$valid || !licenceDataForm.month.$valid || !licenceDataForm.year.$valid" aria-hidden="true">
+                    <span class="text-danger ng-binding" aria-hidden="true">De verloopdatum van je rijbewijs is ongeldig</span>
+                </div>
+            </div>
+          </div>
+
+        </form>
+
+        <div ng-show="containsLicence && !licenceUploaded">
+          <div>
+              <br/>
+              <p>{{ 'LICENSE_CONFIRM' | translate }}</p>
+          </div>
+
+          <button title="upload" type="button" class="mywheels-btn mywheels-btn-normal btn--navigation__previous mywheels-btn-big" md-ink-ripple="#4b702c" ng-disabled="isBusy" ng-click="prepareUpload()">
+              {{'YES' | translate }}
+          </button>
+          <button type="button" class="mywheels-btn mywheels-btn-error btn--navigation__previous mywheels-btn-big" md-ink-ripple="#9a3d26" ng-click="cancelUpload()">
+              {{'NO' | translate }}
+          </button>
+        </div>
+
+    </div>
+
   </div>
 </div>
