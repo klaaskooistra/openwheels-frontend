@@ -308,6 +308,13 @@ angular.module('owm.person', [
         templateUrl: 'person/license/person-license.tpl.html',
         controller: 'PersonLicenseController'
       }
+    },
+    resolve: {
+      person: ['personService', function (personService) {
+        return personService.me({
+          version: 2
+        });
+      }]
     }
   });
 
