@@ -10,17 +10,20 @@ angular.module('phoneNumberDirective', [])
     templateUrl: 'directives/phoneNumber/phoneNumber.tpl.html',
     controller: function functionName($scope, $log, personService, alertService, $mdDialog, $mdMedia) {
 
+      $scope.verificationCodeAlreadySent = false;
+      $scope.verificationCodeError = false;
+
       $scope.addOrVerifyNumber = function (id, number, confidential) {
         if(!id) {
+          //add the phone number if it not exists already
           $scope.addPhoneNumber(number, confidential);
         } else {
-          //default edit a phone number
+          //default edit a phone number to save changes
           $scope.editPhoneNumber(id, number, confidential);
         }
       };
 
       $scope.addPhoneNumber = function (number, confidential) {
-        alertService.closeAll();
         alertService.load();
 
         personService.addPhoneNumber({
@@ -33,15 +36,12 @@ angular.module('phoneNumberDirective', [])
           $scope.updatePhoneNumbers(phoneNumber);
         })
         .catch(function(e) {
-          alertService.addError(e);
-        })
-        .finally(function() {
           alertService.loaded();
+          alertService.addError(e);
         });
       };
 
       $scope.editPhoneNumber = function (id, number, confidential) {
-        alertService.closeAll();
         alertService.load();
 
         personService.alterPhoneWithPhoneId({
@@ -55,24 +55,28 @@ angular.module('phoneNumberDirective', [])
           $scope.updatePhoneNumbers(phoneNumber);
         })
         .catch(function(e) {
-          alertService.addError(e);
-        })
-        .finally(function() {
           alertService.loaded();
+          alertService.addError(e);
         });
       };
 
       $scope.updatePhoneNumbers = function (phoneNumber) {
-        alertService.closeAll();
         alertService.load();
 
         personService.get({
           id: $scope.person.id
         })
         .then(function(person){
+          //update phone numbers in the scope
           $scope.person.phoneNumbers = person.phoneNumbers;
-          if(phoneNumber) {
+
+          //send the code for the first time
+          if(phoneNumber && !$scope.verificationCodeAlreadySent) {
             $scope.sendVerificationCode(phoneNumber.id, phoneNumber.number, $scope.person);
+          }
+          //don't send the code again on opening the dialog
+          else if (phoneNumber && $scope.verificationCodeAlreadySent) {
+            $scope.verifyPhoneNumberDialog(phoneNumber.id, phoneNumber.number, $scope.person);
           }
         })
         .catch(function(e) {
@@ -84,26 +88,37 @@ angular.module('phoneNumberDirective', [])
       };
 
       $scope.sendVerificationCode = function (id, number, person, resend) {
-        alertService.closeAll();
         alertService.load();
 
         //reset codeIsResend
         $scope.codeIsResend = false;
 
+        //open the dialog if it is not a resend
+        if(!resend) {
+          $scope.verifyPhoneNumberDialog(id, number, person);
+        }
+
+        //send a new code
         personService.sendVerificationCode({
           phoneNumber: id
         })
         .then(function(phoneNumber) {
+          $scope.verificationCodeAlreadySent = true;
+
           if(resend) {
-            //show feedback in template
+            //show feedback in dialog
             $scope.codeIsResend = true;
-          } else {
-            //open the dialog
-            $scope.verifyPhoneNumberDialog(id, number, person);
           }
         })
         .catch(function(e) {
-          alertService.addError(e);
+          alertService.loaded();
+          if (e.message === 'Too many verification codes sent') {
+            alertService.add(e.level, 'Je hebt het maximaal aantal verificatiecodes bereikt.', 5000);
+          } else {
+            alertService.addError(e);
+          }
+          //close the dialog if there is a problem with sending a code
+          $mdDialog.hide();
         })
         .finally(function() {
           alertService.loaded();
@@ -111,8 +126,6 @@ angular.module('phoneNumberDirective', [])
       };
 
       $scope.verifyPhoneNumberDialog = function (id, number, person) {
-        alertService.closeAll();
-
         $mdDialog.show({
           fullscreen: $mdMedia('xs'),
           preserveScope: true,
@@ -130,7 +143,6 @@ angular.module('phoneNumberDirective', [])
             $scope.verificationCode = '';
 
             $scope.verifyPhoneNumber = function (id, number, person) {
-              alertService.closeAll();
               alertService.load();
 
               personService.verifyPhoneNumber ({
@@ -139,13 +151,12 @@ angular.module('phoneNumberDirective', [])
                 verificationCode: $scope.verificationCode
               })
               .then(function(phoneNumber) {
+                $scope.hide();
                 $scope.updatePhoneNumbers();
               })
               .catch(function(e) {
-                alertService.addError(e);
-              })
-              .finally(function() {
-                $scope.hide();
+                //show error in dialog
+                $scope.verificationCodeError = true;
                 alertService.loaded();
               });
             };
@@ -167,7 +178,6 @@ angular.module('phoneNumberDirective', [])
           return;
         }
 
-        alertService.closeAll();
         alertService.load();
 
         personService.dropPhoneWithPhoneId({
@@ -180,6 +190,7 @@ angular.module('phoneNumberDirective', [])
           alertService.addError(err);
         })
         .finally(function () {
+          $scope.
           alertService.loaded();
         });
       };

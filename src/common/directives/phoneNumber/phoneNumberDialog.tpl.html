@@ -13,21 +13,19 @@
         <p>We hebben een code gestuurd naar het opgegeven telefoonnummer Vul hieronder de code in om je telefoonnummer te verifiëren.</p>
 
         <p ng-if="codeIsResend" class="text-success">Er is een nieuwe code naar je gestuurd.</p>
+        <p ng-if="verificationCodeError" class="text-danger">De ingevoerde code is onjuist.</p>
 
         <div flex style="min-height: 8em;">
             <!-- enter verification code -->
             <div id="enter_verification_code">
-                <input type="number" inputmode="numeric" pattern="[0-9]*" name="verificationCode" class="form-control" ng-model="verificationCode" placeholder="Code" maxlength="4" max="9999" min="0">
+                <input type="text" pattern="[0-9]*" name="verificationCode" class="form-control" ng-model="verificationCode" placeholder="Code" maxlength="4" max="9999" min="0">
             </div>
 
             <!-- send verification code -->
             <div id="send_verification_code">
-                <button class="mywheels-btn mywheels-btn-default" ng-click="verifyPhoneNumber(id, number, person)">
-                    Bevestigen
-                </button>
-                <button class="mywheels-btn mywheels-btn-transparant" ng-click="sendVerificationCode(id, number, person, true)">
-                    Nogmaals verzenden
-                </button>
+                <button class="mywheels-btn mywheels-btn-default" ng-click="verifyPhoneNumber(id, number, person)">Bevestigen</button>
+                <br/><br/>
+                <a ng-click="sendVerificationCode(id, number, person, true)">Nogmaals verzenden</a>
             </div>
         </div>
 

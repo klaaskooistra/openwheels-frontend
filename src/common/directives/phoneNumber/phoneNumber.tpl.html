@@ -11,13 +11,13 @@
 		          	<md-icon ng-style="{'font-size': '16px', height: '18px'}">delete</md-icon>
 		          </button>
 		        </span>
-	            <input type="tel" name="phone_number" class="form-control" id="number-{{ $index }}" ng-model="p.number" ng-disabled="p.verified">
+	            <input type="tel" name="phone_number" class="form-control" id="number-{{ $index }}" ng-model="p.number" ng-disabled="p.verified" placeholder="Telefoonnummer">
 	        </div>
 	    </div>
 
 		<!-- verify phone number -->
 	    <div id="verify_phone_number_group" flex="20" ng-if="!p.verified">
-        	<a class="mywheels-btn mywheels-btn-normal verify_button" ng-click="addOrVerifyNumber(p.id, p.number, p.confidential)">
+        	<a class="mywheels-btn mywheels-btn-normal verify_button" ng-click="addOrVerifyNumber(p.id, p.number, p.confidential)" ng-disabled="!p.number">
         		Verifiëren
         	</a>
 	    </div>
@@ -44,7 +44,7 @@
 
 		<!-- verify phone number -->
 	    <div id="verify_phone_number_group" ng-if="!p.verified">
-        	<a class="mywheels-btn mywheels-btn-normal verify_button" ng-click="addOrVerifyNumber(p.id, p.number, p.confidential)">
+        	<a class="mywheels-btn mywheels-btn-normal verify_button" ng-click="addOrVerifyNumber(p.id, p.number, p.confidential)" ng-disabled="!p.number">
         		Verifiëren
         	</a>
 	    </div>
