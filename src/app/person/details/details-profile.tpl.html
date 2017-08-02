@@ -61,7 +61,7 @@
                                         <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
                                     </div>
                                     <div class="err-block" ng-if="!licenceNumberValid" aria-hidden="true">
-                                        <span class="text-danger ng-binding" aria-hidden="true">Rijbewijsnummer is ongeldig</span>
+                                        <span class="text-danger ng-binding" aria-hidden="true">Dit is geen correct rijbewijsnummer</span>
                                     </div>
                                 </div>
 
@@ -136,12 +136,16 @@
     <!-- card -->
     <div class="card details--card__section" ng-show="showThird">
         <div class="card-body details--card">
+
             <section ng-if="isBusy && isbooking">
                 <h2 class="card-title">Je boeking wordt gemaakt..</h2>
                 <p>Nog heel even wachten.</p>
             </section>
+
             <section resource-sidebar class="details--profile__sidebar" ng-if="!isBusy && isbooking && !isBlocked && showThird"></section>
-            <section class="details--card--form" ng-if="!isBusy && isbooking && !isBlocked" ng-hide="!isAvailable && !isBlocked">
+
+            <!-- if booking is created and person can pay -->
+            <section class="details--card--form" ng-if="!isBusy && isbooking && !isBlocked && !errorCreateBooking" ng-hide="!isAvailable">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_NEARLY' | translate }}</h2>
 
                 <p ng-if="booking.approved === 'BUY_VOUCHER'">
@@ -174,23 +178,8 @@
                     </div>
                 </div>
             </section>
-            <section ng-if="!isBusy && !isbooking && !isBlocked" class="details--card--form">
-                <h2 class="card-title">{{ 'DETAILS_PROFILE_PHOTO' | translate }}</h2>
-                <p>{{ 'DETAILS_PROFILE_SEARCH' | translate }} </p>
 
-                <!-- call to action buttons -->
-                <div class="details--card--form__navigation-buttons">
-                    <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="prevSection(1, 2)">
-                        <md-icon>navigate_before</md-icon>
-                        {{ 'PREVIOUS' | translate}}
-                    </button>
-                    <button type="button" name="button" ui-sref="owm.resource.search.list" class="mywheels-btn mywheels-btn-default btn--navigation__next">
-                        {{ 'SEARCH_CAR' | translate }}
-                        <md-icon class="text-white">navigate_next</md-icon>
-                    </button>
-                </div>
-                <!-- /call to action buttons -->
-            </section>
+            <!-- if resource is not available for person -->
             <section ng-if="!isBusy && !isAvailable && !isBlocked" class="details--card--form">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_NOT_AVAILABLE' | translate }}</h2>
                 <p>{{ 'DETAILS_PROFILE_NOT_AVAILABLE_text' | translate }} </p>
@@ -208,9 +197,36 @@
                 </div>
                 <!-- /call to action buttons -->
             </section>
+
+            <!-- if person is blocked after driver license check -->
+            <section ng-if="!isBusy && errorCreateBooking && !isBlocked" class="details--card--form">
+                <h2 class="card-title">Foutmelding</h2>
+                <p>Vanwege een overwachte fout kon de boeking helaas niet gemaakt worden. Neem contact met ons op via het <a href="https://mywheels.nl/autodelen/community/contact/" target="_blank">contactformulier</a>.</p>
+            </section>
+
+            <!-- if person is blocked after driver license check -->
             <section ng-if="!isBusy && isBlocked" class="details--card--form">
                 <h2 class="card-title">Deze boeking is helaas niet mogelijk</h2>
                 <p>Om een betrouwbare community te kunnen garanderen, controleren we alle leden van MyWheels. Op basis van deze controle is een verhoogd risico geconstateerd. Daarom is je account gedeactiveerd. Je heb hierover een mail ontvangen met meer informatie. </p>
+            </section>
+
+            <!-- if person didn't create a booking but filled in personal information -->
+            <section ng-if="!isBusy && !isbooking && !isBlocked" class="details--card--form">
+                <h2 class="card-title">{{ 'DETAILS_PROFILE_PHOTO' | translate }}</h2>
+                <p>{{ 'DETAILS_PROFILE_SEARCH' | translate }} </p>
+
+                <!-- call to action buttons -->
+                <div class="details--card--form__navigation-buttons">
+                    <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="prevSection(1, 2)">
+                        <md-icon>navigate_before</md-icon>
+                        {{ 'PREVIOUS' | translate}}
+                    </button>
+                    <button type="button" name="button" ui-sref="owm.resource.search.list" class="mywheels-btn mywheels-btn-default btn--navigation__next">
+                        {{ 'SEARCH_CAR' | translate }}
+                        <md-icon class="text-white">navigate_next</md-icon>
+                    </button>
+                </div>
+                <!-- /call to action buttons -->
             </section>
 
         </div>
