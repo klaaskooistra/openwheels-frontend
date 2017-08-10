@@ -9,7 +9,7 @@
           <a ng-if="user.isAuthenticated" href="http://mywheels.nl/mijn-auto">{{ 'LIST_YOUR_CAR' | translate }}</a><br ng-if="user.isAuthenticated"/>
           <a href="https://mywheels.nl/autodelen/zakelijk-autodelen/">{{ 'BUSINESS' | translate }}</a><br/>
         </div>
-
+        <!--
         <div class="col-md-3 col-sm-3 hidden-xs" style="white-space: nowrap">
           <h4 class="no-margin">{{ 'SPECIAL_CARS_TITLE' | translate }}</h4>
           <a href="https://mywheels.nl/auto-huren?type=van">{{ 'VAN_RENT' | translate }}</a><br/>
@@ -17,7 +17,7 @@
           <a href="https://mywheels.nl/auto-huren?type=camper">{{ 'CAMPER_RENT' | translate }}</a><br/>
           <a href="https://mywheels.nl/auto-huren?fuel=elektrisch">{{ 'ELECTRIC_RENT' | translate }}</a><br/>
         </div>
-
+        -->
         <div class="col-md-3 col-sm-3 col-xs-6" style="white-space: nowrap">
           <h4 class="no-margin">{{ 'DISCOVER_CAR_SHARING_TITLE' | translate }}</h4>
           <a href="https://mywheels.nl/autodelen/hoe-huren-werkt">{{ 'HOW_RENT_WORKS' | translate }}</a><br/>
@@ -36,6 +36,10 @@
           <a href="https://mywheels.nl/autodelen/community/contact/">{{ 'CONTACT' | translate }}</a><br/>
           <a href="https://mywheels.nl/autodelen/community/pers/">{{ 'PRESS' | translate }}</a><br/>
         </div>
+
+      <div class="col-md-3 col-xs-4">
+        <iframe scrolling="no" src="https://kiyoh.nl/widget.php?company=18891" width="210" height="175" border="0" frameborder="0"></iframe>
+      </div>
     </div>
 
     <div ng-if="features.myWheelsFooter" class="footer-social-row text-center footer-color">
