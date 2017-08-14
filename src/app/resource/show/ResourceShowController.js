@@ -2,7 +2,7 @@
 
 angular.module('owm.resource.show', [])
 
-.controller('ResourceShowController', function ($window, $log, $q, $timeout, $location, $scope, $state, $filter, authService, resourceService, bookingService, invoice2Service, boardcomputerService, alertService, chatPopupService, ratingService, API_DATE_FORMAT, resource, me, resourceQueryService, featuresService, $stateParams, linksService, Analytics, metaInfoService) {
+.controller('ResourceShowController', function ($window, $log, $q, $timeout, $location, $scope, $state, $filter, authService, resourceService, bookingService, invoice2Service, boardcomputerService, alertService, chatPopupService, ratingService, API_DATE_FORMAT, resource, me, resourceQueryService, featuresService, $stateParams, linksService, Analytics, metaInfoService, $localStorage) {
   Analytics.trackEvent('discovery', 'show_car', resource.id, undefined, true);
 
   metaInfoService.set({robots: resource.isActive && !resource.removed ? 'all' : 'noindex'});
@@ -54,7 +54,14 @@ angular.module('owm.resource.show', [])
       $scope.booking.endRequested   = timeFrame.endDate;
     }
     $location.search(angular.extend($location.search(), resourceQueryService.createStateParams()));
-    $scope.booking.discountCode = $stateParams.discountCode;
+
+    var discountCode = $stateParams.discountCode;
+    if(!discountCode){
+      if($localStorage.discountCode){
+        discountCode = $localStorage.discountCode;
+      }
+    }
+    $scope.booking.discountCode = discountCode;
   }
 
   function loadRatings () {
