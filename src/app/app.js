@@ -213,12 +213,13 @@ angular.module('openwheels', [
 
 
 .run(function ($window, $log, $timeout, $state, $stateParams, $rootScope, $anchorScroll,
-  alertService, featuresService, linksService, metaInfoService, Analytics, authService) {
+  alertService, featuresService, linksService, metaInfoService, Analytics, authService, $location, $localStorage) {
 
 
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams;
   $rootScope.isLanguageLoaded = false;
+  var discountCode = $location.search().discountCode;
 
   $rootScope.$on('$stateChangeStart', function (e, toState, toParams, fromState) {
     // show spinner
@@ -260,6 +261,14 @@ angular.module('openwheels', [
       Analytics.set('dimension4', userPreference);
     }
 
+    if(discountCode !== undefined){
+
+      if($localStorage.discountCode){
+        delete $localStorage.discountCode;
+      }
+
+      $localStorage.discountCode = discountCode;
+    }
 
     // scroll to top, except for place pages (for toggling map <--> list)
     // depends on presence of DOM-element with id="scroll-to-top-anchor"
@@ -300,7 +309,7 @@ angular.module('openwheels', [
     alertService.loaded();
     $log.debug('State change error', error);
     alertService.closeAll();
-
+    
     if (!fromState.name) {
       $timeout(function () {
         $state.go('home');

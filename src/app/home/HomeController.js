@@ -5,8 +5,6 @@ angular.module('owm.home', ['owm.resource', 'slick'])
 //Module in app/pages/pagesModule.js
 .controller('HomeController', function ($scope, $translate, $location, resourceQueryService, $state, resourceService, $localStorage) {
 
-  var discountCode = $location.search().discountCode;
-
   $scope.$watch(function () {
     return $translate.use();
   }, function (lang) {
@@ -14,16 +12,6 @@ angular.module('owm.home', ['owm.resource', 'slick'])
       $scope.lang = lang;
     }
   });
-
-  if(discountCode !== undefined){
-
-    if($localStorage.discountCode){
-      delete $localStorage.discountCode;
-    }
-
-    $localStorage.discountCode = discountCode;
-    $state.go('home', null, {reload: true});
-  }
 
   if ($scope.features.featuredSlider) {
     resourceService.all({
