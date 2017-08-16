@@ -14,6 +14,10 @@ angular.module('owm.resource.edit.price', [])
       alertService.load();
       var newProps = $filter('returnDirtyItems')(angular.copy($scope.resource), $scope.form);
 
+      if(newProps.refuelByRenter){
+        newProps.fuelPerKilometer = 0;
+      }
+
       resourceService.alter({
         id: $scope.resource.id,
         newProps: newProps
