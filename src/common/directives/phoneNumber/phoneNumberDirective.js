@@ -190,7 +190,6 @@ angular.module('phoneNumberDirective', [])
           alertService.addError(err);
         })
         .finally(function () {
-          $scope.
           alertService.loaded();
         });
       };
