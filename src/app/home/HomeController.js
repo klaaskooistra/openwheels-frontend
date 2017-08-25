@@ -3,7 +3,7 @@
 angular.module('owm.home', ['owm.resource', 'slick'])
 
 //Module in app/pages/pagesModule.js
-.controller('HomeController', function ($scope, $translate, resourceQueryService, $state, resourceService) {
+.controller('HomeController', function ($scope, $translate, $location, resourceQueryService, $state, resourceService, $localStorage) {
 
   $scope.$watch(function () {
     return $translate.use();
