@@ -114,7 +114,7 @@ angular.module('personalDataDirective', [])
           // first check if all person data is filled in
           if (firstName && surname) {
             if (year && month && day) {
-              if (phoneNumbers[0].number) {
+              if (phoneNumbers) {
                 if (streetNumber && zipcode && city) {
                   // save persons info
                   personService.alter({
@@ -162,7 +162,7 @@ angular.module('personalDataDirective', [])
                   alertService.loaded();
                 }
               } else {
-                alertService.add('danger', 'Voeg een telefoonnummer toe zodat we contact met je kunnen opnemen.', 5000);
+                alertService.add('danger', 'Verifieer een telefoonnummer zodat we contact met je kunnen opnemen.', 5000);
                 alertService.loaded();
               }
             } else {
