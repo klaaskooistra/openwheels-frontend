@@ -84,7 +84,7 @@ angular.module('personalDataDirective', [])
             month = $scope.date.month,
             day = $scope.date.day,
             male = $scope.genderText,
-            phoneNumbers = $scope.person.phoneNumbers,
+            phoneNumbers = $scope.verifiedPhoneNumbers,
             city = $scope.person.city,
             zipcode = $scope.person.zipcode,
             streetNumber = $scope.person.streetNumber;
