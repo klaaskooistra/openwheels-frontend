@@ -6,11 +6,12 @@ angular.module('owm.booking.show', [])
   $q, $timeout, $log, $scope, $location, $filter, $translate, $state, $stateParams, appConfig, API_DATE_FORMAT,
   bookingService, resourceService, invoice2Service, alertService, dialogService,
   authService, boardcomputerService, discountUsageService, chatPopupService, linksService,
-  booking, me, declarationService, $mdDialog, contract, Analytics, paymentService, voucherService, $window) {
+  booking, me, declarationService, $mdDialog, contract, Analytics, paymentService, voucherService, $window, $mdMedia, discountService) {
 
   $scope.appConfig = appConfig;
   $scope.alteredAfterBuyVoucher = false;
-
+  $scope.voucherOptions = [25, 50, 100, 250, 500];
+  $scope.showVoucherOptions = false;
   /**
    * HACK
    * see issue MW-1206 "booking.resource.price not implemented"
@@ -64,6 +65,12 @@ angular.module('owm.booking.show', [])
   $scope.bookingEnded = moment().isAfter(moment(booking.endBooking));
   $scope.bookingEndedRealy = moment().isAfter(moment(booking.endBooking).add('1', 'hour'));
   $scope.resource = booking.resource;
+  $scope.isOpen = false;
+  $scope.contactRenterOrOwnerisOpen = false;
+  $scope.agreementIsOpen = false;
+  $scope.paymentIsOpen = booking.approved === 'BUY_VOUCHER' ? true : false;
+  $scope.editBookingIsOpen = booking.approved !== 'BUY_VOUCHER' ? true : false;
+
   $scope.showBookingForm = !$scope.bookingEndedRealy;
   $scope.showPricePerHour = false;
   $scope.userInput = {
@@ -103,9 +110,24 @@ angular.module('owm.booking.show', [])
     }
   }
 
+  $scope.editOwnerBookingIsOpen = false;
+  $scope.toggleEditOwnerBookingCard = function () {
+    var isOpen = $scope.editOwnerBookingIsOpen;
+    if(isOpen === true) {
+      $scope.editOwnerBookingIsOpen = false;
+    } else {
+      $scope.editOwnerBookingIsOpen = true;
+    }
+  };
+
+
   if ($scope.allowOvereenkomst) {
     $scope.overeenkomstUrl = linksService.bookingAgreementPdf(booking.id);
   }
+
+  $scope.toggleVoucherOptions = function (toggle) {
+    $scope.showVoucherOptions = toggle;
+  };
 
   function initPermissions () {
     var booking = $scope.booking;
@@ -243,7 +265,7 @@ angular.module('owm.booking.show', [])
       if(result === 'error') {
         return alertService.add('danger', result, 5000);
       }
-      alertService.add('success', 'Boardcomputer opened door and enabled start', 3000);
+      alertService.add('success', 'De auto opent binnen 15 seconden.', 3000);
     }, function(error) {
       alertService.add('danger', error.message, 5000);
     })
@@ -263,7 +285,7 @@ angular.module('owm.booking.show', [])
       if(result === 'error') {
         return alertService.add('danger', result, 5000);
       }
-      alertService.add('success', 'Boardcomputer closed door and disabled start', 3000);
+      alertService.add('success', 'De auto sluit binnen 15 seconden.', 3000);
     }, function(error) {
       alertService.add('danger', error.message, 5000);
     })
@@ -484,6 +506,9 @@ angular.module('owm.booking.show', [])
   $scope.isPriceLoading = false;
   loadDiscount();
 
+  $scope.hasDiscount = false;
+  $scope.discount = null;
+
   var unbindWatch = $scope.$watch('showBookingForm', function (val) {
     if (val) {
       $scope.$watch('bookingRequest.beginRequested', onTimeFrameChange);
@@ -572,6 +597,9 @@ angular.module('owm.booking.show', [])
     })
     .then(function (discount) {
       $scope.discount = discount;
+      if($scope.discount.length > 0){
+        $scope.hasDiscount = true;
+      }
     });
   }
 
@@ -615,6 +643,45 @@ angular.module('owm.booking.show', [])
     $q.all({received: loadReceivedInvoices(), sent: loadSentInvoices()})
     .then(injectInvoiceLines);
   }
+
+  $scope.toggleContactCard = function () {
+    var isOpen = $scope.contactRenterOrOwnerisOpen;
+    if(isOpen === true) {
+      $scope.contactRenterOrOwnerisOpen = false;
+    } else {
+      $scope.contactRenterOrOwnerisOpen = true;
+    }
+  };
+
+  $scope.toggleAgreementCard = function () {
+    var isOpen = $scope.agreementIsOpen;
+    if(isOpen === true) {
+      $scope.agreementIsOpen = false;
+    } else {
+      $scope.agreementIsOpen = true;
+    }
+  };
+
+  //
+
+  $scope.toggleEditBookingCard = function () {
+    var isOpen = $scope.editBookingIsOpen;
+    if(isOpen === true) {
+      $scope.editBookingIsOpen = false;
+    } else {
+      $scope.editBookingIsOpen = true;
+    }
+  };
+
+
+  $scope.togglePaymentCard = function () {
+    var isOpen = $scope.paymentIsOpen;
+    if(isOpen === true) {
+      $scope.paymentIsOpen = false;
+    } else {
+      $scope.paymentIsOpen = true;
+    }
+  };
 
   function loadReceivedInvoices () {
     var booking = $scope.booking;
@@ -667,6 +734,56 @@ angular.module('owm.booking.show', [])
       return invoices;
     });
   }
+
+  function addDiscount(value) {
+    return discountService.apply({ //apply the discount code
+      booking: booking.id,
+      discount: value
+    }).then(function () {
+      alertService.addSaveSuccess('De kortingscode is toegevoegd aan je boeking.'); //if there is something wrong show a err
+      $scope.hasDiscount = true;
+      $mdDialog.cancel();
+    }).catch(function (err) {
+      alertService.addError(err); //if there is something wrong show a err
+    });
+  }
+
+  $scope.toggleBookingCard = function () {
+    var isOpen = $scope.isOpen;
+    if(isOpen === true) {
+      $scope.isOpen = false;
+    } else {
+      $scope.isOpen = true;
+    }
+
+  };
+
+  $scope.openDiscountDialog = function () {
+    $mdDialog.show({
+      fullscreen: $mdMedia('lg'),
+      preserveScope: true,
+      locals: {
+      },
+      scope: $scope,
+      templateUrl: 'discount/discountBookingDialog.tpl.html',
+      controller: ['$scope', '$mdDialog', '$mdMedia', function ($scope, $mdDialog, discountService, contractService) {
+
+        $scope.checkingDiscountCode = false;
+        $scope.hide = function () {
+          $mdDialog.hide();
+        };
+
+        $scope.save = function () {
+          addDiscount($scope.discountCode);
+        };
+
+        $scope.cancel = function () {
+          $mdDialog.cancel();
+        };
+      }]
+    });
+  };
+
 
   $scope.openChatWith = openChatWith;
   function openChatWith(otherPerson) {

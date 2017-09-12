@@ -3,6 +3,7 @@
     <a ui-sref="owm.finance.v4"><i class="fa fa-fw fa-chevron-left"></i>Terug naar financieel overzicht</a>
   </div>
 </div>
+
 <div class="card" ng-if="previousState.name == 'owm.trips'">
   <div class="card-body card-inverse">
     <a ui-sref="owm.trips" ng-if="userPerspective === 'renter'"><i class="fa fa-fw fa-chevron-left"></i>Terug naar ritgeschiedenis</a>
@@ -15,6 +16,171 @@
   </div>
 </div>
 
+<div class="card" ng-if="userPerspective==='renter'">
+  <div class="card-body card-inverse">
+    <h2 class="text-white">Bedankt voor je boeking!</h2>
+    <p class="text-white">
+      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et
+    </p>
+  </div>
+</div>
+
+<div class="card" ng-if="userPerspective==='renter' && !booking.ok">
+  <div class="card-body card-inverse">
+    <h2 class="text-white">Bijna klaar! Alleen nog rijtegoed kopen</h2>
+    <p class="text-white">
+      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et
+    </p>
+  </div>
+</div>
+
+<md-card class="ow-card">
+  <div class="md-card-image" style="position: relative">
+    <div resource="resource" size="normal" class="ng-isolate-scope">
+      <img class="media-object img-resource-large pull-left" ng-src="{{ resource.pictures[0] | resourceAvatar:'large' }}" />
+    </div>
+  </div>
+  <div style="position: relative">
+    <md-card-title>
+      <md-card-title-text>
+        <a ui-sref="owm.resource.show({ resourceId: resource.id, city: resource.city })">
+          <h3 class="no-margin" style="font-size: 2rem">
+            <span>{{ resource.alias || ('RESOURCE_NO_NAME' | translate) }} {{ resource.registrationPlate | surroundWith : '(' : ')' }}</span>
+          </h3>
+        </a>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-body class="ow-list-compact">
+      <md-list class="margin-right" role="list">
+        <md-list-item role="listitem" class="md-no-proxy">
+          <md-icon class="text-success material-icons">directions_car</md-icon>
+          <div flex="" class="flex">
+            {{ (resource.brand | toTitleCase) || ('UNKNOWN_BRAND' | translate) }}
+            <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }} pull-right">{{ booking.status | bookingStatus }}</span>
+            <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-requested pull-right">{{ 'requested' | bookingStatus }}</span>
+            <span flex="none" class="flex-none">{{ resource.brand }} {{ resource.model }}</span>
+          </div>
+        </md-list-item>
+        <md-list-item role="listitem" class="md-no-proxy">
+          <md-icon class="text-success material-icons">place</md-icon>
+          <div flex="" class="flex">
+            {{ resource.location }} <small>{{ resource.city }}</small>
+          </div>
+        </md-list-item>
+
+        <div id="started" ng-if="hasAcceptedTimeframe(booking)">
+          <md-list-item role="listitem" class="md-no-proxy">
+            <md-icon class="text-success material-icons">access_time</md-icon>
+            <div flex="" class="flex">
+              <datetime datetime="{{ booking.beginBooking }}"></datetime>
+            </div>
+          </md-list-item>
+
+          <md-list-item role="listitem" class="md-no-proxy">
+            <md-icon class="text-warning material-icons">access_time</md-icon>
+            <div flex="" class="flex">
+              <datetime datetime="{{ booking.endBooking }}"></datetime>
+            </div>
+          </md-list-item>
+        </div>
+
+        <div id="requested" ng-if="!hasAcceptedTimeframe(booking)">
+          <md-list-item role="listitem" class="md-no-proxy">
+            <md-icon class="text-success material-icons">access_time</md-icon>
+            <div flex="" class="flex">
+              <datetime datetime="{{ booking.beginRequested }}"></datetime>
+            </div>
+          </md-list-item>
+
+          <md-list-item role="listitem" class="md-no-proxy">
+            <md-icon class="text-warning material-icons">access_time</md-icon>
+            <div flex="" class="flex">
+              <datetime datetime="{{ booking.endRequested }}"></datetime>
+            </div>
+          </md-list-item>
+        </div>
+
+      </md-list>
+    </md-card-body>
+  </div>
+</md-card>
+
+<div class="card" ng-if="userPerspective==='owner'">
+  <div class="card-heading">
+    <h3 class="card-title">
+      <a ng-click="toggleEditOwnerBookingCard()">
+        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !editOwnerBookingIsOpen, 'fa-chevron-down': editOwnerBookingIsOpen }"></i>
+
+        <span ng-if="userPerspective==='owner' && !hasAcceptedTimeframe(booking)">
+          {{ booking.person.firstName | wantsToRent : booking.resource }}
+        </span>
+
+        <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && !hasRequestedTimeframe(booking)">
+        {{ booking.person.firstName | hasRented : booking.resource }}
+        </span>
+
+        <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && hasRequestedTimeframe(booking)">
+        {{ booking.person.firstName | wantsToChangeBooking }}
+        </span>
+      </a>
+
+    </h3>
+  </div>
+  <div uib-collapse="editOwnerBookingIsOpen">
+    <div class="card-body">
+      <div class="row" ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && hasRequestedTimeframe(booking)">
+        <div class="col-md-5">
+          <div>
+            <li class="text-success material-icons">access_time</li>
+            <datetime style="display: inline;" datetime="{{ booking.beginRequested }}"></datetime>
+          </div>
+          <div>
+            <li class="text-warning material-icons">access_time</li>
+            <datetime style="display: inline;" datetime="{{ booking.endRequested }}"></datetime>
+          </div>
+          <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
+          <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-requested">{{ 'requested' | bookingStatus }}</span>
+        </div>
+        <div class="col-md-3">
+          <li class="text-warning material-icons" style="margin-top: 23px;">compare_arrows</li>
+        </div>
+        <div class="col-md-4">
+          <div>
+            <li class="text-success material-icons">access_time</li>
+            <datetime style="display: inline;" datetime="{{ booking.beginBooking }}"></datetime>
+          </div>
+          <div>
+            <li class="text-warning material-icons">access_time</li>
+            <datetime style="display: inline;" datetime="{{ booking.endBooking }}"></datetime>
+          </div>
+          <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
+          <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-accepted">{{ 'accepted' | bookingStatus }}</span>
+      </div>
+      </div>
+      <div class="allowAcceptReject">
+        <div class="text-center" ng-if="allowAcceptReject">
+          <div class="form-group">
+            <label>{{ 'BOOKING.REMARK_AUTHORIZER_LABEL' | translate }}</label>
+            <textarea class="form-control" ng-model="userInput.acceptRejectRemark" />
+          </div>
+          <button type="button" class="btn btn-success" ng-click="acceptBooking(booking)">Accepteren</button>
+          <button type="button" class="btn btn-danger" ng-click="rejectBooking(booking)">Weigeren</button>
+        </div>
+      </div>
+      <div class="" ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && !hasRequestedTimeframe(booking)">
+        Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.
+      </div>
+      <div class="row text-center" ng-if="allowCancel">
+        <button class="btn btn-default"  ng-click="cancelBooking(booking)">
+          {{ 'CANCEL_BOOKING' | translate }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!--
 <div class="card">
   <div class="card-heading">
 
@@ -45,12 +211,10 @@
 
   <div class="card-body">
 
-    <!-- resource -->
     <div ng-if="userPerspective==='owner'" ng-include="'resource/partials/resource-header3.tpl.html'"></div>
     <div ng-if="userPerspective==='renter'" ng-include="'resource/partials/resource-header2.tpl.html'"></div>
     <hr/>
 
-    <!-- alert -->
     <div class="alert alert-warning" ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) >= 0">
       <span>{{ booking.status | bookingStatus }}</span>
     </div>
@@ -66,7 +230,6 @@
         </div>
         <div class="media-body no-padding">
 
-          <!-- FORM TOGGLE -->
           <button ng-if="allowEdit && !showBookingForm && !hasRequestedTimeframe(booking)"
             type="button" class="btn btn-default"
             scroll-to="bookingFormContainer"
@@ -74,7 +237,6 @@
             {{ 'EDIT_BOOKING' | translate }}
           </button>
 
-          <!-- CANCEL -->
           <button ng-if="allowCancel && !showBookingForm && !allowEdit && !hasRequestedTimeframe(booking)"
             type="button" class="btn btn-default"
             ng-click="cancelBooking(booking)">
@@ -93,7 +255,6 @@
       <hr/>
     </div>
 
-    <!-- requested times -->
     <div ng-if="hasRequestedTimeframe(booking)">
       <div class="media">
         <div class="media-object auto-height pull-left">
@@ -125,18 +286,37 @@
 
   </div>
 </div>
+-->
+
+<div class="card" ng-if="allowOvereenkomst">
+  <div class="card-heading">
+    <h3 class="card-title">
+      <a  href="{{ overeenkomstUrl }}" target="_blank" ng-href="{{ overeenkomstUrl }}">
+        <i class="fa fa-download fa-fw"></i>
+        Huurovereenkomst downloaden (pdf)
+      </a>
+    </h3>
+  </div>
+</div>
 
 <!-- OK not OK messages -->
+<!--
 <div class="card" ng-if="userPerspective==='renter' && booking.approved === 'BUY_VOUCHER'">
   <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
     <span>Deze rit is nog niet betaald. <a style="color: #832f2f" ui-sref="owm.finance.vouchers">Koop rijtegoed</a> om deze rit te betalen.</span>
   </div>
 </div>
+-->
+
+<!-- Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.
+
 <div class="card" ng-if="userPerspective==='owner' && booking.ok && !allowAcceptReject">
   <div class="card-body card-inverse" style="background-color:#3bab78; color: white;">
     <span>Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.</span>
   </div>
 </div>
+-->
+
 <div class="card" ng-if="userPerspective==='owner' && !booking.ok">
   <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
     <span>Voor deze rit is nog niet alles in orde. Mogelijk moet de huurder nog betalen of andere gegevens doorgeven. Geef de auto daarom niet mee aan de huurder zolang deze meldig zichtbaar is.
@@ -153,136 +333,236 @@
 
 <!-- FORM -->
 <div id="bookingFormContainer" uib-collapse="!showBookingForm" ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
-  <div class="card">
-    <div class="card-heading"><h2 class="card-title">Reservering wijzigen</h2></div>
-    <div class="card-body">
+  <div class="card" ng-init="!editBookingIsOpen" >
+    <div class="card-heading">
+      <h3 class="card-title">
+        <a ng-click="toggleEditBookingCard()">
+          <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !editBookingIsOpen, 'fa-chevron-down': editBookingIsOpen }"></i>
+          Reservering wijzigen
+        </a>
 
-      <div class="resource__boardcomputer text-center" id="resource__boardcomputer" ng-if="allowBoardComputer">
-        <ul class="list-inline">
-          <li>
-            <button ng-click="openDoor(resource)" class="btn btn-lg btn-default btn-success"><i class="fa fa-unlock fa-fw fa-lg"></i></button>
-          </li>
-          <li>
-            <button ng-click="closeDoor(resource)" class="btn btn-lg btn-default btn-danger"><i class="fa fa-lock fa-fw fa-lg"></i></button>
-          </li>
-        </ul>
-      </div>
-      <!-- price -->
-      <div class="branding_booking_resource_price" ng-if="userPerspective === 'renter'" ng-include="'resource/partials/resource-price.tpl.html'"></div>
+      </h3>
+    </div>
+    <div uib-collapse="!editBookingIsOpen">
+      <div class="card-body">
 
-      <div class="booking-form" >
-        <form class="booking" timeframe begin="bookingRequest.beginRequested" end="bookingRequest.endRequested">
-          <div class="form-group" ng-if="allowEdit">
-            <label for="beginRequested">
-              {{ 'DATE_START' | translate }}&nbsp;
-              <button id="booking_now_button" type="button" class="btn btn-warning btn-xs" ng-click="setTimeframe(bookingRequest, 0)">{{ 'NOW' | translate }}</button>
-            </label>
-            <div class="row">
-              <div class="col-xs-7">
-                <input id="beginRequested" type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.beginRequested" pickadate="dateConfig">
-              </div>
-              <div class="col-xs-5">
-                <input id="endBequested" type="text" placeholder="{{ 'TIME' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.beginRequested" pickatime="timeConfig">
-              </div>
-            </div>
-          </div>
+        <div class="resource__boardcomputer text-center" id="resource__boardcomputer" ng-if="allowBoardComputer">
+          <ul class="list-inline">
+            <li>
+              <button ng-click="openDoor(resource)" class="btn btn-lg btn-default btn-success"><i class="fa fa-unlock fa-fw fa-lg"></i></button>
+            </li>
+            <li>
+              <button ng-click="closeDoor(resource)" class="btn btn-lg btn-default btn-danger"><i class="fa fa-lock fa-fw fa-lg"></i></button>
+            </li>
+          </ul>
+        </div>
 
-          <div class="form-group" ng-if="allowEdit">
-            <label for="endTrip">
-              {{ 'DATE_END' | translate }}&nbsp;
-              <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 1)">{{ 'PLUS_1_HOUR' | translate }}</button>
-              <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 2)">{{ 'PLUS_2_HOUR' | translate }}</button>
-              <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 4)">{{ 'PLUS_4_HOUR' | translate }}</button>
-            </label>
-            <div class="row">
-              <div class="col-xs-7">
-                <input type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.endRequested" pickadate="dateConfig">
-              </div>
-              <div class="col-xs-5">
-                <input type="text" placeholder="{{ 'TIME' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.endRequested" pickatime="timeConfig">
+        <!-- price
+        <div class="branding_booking_resource_price" ng-if="userPerspective === 'renter'" ng-include="'resource/partials/resource-price.tpl.html'"></div>
+        -->
+
+        <div class="booking-form" >
+          <form class="booking" timeframe begin="bookingRequest.beginRequested" end="bookingRequest.endRequested">
+            <div class="form-group" ng-if="allowEdit">
+              <label for="beginRequested">
+                {{ 'DATE_START' | translate }}&nbsp;
+                <button id="booking_now_button" type="button" class="btn btn-warning btn-xs" ng-click="setTimeframe(bookingRequest, 0)">{{ 'NOW' | translate }}</button>
+              </label>
+              <div class="row">
+                <div class="col-xs-7">
+                  <input id="beginRequested" type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.beginRequested" pickadate="dateConfig">
+                </div>
+                <div class="col-xs-5">
+                  <input id="endBequested" type="text" placeholder="{{ 'TIME' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.beginRequested" pickatime="timeConfig">
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="form-group" ng-if="allowEdit">
-            <label for="endTrip" ng-bind="'BOOKING.REMARK_REQUESTER_LABEL' | translate"></label>
-            <textarea class="form-control" ng-model="bookingRequest.remarkRequester"></textarea>
-          </div>
+            <div class="form-group" ng-if="allowEdit">
+              <label for="endTrip">
+                {{ 'DATE_END' | translate }}&nbsp;
+                <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 1)">{{ 'PLUS_1_HOUR' | translate }}</button>
+                <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 2)">{{ 'PLUS_2_HOUR' | translate }}</button>
+                <button type="button" class="btn btn-default btn-xs" ng-click="extendBooking(bookingRequest, 4)">{{ 'PLUS_4_HOUR' | translate }}</button>
+              </label>
+              <div class="row">
+                <div class="col-xs-7">
+                  <input type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.endRequested" pickadate="dateConfig">
+                </div>
+                <div class="col-xs-5">
+                  <input type="text" placeholder="{{ 'TIME' | translate }}" class="form-control pickadate-input" ng-model="bookingRequest.endRequested" pickatime="timeConfig">
+                </div>
+              </div>
+            </div>
 
-          <!-- disclaimer -->
-          <div id="bookingShowDisclaimer" class="alert alert-danger" ng-if="booking.approved==='OK' && booking.bookingAlterationStrategy !== 'mywheels_member' && booking.bookingAlterationStrategy !== 'mywheels_dim' && booking.bookingAlterationStrategy !== 'mywheels_premium'">
-            <i class="fa fa-exclamation-triangle text-danger"></i>&nbsp;
-            <span ng-switch="booking.bookingAlterationStrategy">
+            <div class="form-group" ng-if="allowEdit">
+              <label for="endTrip" ng-bind="'BOOKING.REMARK_REQUESTER_LABEL' | translate"></label>
+              <textarea class="form-control" ng-model="bookingRequest.remarkRequester"></textarea>
+            </div>
+
+            <!-- disclaimer -->
+            <div id="bookingShowDisclaimer" class="alert alert-danger" ng-if="booking.approved==='OK' && booking.bookingAlterationStrategy !== 'mywheels_member' && booking.bookingAlterationStrategy !== 'mywheels_dim' && booking.bookingAlterationStrategy !== 'mywheels_premium'">
+              <i class="fa fa-exclamation-triangle text-danger"></i>&nbsp;
+              <span ng-switch="booking.bookingAlterationStrategy">
               <span ng-switch-when="default">{{ 'BOOKING_ALTERATION_STRATEGY_DEFAULT' | translate }}</span>
               <span ng-switch-when="mywheels_go">{{ 'BOOKING_ALTERATION_STRATEGY_MYWHEELS_GO' | translate }}</span>
               <span ng-switch-when="anwb">{{ 'BOOKING_ALTERATION_STRATEGY_ANWB' | translate }}</span>
             </span>
-          </div>
-
-          <!-- availability & price -->
-          <div class="form-group" ng-if="(price || isPriceLoading || availability || isAvailabilityLoading) && userPerspective === 'renter' ">
-            <div class="text-center">
-              <h4 ng-if="availability.available==='no'"><i class="fa fa-times text-danger" ></i> Niet beschikbaar</h4>
-              <h4 ng-if="availability.available==='yes'"><i class="fa fa-check text-success" ></i> Beschikbaar</h4>
-              <h4 ng-if="availability.available==='yes' && price">
-                Kosten:
-                <span>{{ price.total | currency }}</span>
-                <info-icon tooltip-html="priceHtml(price)"></info-icon>
-              </h4>
-              <h4 ng-if="isPriceLoading || isAvailabilityLoading"><i class="fa fa-spinner fa-spin"></i></h4>
             </div>
-          </div>
 
-          <!-- pay button -->
-          <div class="form-group" ng-if="extraCredit">
-            <div class="text-center">
-              <button type="button" class="btn btn-success" ng-click="buyVoucher(extraCredit)">
-                  Koop {{ extraCredit | currency }} rijtegoed
-              </button>
-            </div>
-          </div>
-
-          <!-- buttons -->
-          <div class="text-center" ng-if="!extraCredit">
-            <p>
-              <button class="btn btn-primary" ng-if="allowEdit"
-                ng-disabled="bookingRequest.beginRequested === booking.beginBooking && bookingRequest.endRequested === booking.endBooking"
-                ng-click="editBooking(bookingRequest)">
-                {{ 'EDIT_BOOKING' | translate }}
-              </button>
-
-              <button class="btn btn-default" ng-if="allowCancel"
-                ng-click="cancelBooking(booking)">
-                {{ 'CANCEL_BOOKING' | translate }}
-              </button>
-
-              <button class="btn btn-default" ng-if="allowStop"
-                ng-click="stopBooking(booking)">
-                {{ 'STOP_BOOKING' | translate }}
-              </button>
-
-              <a target="_blank" ng-href="{{ $state.href('owm.resource.calendar', {city: resource.city, resourceId: resource.id}) }}" class="btn btn-default" ng-if="userPerspective === 'renter'">
-                <i class="fa fa-calendar"></i> {{ 'CALENDAR_BUTTON' | translate }}
-              </a>
-            </p>
-
-            <div ng-if="allowAcceptReject">
-              <div class="form-group">
-                <label>{{ 'BOOKING.REMARK_AUTHORIZER_LABEL' | translate }}</label>
-                <textarea class="form-control" ng-model="userInput.acceptRejectRemark" />
+            <!-- availability & price
+            <div class="form-group" ng-if="(price || isPriceLoading || availability || isAvailabilityLoading) && userPerspective === 'renter' ">
+              <div class="text-center">
+                <h4 ng-if="availability.available==='no'"><i class="fa fa-times text-danger" ></i> Niet beschikbaar</h4>
+                <h4 ng-if="availability.available==='yes'"><i class="fa fa-check text-success" ></i> Beschikbaar</h4>
+                <h4 ng-if="availability.available==='yes' && price">
+                  Kosten:
+                  <span>{{ price.total | currency }}</span>
+                  <info-icon tooltip-html="priceHtml(price)"></info-icon>
+                </h4>
+                <h4 ng-if="isPriceLoading || isAvailabilityLoading"><i class="fa fa-spinner fa-spin"></i></h4>
               </div>
-              <button type="button" class="btn btn-success" ng-click="acceptBooking(booking)">Accepteren</button>
-              <button type="button" class="btn btn-danger" ng-click="rejectBooking(booking)">Weigeren</button>
+            </div>
+            -->
+            <!-- pay button -->
+            <div class="form-group" ng-if="extraCredit">
+              <div class="text-center">
+                <button type="button" class="btn btn-success" ng-click="buyVoucher(extraCredit)">
+                  Koop {{ extraCredit | currency }} rijtegoed
+                </button>
+              </div>
             </div>
 
-          </div>
+            <!-- buttons -->
+            <div class="text-center" ng-if="!extraCredit">
+              <p>
+                <button class="btn btn-primary" ng-if="allowEdit"
+                        ng-disabled="bookingRequest.beginRequested === booking.beginBooking && bookingRequest.endRequested === booking.endBooking"
+                        ng-click="editBooking(bookingRequest)">
+                  {{ 'EDIT_BOOKING' | translate }}
+                </button>
 
-        </form>
+                <button class="btn btn-default" ng-if="allowCancel"
+                        ng-click="cancelBooking(booking)">
+                  {{ 'CANCEL_BOOKING' | translate }}
+                </button>
+              </p>
+              <p>
+                <button class="btn btn-default" ng-if="allowStop"
+                        ng-click="stopBooking(booking)">
+                  {{ 'STOP_BOOKING' | translate }}
+                </button>
+
+                <button class="btn btn-default" ng-disabled="hasDiscount" ng-click="openDiscountDialog();" ng-if="userPerspective === 'renter'">
+                  Kortingscode toevoegen
+                </button>
+              </p>
+
+              <div ng-if="allowAcceptReject">
+                <div class="form-group">
+                  <label>{{ 'BOOKING.REMARK_AUTHORIZER_LABEL' | translate }}</label>
+                  <textarea class="form-control" ng-model="userInput.acceptRejectRemark" />
+                </div>
+                <button type="button" class="btn btn-success" ng-click="acceptBooking(booking)">Accepteren</button>
+                <button type="button" class="btn btn-danger" ng-click="rejectBooking(booking)">Weigeren</button>
+              </div>
+
+            </div>
+
+          </form>
+          <form class="addExtraDriver">
+
+          </form>
+        </div>
       </div>
+
     </div>
   </div>
 </div><!--/ FORM -->
 
+<div class="card" ng-init="!paymentIsOpen" ng-if="userPerspective === 'renter' && !booking.ok">
+  <div class="card-heading">
+      <span class="pull-right" ng-if="false">
+        <small hide-xs style="padding-left: 1em" ng-if="booking.cancelAfter && booking.status != 'OK'">Betaal voor {{booking.cancelAfter|amDateFormat:'D MMMM YYYY HH:mm'}} om annulering te voorkomen</small>
+        <md-icon ng-show="booking.statusValue" ng-class="{'text-success': booking.statusValue}">check</md-icon>
+        <b ng-class="{'text-success': booking.statusValue}" ng-if="booking.details.discount">{{ booking.details.booking_price.total + booking.details.km_price - booking.details.discount | currency }}</b>
+        <b ng-class="{'text-success': booking.statusValue}" ng-if="!booking.details.discount">{{ booking.details.booking_price.total + booking.details.km_price | currency }}</b>
+      </span>
+    <h3 class="card-title">
+      <a ng-click="togglePaymentCard()">
+        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !paymentIsOpen, 'fa-chevron-down': paymentIsOpen }"></i>
+        Rit betalen
+      </a>
+      <small hide-gt-xs style="padding-top: 1em;" ng-if="booking.isOpen && booking.cancelAfter && booking.status != 'OK'"><br>Betaal voor {{booking.cancelAfter|amDateFormat:'D MMMM YYYY HH:mm '}} om annulering te voorkomen</small>
+    </h3>
+  </div>
+
+  <div uib-collapse="!paymentIsOpen">
+    <div class="card-body">
+      <voucher me="me" booking="booking" on-changed="bookingChanged(booking)"></voucher>
+    </div>
+    <div class="card-body">
+      <h2>Rijtegoed</h2>
+      <!-- credit -->
+      <div style="margin-bottom: 15px;">
+
+        <table class="table">
+          <tr>
+            <td style="width:100%">Benodigd voor je reserveringen</td>
+            <td class="text-right">{{ requiredValue.sub_total | currency }}</td>
+          </tr>
+          <tr ng-if="requiredValue.debt > 0">
+            <td>Openstaande facturen</td>
+            <td class="text-right">{{ requiredValue.debt | currency }}</td>
+          </tr>
+          <tr>
+            <td>Af: je huidige rijtegoed</td>
+            <td class="text-right">{{ requiredValue.credit | currency }}</td>
+          </tr>
+          <tr>
+            <td ng-if="requiredValue.total >= 0"><b>Te betalen</b></td>
+            <td ng-if="requiredValue.total < 0"><b>Resterend rijtegoed</b></td>
+            <td class="text-right"><b>{{ requiredValue.total | currency }}</b></td>
+          </tr>
+        </table>
+
+        <div ng-show="!showVoucherOptions">
+
+          <div ng-if="requiredValue.voucher > 0">
+            <button type="button" class="btn btn-success" ng-click="buyVoucher(requiredValue.voucher)">
+              Koop {{ requiredValue.voucher | currency }} rijtegoed
+            </button>
+            <button type="button" class="btn btn-link" ng-click="toggleVoucherOptions(true)">
+              Ander bedrag
+            </button>
+          </div>
+
+          <div ng-if="!(requiredValue.voucher > 0)">
+            <button type="button" class="btn btn-success" ng-click="toggleVoucherOptions(true)">Koop rijtegoed</button>
+            <button type="button" class="btn btn-link" ng-click="toggleVoucherOptions(true)">
+              Ander bedrag
+            </button>
+          </div>
+        </div>
+
+        <div ng-show="showVoucherOptions">
+          <div class="clearfix" style="margin: 0 -5px 15px -5px">
+            <div ng-repeat="option in voucherOptions" class="pull-left" style="width: 20%; padding: 5px">
+              <button ng-click="buyVoucher(option)" type="button" class="btn btn-block btn-success">{{ option | currency }}</button>
+            </div>
+          </div>
+          <a href="" ng-click="toggleVoucherOptions(false)">Annuleren</a>
+        </div>
+        <div ng-if="!accountApproved">
+          <p class="mywheels-btn-margin-top">
+            <b>Let op:</b> om de betaling te kunnen verwerken, moet de tenaamstelling van de rekening overeenkomen met je accountnaam.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- remarks -->
 <div class="card" ng-if="booking.remarkRequester || booking.remarkAuthorizer">
@@ -304,7 +584,78 @@
   </div>
 </div>
 
-<!-- renter -->
+<div class="card" ng-init="!contactRenterOrOwnerisOpen" ng-if="userPerspective === 'renter'">
+  <div class="card-heading">
+    <h3 class="card-title">
+      <a ng-click="toggleContactCard()">
+        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !contactRenterOrOwnerisOpen, 'fa-chevron-down': contactRenterOrOwnerisOpen }"></i>
+       Contact opnemen me de eigenaar
+      </a>
+
+    </h3>
+  </div>
+  <div uib-collapse="!contactRenterOrOwnerisOpen">
+    <div class="card-body">
+      <div class="media">
+        <img class="media-object pull-left img-user-small" person-profile-image="{ person: booking.person, size: 'small' }">
+        <div class="media-body">
+          <h4 class="media-heading"><a ui-sref="member({ personId: resource.owner.id })">{{ resource.owner | fullname }}</a></h4>
+          <div ng-if="resource.owner.created" class="text-muted">
+            <small>{{ resource.owner.created | memberSince }}</small>
+          </div>
+          <div><span badge-list="resource.owner.badges"></span></div>
+          <button type="button" class="btn btn-link" ng-click="openChatWith(resource.owner)">
+            <i class="fa fa-comment fa-fw"></i>
+            {{ 'SEND_MESSAGE' | translate }}
+          </button>
+
+          <div ng-if="resource.advertisement">
+            <h5>{{ 'ABOUT_CAR' | translate}}</h5>
+            <p>{{ resource.advertisement }}</p>
+          </div>
+          <div ng-if="resource.owner.about">
+            <h5>{{ 'ABOUT_ME' | translate }}</h5>
+            <p>{{ resource.owner.about}}</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="card" ng-init="!contactRenterOrOwnerisOpen" ng-if="userPerspective === 'owner'">
+  <div class="card-heading">
+    <h3 class="card-title">
+      <a ng-click="toggleContactCard()">
+        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !contactRenterOrOwnerisOpen, 'fa-chevron-down': contactRenterOrOwnerisOpen }"></i>
+        Contact opnemen me de huurder
+      </a>
+    </h3>
+  </div>
+  <div uib-collapse="!contactRenterOrOwnerisOpen">
+    <div class="card-body">
+      <div class="media">
+        <img class="media-object pull-left img-user-small" person-profile-image="{ person: booking.person, size: 'small' }">
+        <div class="media-body">
+          <h4 class="media-heading"><a ui-sref="member({ personId: booking.person.id })">{{ booking.person | fullname }}</a></h4>
+          <div ng-if="booking.person.created">
+            <small class="text-muted">{{ booking.person.created | memberSince }}</small>
+          </div>
+          <div><span badge-list="booking.person.badges"></span></div>
+          <button type="button" class="btn btn-link" ng-click="openChatWith(booking.person)">
+            <i class="fa fa-comment fa-fw"></i>
+            {{ 'SEND_MESSAGE' | translate }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- old
+
 <div class="card" ng-if="userPerspective==='owner'">
   <div class="card-heading">
     <h3 class="card-title">{{ 'RENTER' | translate }}</h3>
@@ -324,8 +675,6 @@
     </div>
   </div>
 </div>
-
-<!-- owner -->
 
 <div class="card" ng-if="userPerspective==='renter'">
   <div class="card-heading">
@@ -357,7 +706,7 @@
   </div>
 </div>
 
-<!-- contact person -->
+-->
 
 <div class="card" ng-if="userPerspective==='renter' && resource.contactPerson && (resource.contactPerson.id !== resource.owner.id)">
   <div class="card-heading">
@@ -543,17 +892,6 @@
 </div>
  -->
 
-<!-- resource features -->
-<div class="card">
-  <div class="card-heading">
-    <h3 class="card-title">
-      {{ resource.brand || ('UNKNOWN_BRAND' | translate) }} <span ng-if="resource.model"> {{ resource.model }}</span>
-    </h3>
-  </div>
-  <div class="card-body">
-    <div ng-include="'resource/partials/resource-features.tpl.html'"></div>
-  </div>
-</div>
 
 <!-- map -->
 <div class="card" ng-if="allowMap">
