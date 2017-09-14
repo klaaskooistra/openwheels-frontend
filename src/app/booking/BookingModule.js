@@ -5,6 +5,7 @@ angular.module('owm.booking', [
   'owm.booking.list',
   'owm.booking.list-rental',
   'owm.booking.show',
+  'owm.booking.new',
   'owm.booking.rating',
   'owm.booking.administer'
 ])
@@ -61,6 +62,18 @@ angular.module('owm.booking', [
       }]
     }
   })
+
+  .state('owm.booking.new', {
+    url: '/overzicht',
+    templateUrl: 'booking/new/new-booking-show.tpl.html',
+    controller: 'NewBookingShowController',
+    resolve: {
+      me: ['authService', function (authService) {
+        return authService.me();
+      }]
+    }
+  })
+
 
   /**
    * Accept a booking & redirect to booking detail

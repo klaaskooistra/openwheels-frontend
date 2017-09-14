@@ -1,0 +1,147 @@
+<div class="card">
+    <div class="card-heading">
+        <h2 class="card-title">
+            <span>Bedankt voor je boeking</span>
+        </h2>
+    </div>
+</div>
+
+<md-card class="ow-card">
+    <div class="md-card-image" style="position: relative">
+        <div resource="resource" size="normal" class="ng-isolate-scope">
+            <img class="media-object img-resource-large pull-left" ng-src="{{ resource.pictures[0] | resourceAvatar:'large' }}" />
+        </div>
+    </div>
+    <div style="position: relative">
+        <md-card-title>
+            <md-card-title-text>
+                <a ui-sref="owm.resource.show({ resourceId: resource.id, city: resource.city })">
+                    <h3 class="no-margin" style="font-size: 2rem">
+                        <span>{{ resource.alias || ('RESOURCE_NO_NAME' | translate) }} {{ resource.registrationPlate | surroundWith : '(' : ')' }}</span>
+                    </h3>
+                </a>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-body class="ow-list-compact">
+            <md-list class="margin-right" role="list">
+                <md-list-item role="listitem" class="md-no-proxy">
+                    <md-icon class="text-success material-icons">directions_car</md-icon>
+                    <div flex="" class="flex">
+                        <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }} pull-right">{{ booking.status | bookingStatus }}</span>
+                        <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-requested pull-right">{{ 'requested' | bookingStatus }}</span>
+                        <span flex="none" class="flex-none">{{ resource.brand }} {{ resource.model }}</span>
+                    </div>
+                </md-list-item>
+                <md-list-item role="listitem" class="md-no-proxy">
+                    <md-icon class="text-success material-icons">place</md-icon>
+                    <div flex="" class="flex">
+                        {{ resource.location }} <small>{{ resource.city }}</small>
+                    </div>
+                </md-list-item>
+                <md-list-item role="listitem" class="md-no-proxy">
+                    <md-icon class="text-success material-icons">access_time</md-icon>
+                    <div flex="" class="flex">
+                        <datetime datetime="{{ booking.beginRequested }}"></datetime>
+                    </div>
+                </md-list-item>
+
+                <md-list-item role="listitem" class="md-no-proxy">
+                    <md-icon class="text-warning material-icons">access_time</md-icon>
+                    <div flex="" class="flex">
+                        <datetime datetime="{{ booking.endRequested }}"></datetime>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-body>
+    </div>
+</md-card>
+
+<div class="card" ng-if="userPerspective === 'renter'">
+    <div class="card-heading">
+        <h3 class="card-title">{{ 'OWNER' | translate }}</h3>
+        <div class="media">
+            <img class="media-object pull-left img-user-small" person-profile-image="{ person: resource.owner, size: 'small' }" />
+            <div class="media-body">
+                <h4 class="media-heading"><a ui-sref="member({ personId: resource.owner.id })">{{ resource.owner | fullname }}</a></h4>
+                <div ng-if="resource.owner.created" class="text-muted">
+                    <small>{{ resource.owner.created | memberSince }}</small>
+                </div>
+                <div><span badge-list="resource.owner.badges"></span></div>
+                <button type="button" class="btn btn-link" ng-click="openChatWith(resource.owner)">
+                    <i class="fa fa-comment fa-fw"></i>
+                    {{ 'SEND_MESSAGE' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div ng-if="resource.advertisement">
+            <h5>{{ 'ABOUT_CAR' | translate}}</h5>
+            <p>{{ resource.advertisement }}</p>
+        </div>
+        <div ng-if="resource.owner.about">
+            <h5>{{ 'ABOUT_ME' | translate }}</h5>
+            <p>{{ resource.owner.about}}</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-heading">
+        <h2 class="card-title">
+            <span>Prijsinformatie</span>
+            <md-icon class="text-success list-margin ng-isolate-scope material-icons pull-right">euro</md-icon>
+        </h2>
+    </div>
+
+    <div class="card-body">
+        <div style="margin-bottom: 15px;">
+
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td style="width:100%">{{ 'PER_DAY' | translate }}</td>
+                    <td class="text-right">{{ resource.price.dayRateTotal | currency }}</td>
+                </tr>
+                <tr>
+                    <td style="width:100%">{{ 'PER_HOUR' | translate }}</td>
+                    <td class="text-right">{{ resource.price.hourRate | currency }}</td>
+                </tr>
+                <tr>
+                    <td style="width:100%">{{ 'PER_FUEL' | translate }}</td>
+                    <td class="text-right">{{ resource.price.fuelPerKilometer | currency }}</td>
+                </tr>
+                <tr>
+                    <td><b>Te betalen</b></td>
+                    <td class="text-right"><b>--</b></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-heading">
+        <h2 class="card-title">
+            <span>Goed om te weten</span>
+        </h2>
+    </div>
+    <div class="card-body">
+        <ul class="list-unstyled list-spaced">
+            <li>
+                <md-icon class="text-danger list-margin ng-isolate-scope material-icons">not_interested</md-icon>
+                <span>Niet roken in de auto</span>
+            </li>
+            <li>
+                <md-icon class="text-danger list-margin ng-isolate-scope material-icons">not_interested</md-icon>
+                <span>Lever de auto's netjes in</span>
+            </li>
+            <li>
+                <md-icon class="text-danger list-margin ng-isolate-scope material-icons">not_interested</md-icon>
+                <span>Boetes wordt niemand blij van, houdt je dus aan de regels</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
