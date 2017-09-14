@@ -453,6 +453,7 @@ angular.module('owm.resource.reservationForm', [])
           }
         })
         .then(function (response) {
+          var bookingId = response.id;
           if (response.beginBooking) {
             alertService.add('success', $filter('translate')('BOOKING_ACCEPTED'), 10000);
           } else {
@@ -461,7 +462,7 @@ angular.module('owm.resource.reservationForm', [])
           if (response.approved === 'BUY_VOUCHER') {
             return $state.go('owm.finance.vouchers');
           } else {
-            return $state.go('owm.person.dashboard');
+            return $state.go('owm.booking.show', { bookingId: bookingId });
           }
         })
         .catch(alertService.addError)
