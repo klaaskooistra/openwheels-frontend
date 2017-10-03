@@ -115,7 +115,7 @@ angular.module('personalDataDirective', [])
           if (firstName && surname) {
             if (year && month && day) {
               if (phoneNumbers) {
-                if (streetNumber && zipcode && city) {
+                if (streetNumber && zipcode && city && containsStreetNumber(streetNumber)) {
                   // save persons info
                   personService.alter({
                     person: $scope.person.id,
@@ -172,6 +172,10 @@ angular.module('personalDataDirective', [])
           } else {
             alertService.add('danger', 'Vul je voor- en achternaam in zodat we weten hoe we je mogen aanspreken.', 5000);
             alertService.loaded();
+          }
+
+          function containsStreetNumber (string) {
+            return /\d/.test(string);
           }
 
           var makeResourceAvailable = function () {

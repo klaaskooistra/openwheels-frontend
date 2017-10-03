@@ -62,6 +62,7 @@ angular.module('owm.person.details', [])
     $scope.bookingStart = moment($stateParams.startDate).format(URL_DATE_TIME_FORMAT);
     $scope.bookingEnd = moment($stateParams.endDate).format(URL_DATE_TIME_FORMAT);
     $scope.licenceNumberValid = true;
+    $scope.licenceNumberRepeatValid = true;
     $scope.licenceDateValid = true;
     $scope.validLicenceMin = moment().format('YYYY');
     $scope.validLicenceMax = moment().add('years', 30).format('YYYY');
@@ -223,6 +224,13 @@ angular.module('owm.person.details', [])
           !isNaN($scope.licenceDate.year) &&
           $scope.licenceDataForm.year.$valid)
         {
+
+          if($scope.driverLicenseNumber !== $scope.driverLicenseNumberRepeat) {
+            $scope.licenceNumberValid = true;
+            $scope.licenceNumberRepeatValid = false;
+            return;
+          }
+
           $scope.licenceDateValid = true;
           var newProps = $filter('returnDirtyItems')( angular.copy($scope.person), $scope.licenceDataForm);
           var licenceDateExpire = $scope.licenceDate.year + '-' + $scope.licenceDate.month+ '-' + $scope.licenceDate.day;
