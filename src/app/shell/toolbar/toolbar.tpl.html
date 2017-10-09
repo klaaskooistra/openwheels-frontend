@@ -28,7 +28,12 @@
       </md-button>
 
       <!-- add resource -->
-      <md-button id="toolbarListyourcar" hide-xs hide-sm ng-if="!user.isAuthenticated" ui-sref="list-your-car">
+      <md-button id="toolbarListyourcar" hide-xs hide-sm ng-if="!user.isAuthenticated" href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header">
+        <md-icon>directions_car</md-icon>
+        <span>{{ 'MYWHEELS_OPEN_HEADLINE' | translate }}</span>
+      </md-button>
+      <!-- add MyWHeels Open -->
+      <md-button id="toolbarMyWheelsOpen" hide-xs hide-sm ng-if="!user.isAuthenticated" ui-sref="list-your-car">
         <md-icon>directions_car</md-icon>
         <span>{{ 'LIST_YOUR_CAR' | translate }}</span>
       </md-button>
