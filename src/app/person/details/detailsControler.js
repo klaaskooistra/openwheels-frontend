@@ -74,9 +74,9 @@ angular.module('owm.person.details', [])
     };
 
     $scope.images = images;
-    $scope.containsLicence = me.status === 'book-only' ? true : false;
-    $scope.licenceUploaded = me.status === 'book-only' ? true : false;
-    $scope.licenceImage = me.status === 'book-only' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
+    $scope.containsLicence = me.status === 'book-only' || me.status === 'active' ? true : false;
+    $scope.licenceUploaded = me.status === 'book-only' || me.status === 'active' ? true : false;
+    $scope.licenceImage = me.status === 'book-only' || me.status === 'active' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
     $scope.licenceFileName = 'Selecteer je rijbewijs';
     // toggle the sections
     $scope.nextSection = function () {
