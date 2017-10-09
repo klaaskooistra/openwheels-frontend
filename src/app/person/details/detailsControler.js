@@ -74,10 +74,20 @@ angular.module('owm.person.details', [])
     };
 
     $scope.images = images;
-    $scope.containsLicence = me.status === 'book-only' || me.status === 'active' ? true : false;
-    $scope.licenceUploaded = me.status === 'book-only' || me.status === 'active' ? true : false;
-    $scope.licenceImage = me.status === 'book-only' || me.status === 'active' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
-    $scope.licenceFileName = 'Selecteer je rijbewijs';
+
+    //reload
+    initLicensePage();
+
+    function initLicensePage() {
+      return authService.me(!!'forceReload').then(function (me) {
+        initPerson(me);
+        $scope.containsLicence = me.status === 'book-only' || me.status === 'active' ? true : false;
+        $scope.licenceUploaded = me.status === 'book-only' || me.status === 'active' ? true : false;
+        $scope.licenceImage = me.status === 'book-only' || me.status === 'active' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
+        $scope.licenceFileName = 'Selecteer je rijbewijs';
+      });
+    }
+
     // toggle the sections
     $scope.nextSection = function () {
       if ($scope.pageNumber < 3) {
@@ -91,6 +101,8 @@ angular.module('owm.person.details', [])
       if ($scope.pageNumber > 1) {
         var number = JSON.parse(elementNumber);
         var numberTwo = JSON.parse(elementNumberTwo);
+
+        initLicensePage();
 
         angular.element('.details--card__section')[number].classList.add('prevSection');
         angular.element('.details--card__section')[numberTwo].classList.add('prevSection');
