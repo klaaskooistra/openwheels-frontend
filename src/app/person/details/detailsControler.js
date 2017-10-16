@@ -58,6 +58,8 @@ angular.module('owm.person.details', [])
     $scope.requiredValue = null;
     $scope.isAvailable = true;
     $scope.errorCreateBooking = false;
+    $scope.errorRentalCheck = false;
+    $scope.errorRentalCheckMessage = null;
     $scope.isbooking = $stateParams.resourceId !== undefined ? true : false;
     $scope.bookingStart = moment($stateParams.startDate).format(URL_DATE_TIME_FORMAT);
     $scope.bookingEnd = moment($stateParams.endDate).format(URL_DATE_TIME_FORMAT);
@@ -425,6 +427,11 @@ angular.module('owm.person.details', [])
         }
         else if (err.message === 'Er is een fout opgetreden') {
           $scope.errorCreateBooking = true;
+        }
+        else if (err.message.indexOf('Voor je kunt reserveren hebben we jouw') >= 0) {
+          $scope.errorCreateBooking = true;
+          $scope.errorRentalCheckMessage = err.message;
+          $scope.errorRentalCheck = true;
         }
         alertService.loaded();
         $scope.isBusy = false;

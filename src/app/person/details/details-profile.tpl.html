@@ -205,6 +205,7 @@
             <!-- if person is blocked after driver license check -->
             <section ng-if="!isBusy && errorCreateBooking && !isBlocked" class="details--card--form">
                 <h2 class="card-title">Foutmelding</h2>
+                <p ng-if="errorRentalCheck">{{ errorRentalCheckMessage }}</p>
                 <p>Vanwege een overwachte fout kon de boeking helaas niet gemaakt worden. Neem contact met ons op via het <a href="https://mywheels.nl/autodelen/community/contact/" target="_blank">contactformulier</a>.</p>
             </section>
 
