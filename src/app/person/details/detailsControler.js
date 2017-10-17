@@ -68,6 +68,7 @@ angular.module('owm.person.details', [])
     $scope.licenceDateValid = true;
     $scope.validLicenceMin = moment().format('YYYY');
     $scope.validLicenceMax = moment().add('years', 30).format('YYYY');
+    $scope.onlyNumbers = /^\d+$/;
 
     //licence upload sections
     // licence images

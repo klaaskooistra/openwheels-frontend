@@ -58,10 +58,10 @@
                                 <div class="licenceNumberGroup">
                                     <h3 class="ng-binding">Rijbewijsnummer</h3>
                                     <div id="licenceNumber_group" class="icon payment">
-                                        <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+                                        <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" required>
                                     </div>
-                                    <div id="licenceNumberRepeat_group" class="icon replay" ng-show="licenceDataForm.driverLicenseNumber.$touched && driverLicenseNumber.length === 10">
-                                        <input ng-paste="$event.preventDefault();" name="driverLicenseNumberRepeat" id="driverLicenseNumberRepeat" ng-model="driverLicenseNumberRepeat" placeholder="Voer opnieuw je rijbewijsnummer in voor de zekerheid ..." class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" required>
+                                    <div id="licenceNumberRepeat_group" class="icon replay" ng-show="driverLicenseNumber.length === 10">
+                                        <input ng-paste="$event.preventDefault();" name="driverLicenseNumberRepeat" id="driverLicenseNumberRepeat" ng-model="driverLicenseNumberRepeat" placeholder="Voer opnieuw je rijbewijsnummer in voor de zekerheid ..." class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" required>
                                     </div>
                                     <div class="err-block" ng-if="!licenceNumberValid || !licenceNumberRepeatValid || (driverLicenseNumber !== driverLicenseNumberRepeat)" aria-hidden="true">
                                         <span class="text-danger ng-binding" aria-hidden="true" ng-show="!licenceNumberValid">Dit is geen correct rijbewijsnummer</span>
