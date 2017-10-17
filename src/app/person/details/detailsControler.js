@@ -228,7 +228,7 @@ angular.module('owm.person.details', [])
     };
 
     $scope.prepareUpload = function () {
-      if($scope.driverLicenseNumber !== undefined && $scope.driverLicenseNumber.length < 11)
+      if($scope.driverLicenseNumber !== undefined && $scope.driverLicenseNumber.length === 10)
       {
         if(
           !isNaN($scope.licenceDate.day) &&
@@ -241,6 +241,7 @@ angular.module('owm.person.details', [])
 
           if($scope.driverLicenseNumber !== $scope.driverLicenseNumberRepeat) {
             $scope.licenceNumberValid = true;
+            $scope.licenceDateValid = true;
             $scope.licenceNumberRepeatValid = false;
             return;
           }

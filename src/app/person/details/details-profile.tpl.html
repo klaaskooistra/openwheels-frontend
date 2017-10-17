@@ -60,7 +60,7 @@
                                     <div id="licenceNumber_group" class="icon payment">
                                         <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
                                     </div>
-                                    <div id="licenceNumberRepeat_group" class="icon replay" ng-show="licenceDataForm.driverLicenseNumber.$touched">
+                                    <div id="licenceNumberRepeat_group" class="icon replay" ng-show="licenceDataForm.driverLicenseNumber.$touched && driverLicenseNumber.length === 10">
                                         <input ng-paste="$event.preventDefault();" name="driverLicenseNumberRepeat" id="driverLicenseNumberRepeat" ng-model="driverLicenseNumberRepeat" placeholder="Voer opnieuw je rijbewijsnummer in voor de zekerheid ..." class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" required>
                                     </div>
                                     <div class="err-block" ng-if="!licenceNumberValid || !licenceNumberRepeatValid || (driverLicenseNumber !== driverLicenseNumberRepeat)" aria-hidden="true">
