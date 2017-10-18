@@ -212,7 +212,6 @@ angular.module('openwheels', [
   /* Intentionally left blank */
 })
 
-
 .run(function ($window, $log, $timeout, $state, $stateParams, $rootScope, $anchorScroll,
   alertService, featuresService, linksService, metaInfoService, Analytics, authService, $location, $localStorage) {
 
@@ -320,6 +319,7 @@ angular.module('openwheels', [
       alertService.add('danger', error.message || 'Woops, er is iets mis gegaan', 5000);
     }
   });
+
 });
 
 // MANUAL BOOTSTRAP
