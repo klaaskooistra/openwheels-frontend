@@ -34,6 +34,7 @@ angular.module('owm.person.license', [])
     };
 
     $scope.driverLicenseNumber = $scope.person.driverLicenseNumber;
+    $scope.driverLicenseNumberRepeat = null;
   }
 
   angular.element('#licenseFrontFile').on('change', function (e) {

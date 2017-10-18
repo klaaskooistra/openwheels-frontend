@@ -58,10 +58,14 @@
                                 <div class="licenceNumberGroup">
                                     <h3 class="ng-binding">Rijbewijsnummer</h3>
                                     <div id="licenceNumber_group" class="icon payment">
-                                        <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text">
+                                        <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" required>
                                     </div>
-                                    <div class="err-block" ng-if="!licenceNumberValid" aria-hidden="true">
-                                        <span class="text-danger ng-binding" aria-hidden="true">Dit is geen correct rijbewijsnummer</span>
+                                    <div id="licenceNumberRepeat_group" class="icon replay" ng-show="driverLicenseNumber.length === 10">
+                                        <input ng-paste="$event.preventDefault();" name="driverLicenseNumberRepeat" id="driverLicenseNumberRepeat" ng-model="driverLicenseNumberRepeat" placeholder="Voer opnieuw je rijbewijsnummer in voor de zekerheid ..." class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" required>
+                                    </div>
+                                    <div class="err-block" ng-if="!licenceNumberValid || !licenceNumberRepeatValid || (driverLicenseNumber !== driverLicenseNumberRepeat)" aria-hidden="true">
+                                        <span class="text-danger ng-binding" aria-hidden="true" ng-show="!licenceNumberValid">Dit is geen correct rijbewijsnummer</span>
+                                        <span class="text-danger ng-binding" aria-hidden="true" ng-show="licenceNumberValid && !licenceNumberRepeatValid && (driverLicenseNumber !== driverLicenseNumberRepeat)">Je ingevulde rijbewijsnummers komen niet overeen</span>
                                     </div>
                                 </div>
 
@@ -201,6 +205,7 @@
             <!-- if person is blocked after driver license check -->
             <section ng-if="!isBusy && errorCreateBooking && !isBlocked" class="details--card--form">
                 <h2 class="card-title">Foutmelding</h2>
+                <p ng-if="errorRentalCheck">{{ errorRentalCheckMessage }}</p>
                 <p>Vanwege een overwachte fout kon de boeking helaas niet gemaakt worden. Neem contact met ons op via het <a href="https://mywheels.nl/autodelen/community/contact/" target="_blank">contactformulier</a>.</p>
             </section>
 
