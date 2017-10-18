@@ -63,16 +63,22 @@
         <!-- /dateOfBirth -->
 
         <!-- gender -->
-        <div class="gender--options">
-            <div class="gender--options__option">
-                <input type="radio" ng-model="genderText" ng-change="person.male = genderText==='male' ? true : (genderText==='female' ? false : null)" id="male" value="male">
-                <label for="male">{{ 'MALE' | translate }}</label>
+        <div id="gender_group">
+            <div class="gender--options">
+                <div class="gender--options__option">
+                    <input type="radio" ng-model="genderText" ng-change="person.male = genderText==='male' ? true : (genderText==='female' ? false : null)" id="male" value="male">
+                    <label for="male">{{ 'MALE' | translate }}</label>
+                </div>
+                <div class="gender--options__option">
+                    <input type="radio" ng-model="genderText" ng-change="person.male = genderText==='male' ? true : (genderText==='female' ? false : null)" value="female" id="female">
+                    <label for="female">{{ 'FEMALE' | translate }}</label>
+                </div>
             </div>
-            <div class="gender--options__option">
-                <input type="radio" ng-model="genderText" ng-change="person.male = genderText==='male' ? true : (genderText==='female' ? false : null)" value="female" id="female">
-                <label for="female">{{ 'FEMALE' | translate }}</label>
+            <div class="err-block" ng-show="genderText === ''">
+                <span class="text-danger" ng-show="personalDataForm.$submitted && (genderText === '')">{{ 'REQUIRED' | translate }}</span>
             </div>
         </div>
+
         <!-- /gender -->
 
         <!-- phone number -->
