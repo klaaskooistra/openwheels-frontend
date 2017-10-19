@@ -115,50 +115,55 @@ angular.module('personalDataDirective', [])
           if (firstName && surname) {
             if (year && month && day) {
               if (phoneNumbers) {
-                if (streetNumber && zipcode && city && containsStreetNumber(streetNumber)) {
-                  // save persons info
-                  personService.alter({
-                    person: $scope.person.id,
-                    newProps: newProps
-                  }).then(function () {
-                    
-                    Analytics.trackEvent('person', 'edited', $scope.person.id, undefined, true);
-                    that.initPerson($scope.person);
-                    // if person is renter, send to next page
-                    $scope.next();
-                    // if person is owner, save IBAN if no IBAN is defined
-                    if ($state.current.name === 'owm.resource.create.details' && !$scope.ibanIsDefined) {
-                      if($scope.account.iban) {
-                        accountService.alter({
-                          'id': $scope.account.id,
-                          'newProps': {
-                            'iban': $scope.account.iban
-                          }
-                        }).then(function(){
-                          // make resource availble if IBAN is saved successfully
-                          makeResourceAvailable();
-                        }).catch(function (err) {
-                          alertService.addError(err);
-                        })
-                        .finally(function () {
+                if (male) {
+                  if (streetNumber && zipcode && city && containsStreetNumber(streetNumber)) {
+                    // save persons info
+                    personService.alter({
+                      person: $scope.person.id,
+                      newProps: newProps
+                    }).then(function () {
+                      
+                      Analytics.trackEvent('person', 'edited', $scope.person.id, undefined, true);
+                      that.initPerson($scope.person);
+                      // if person is renter, send to next page
+                      $scope.next();
+                      // if person is owner, save IBAN if no IBAN is defined
+                      if ($state.current.name === 'owm.resource.create.details' && !$scope.ibanIsDefined) {
+                        if($scope.account.iban) {
+                          accountService.alter({
+                            'id': $scope.account.id,
+                            'newProps': {
+                              'iban': $scope.account.iban
+                            }
+                          }).then(function(){
+                            // make resource availble if IBAN is saved successfully
+                            makeResourceAvailable();
+                          }).catch(function (err) {
+                            alertService.addError(err);
+                          })
+                          .finally(function () {
+                            alertService.loaded();
+                          });
+                        } else {
+                          alertService.add('danger', 'Vul je IBAN-nummer in zodat we verhuuropbrengst kunnen uitbetalen.', 5000);
                           alertService.loaded();
-                        });
-                      } else {
-                        alertService.add('danger', 'Vul je IBAN-nummer in zodat we verhuuropbrengst kunnen uitbetalen.', 5000);
-                        alertService.loaded();
+                        }
+                      // if person is owner and IBAN is already defined, make resource available
+                      } else if ($state.current.name === 'owm.resource.create.details') {
+                        makeResourceAvailable();
                       }
-                    // if person is owner and IBAN is already defined, make resource available
-                    } else if ($state.current.name === 'owm.resource.create.details') {
-                      makeResourceAvailable();
-                    }
-                  }).catch(function (err) {
-                    alertService.addError(err);
-                  })
-                  .finally(function () {
+                    }).catch(function (err) {
+                      alertService.addError(err);
+                    })
+                    .finally(function () {
+                      alertService.loaded();
+                    });
+                  } else {
+                    alertService.add('danger', 'Vul je postcode en huisnummer in zodat we je post kunnen sturen.', 5000);
                     alertService.loaded();
-                  });
+                  }
                 } else {
-                  alertService.add('danger', 'Vul je postcode en huisnummer in zodat we je post kunnen sturen.', 5000);
+                  alertService.add('danger', 'Vul je geslacht in.', 5000);
                   alertService.loaded();
                 }
               } else {
