@@ -163,7 +163,7 @@ angular.module('personalDataDirective', [])
                     alertService.loaded();
                   }
                 } else {
-                  alertService.add('danger', 'Vul je geslacht in.', 5000);
+                  alertService.add('danger', 'Selecteer wat je geslacht is.', 5000);
                   alertService.loaded();
                 }
               } else {
