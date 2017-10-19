@@ -435,10 +435,14 @@ angular.module('owm.person.details', [])
         else if (err.message === 'Er is een fout opgetreden') {
           $scope.errorCreateBooking = true;
         }
-        else if (err.message.indexOf('Voor je kunt reserveren hebben we jouw') >= 0) {
+        else if (err.message.indexOf('Voor je kunt reserveren, hebben we jouw') >= 0) {
           $scope.errorCreateBooking = true;
           $scope.errorRentalCheckMessage = err.message;
           $scope.errorRentalCheck = true;
+        }
+        else if (err.message) {
+          $scope.errorCreateBooking = true;
+          $scope.errorMessage = err.message;
         }
         alertService.loaded();
         $scope.isBusy = false;
