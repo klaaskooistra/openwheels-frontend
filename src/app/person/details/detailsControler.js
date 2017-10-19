@@ -82,13 +82,15 @@ angular.module('owm.person.details', [])
     initLicensePage();
 
     function initLicensePage() {
-      return authService.me(!!'forceReload').then(function (me) {
-        initPerson(me);
-        $scope.containsLicence = me.status === 'book-only' || me.status === 'active' ? true : false;
-        $scope.licenceUploaded = me.status === 'book-only' || me.status === 'active' ? true : false;
-        $scope.licenceImage = me.status === 'book-only' || me.status === 'active' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
-        $scope.licenceFileName = 'Selecteer je rijbewijs';
-      });
+      if($scope.showSecond) {
+        return authService.me(!!'forceReload').then(function (me) {
+          initPerson(me);
+          $scope.containsLicence = me.status === 'book-only' || me.status === 'active' ? true : false;
+          $scope.licenceUploaded = me.status === 'book-only' || me.status === 'active' ? true : false;
+          $scope.licenceImage = me.status === 'book-only' || me.status === 'active' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
+          $scope.licenceFileName = 'Selecteer je rijbewijs';
+        });
+      }
     }
 
     // toggle the sections
@@ -166,14 +168,17 @@ angular.module('owm.person.details', [])
 
       $scope.driverLicenseNumber = $scope.person.driverLicenseNumber;
 
-      account2Service.forMe({
-        'onlyApproved': true
-      }).then(function (value) {
-        if (value.length > 0) {
-          $scope.accountApproved = true;
-        }
+      if($scope.showThird) {
+        account2Service.forMe({
+          'onlyApproved': true
+        }).then(function (value) {
+          if (value.length > 0) {
+            $scope.accountApproved = true;
+          }
 
-      });
+        });
+      }
+
       initAlerts();
     }
 
@@ -311,9 +316,9 @@ angular.module('owm.person.details', [])
             }).then(function (person) {
               angular.extend(authService.user.identity, person);
               $scope.nextSection();
+              $scope.driverLicenseAccepted = true;
               alertService.loaded();
               $scope.licenceUploaded = true;
-              $scope.isBusy = false;
             })
             // silently fail
               .catch(function (err) {
