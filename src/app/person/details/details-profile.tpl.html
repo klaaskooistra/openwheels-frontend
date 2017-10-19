@@ -146,7 +146,7 @@
                 <p>Nog heel even wachten.</p>
             </section>
 
-            <section resource-sidebar class="details--profile__sidebar" ng-if="isBusy && isbooking && !isBlocked && showThird"></section>
+            <section resource-sidebar class="details--profile__sidebar" ng-if="!isBusy && isbooking && !isBlocked && showThird"></section>
 
             <!-- if booking is created and person can pay -->
             <section class="details--card--form" ng-if="!isBusy && isbooking && !isBlocked && !errorCreateBooking" ng-hide="!isAvailable">
