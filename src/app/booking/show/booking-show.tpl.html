@@ -10,26 +10,34 @@
     <a ui-sref="owm.trips" ng-if="userPerspective === 'owner'"><i class="fa fa-fw fa-chevron-left"></i>Terug naar verhuurgeschiedenis</a>
   </div>
 </div>
+
 <div class="card" ng-if="previousState.name == 'owm.person.dashboard'">
   <div class="card-body card-inverse">
     <a ui-sref="owm.person.dashboard"><i class="fa fa-fw fa-chevron-left"></i>Terug naar dashboard</a>
   </div>
 </div>
 
-<div class="card" ng-if="userPerspective ==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && previousState.name == 'owm.resource.show' && booking.ok">
-  <div class="card-body card-inverse">
+<!-- Information block for renter if this is the thank you page -->
+<div class="card" ng-if="previousState.name == 'owm.resource.show' && userPerspective ==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
+  <!-- If booking is ok -->
+  <div class="card-body card-inverse" ng-if="booking.ok">
     <h2 class="text-white">Bedankt voor je boeking!</h2>
     <p class="text-white">
-      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et
+      Alles is in orde voor je boeking, je kunt goed verzekerd op weg.
     </p>
   </div>
-</div>
-
-<div class="card" ng-if="userPerspective==='renter' && !booking.ok && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
-  <div class="card-body card-inverse">
+  <!-- If renter needs to pay -->
+  <div class="card-body card-inverse" ng-if="!booking.ok && booking.approved === 'BUY_VOUCHER' && previousState.name == 'owm.resource.show'">
     <h2 class="text-white">Bijna klaar! Alleen nog rijtegoed kopen</h2>
     <p class="text-white">
-      Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et
+      Je reservering is gemaakt. Je hoeft enkel de reservering nog te betalen.
+    </p>
+  </div>
+  <!-- If booking is not ok -->
+  <div class="card-body card-inverse" ng-if="booking.status === 'requested'">
+    <h2 class="text-white">Je huurverzoek is verzonden</h2>
+    <p class="text-white">
+      Je ontvangt een mail van ons als de verhuurder op je huurverzoek heeft gereageerd.
     </p>
   </div>
 </div>
@@ -55,31 +63,29 @@
         <md-list-item role="listitem" class="md-no-proxy">
           <md-icon class="text-success material-icons">directions_car</md-icon>
           <div flex="" class="flex">
-            {{ (resource.brand | toTitleCase) || ('UNKNOWN_BRAND' | translate) }}
+            {{ (resource.brand | toTitleCase) || ('UNKNOWN_BRAND' | translate) }} {{ resource.model | toTitleCase }}
             <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }} pull-right">{{ booking.status | bookingStatus }}</span>
             <span ng-if="!hasAcceptedTimeframe(booking) && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0" class="tag tag-requested pull-right">{{ 'requested' | bookingStatus }}</span>
-            <span ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) >= 0" class="tag tag-requested pull-right">Geannuleerd</span>
-
-            <span flex="none" class="flex-none">{{ resource.brand }} {{ resource.model }}</span>
+            <span ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) >= 0" class="tag tag-requested pull-right">{{ 'cancelled' | bookingStatus }}</span>
           </div>
         </md-list-item>
         <md-list-item role="listitem" class="md-no-proxy">
           <md-icon class="text-success material-icons">place</md-icon>
           <div flex="" class="flex">
-            {{ resource.location }} <small>{{ resource.city }}</small>
+            {{ resource.location }} {{ resource.streetNumber }} <small>{{ resource.city  | toTitleCase }}</small>
           </div>
         </md-list-item>
 
         <div id="started" ng-if="hasAcceptedTimeframe(booking)">
           <md-list-item role="listitem" class="md-no-proxy">
-            <md-icon class="text-success material-icons">access_time</md-icon>
+            <md-icon class="text-success material-icons">arrow_forward</md-icon>
             <div flex="" class="flex">
               <datetime datetime="{{ booking.beginBooking }}"></datetime>
             </div>
           </md-list-item>
 
           <md-list-item role="listitem" class="md-no-proxy">
-            <md-icon class="text-warning material-icons">access_time</md-icon>
+            <md-icon class="text-success material-icons">arrow_back</md-icon>
             <div flex="" class="flex">
               <datetime datetime="{{ booking.endBooking }}"></datetime>
             </div>
@@ -88,14 +94,14 @@
 
         <div id="requested" ng-if="!hasAcceptedTimeframe(booking)">
           <md-list-item role="listitem" class="md-no-proxy">
-            <md-icon class="text-success material-icons">access_time</md-icon>
+            <md-icon class="text-warning material-icons">arrow_forward</md-icon>
             <div flex="" class="flex">
               <datetime datetime="{{ booking.beginRequested }}"></datetime>
             </div>
           </md-list-item>
 
           <md-list-item role="listitem" class="md-no-proxy">
-            <md-icon class="text-warning material-icons">access_time</md-icon>
+            <md-icon class="text-warning material-icons">arrow_back</md-icon>
             <div flex="" class="flex">
               <datetime datetime="{{ booking.endRequested }}"></datetime>
             </div>
@@ -107,52 +113,73 @@
   </div>
 </md-card>
 
-<div class="card" ng-if="userPerspective==='owner' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
+<div class="card" ng-if="allowOvereenkomst && !bookingEnded">
   <div class="card-heading">
     <h3 class="card-title">
-      <a ng-click="toggleEditOwnerBookingCard()">
-        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !editOwnerBookingIsOpen, 'fa-chevron-down': editOwnerBookingIsOpen }"></i>
-
-        <span ng-if="userPerspective==='owner' && !hasAcceptedTimeframe(booking)">
-          {{ booking.person.firstName | wantsToRent : booking.resource }}
-        </span>
-
-        <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && !hasRequestedTimeframe(booking)">
-        {{ booking.person.firstName | hasRented : booking.resource }}
-        </span>
-
-        <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && hasRequestedTimeframe(booking)">
-        {{ booking.person.firstName | wantsToChangeBooking }}
-        </span>
+      <a  href="{{ overeenkomstUrl }}" target="_blank" ng-href="{{ overeenkomstUrl }}">
+        <md-icon class="btn-link">file_download</md-icon>
+        Download huurovereenkomst
       </a>
+    </h3>
+  </div>
+</div>
 
+<div class="card" ng-if="userPerspective==='renter' && booking.approved === 'BUY_VOUCHER' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
+  <div class="card-body card-inverse" style="background-color:#5faac8; color:white;" layout="row" layout-xs="column">
+    <div flex="75" flex-xs="100">
+      <h3 style="color:#fff; margin-bottom:10px;">Reservering betalen</h3>
+      Je reservering is nog niet definitief omdat je te weinig rijtegoed hebt.</div>
+    <div flex="25" flex-xs="100"><md-button class="md-raised" ui-sref="owm.finance.vouchers">Koop rijtegoed</md-button></div>
+  </div>
+</div>
+
+<div class="card" ng-if="userPerspective==='renter' && hasRequestedTimeframe(booking) && hasAcceptedTimeframe(booking)">
+  <div class="card-body card-inverse" style="background-color:#e6a500; color:white;">
+    <span>De wijzging van je reeds geaccepteerde verzoek is naar de verhuurder verstuurd. Na goedkeuring ontvang je per mail een bevestiging. Pas dan is je rit verlengd.</span>
+  </div>
+</div>
+
+<div class="card" ng-if="userPerspective==='owner' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && !bookingRequestEnded && !bookingEnded">
+  <div class="card-heading">
+    <h3 class="card-title">
+      <span ng-if="userPerspective==='owner' && !hasAcceptedTimeframe(booking)">
+        {{ booking.person.firstName | wantsToRent : booking.resource }}
+      </span>
+
+      <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && !hasRequestedTimeframe(booking)">
+      {{ booking.person.firstName | hasRented : booking.resource }}
+      </span>
+
+      <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && hasRequestedTimeframe(booking)">
+      {{ booking.person.firstName | wantsToChangeBooking }}
+      </span>
     </h3>
   </div>
   <div uib-collapse="editOwnerBookingIsOpen">
     <div class="card-body">
-      <div class="row" ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && hasRequestedTimeframe(booking)">
-        <div class="col-md-5">
-          <div>
-            <li class="text-success material-icons">access_time</li>
+      <div class="row" ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && hasRequestedTimeframe(booking)" style="text-align:center; margin-bottom:15px;">
+        <div class="col-md-4">
+          <div style="min-height: 40px;">
+            <md-icon class="text-warning material-icons">arrow_forward</md-icon>
             <datetime style="display: inline;" datetime="{{ booking.beginRequested }}"></datetime>
           </div>
-          <div>
-            <li class="text-warning material-icons">access_time</li>
+          <div style="min-height: 40px;">
+            <md-icon class="text-warning material-icons">arrow_back</md-icon>
             <datetime style="display: inline;" datetime="{{ booking.endRequested }}"></datetime>
           </div>
           <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
           <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-requested">{{ 'requested' | bookingStatus }}</span>
         </div>
-        <div class="col-md-3">
-          <li class="text-warning material-icons" style="margin-top: 23px;">compare_arrows</li>
+        <div class="col-md-4" style="padding-bottom: 25px;">
+          <md-icon class="material-icons" style="margin-top: 23px;">compare_arrows</md-icon>
         </div>
         <div class="col-md-4">
-          <div>
-            <li class="text-success material-icons">access_time</li>
+          <div style="min-height: 40px;">
+            <md-icon class="text-success material-icons">arrow_forward</md-icon>
             <datetime style="display: inline;" datetime="{{ booking.beginBooking }}"></datetime>
           </div>
-          <div>
-            <li class="text-warning material-icons">access_time</li>
+          <div style="min-height: 40px;">
+            <md-icon class="text-success material-icons">arrow_back</md-icon>
             <datetime style="display: inline;" datetime="{{ booking.endBooking }}"></datetime>
           </div>
           <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
@@ -169,7 +196,7 @@
           <button type="button" class="btn btn-danger" ng-click="rejectBooking(booking)">Weigeren</button>
         </div>
       </div>
-      <div class="" ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && !hasRequestedTimeframe(booking)">
+      <div class="" ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && booking.ok && !hasRequestedTimeframe(booking)">
         Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.
       </div>
       <div class="row text-center" ng-if="allowCancel">
@@ -181,143 +208,6 @@
     </div>
   </div>
 </div>
-
-<!--
-<div class="card">
-  <div class="card-heading">
-
-    <span class="pull-right">
-      <a id="booking-huurovereenkomst-link" ng-if="allowOvereenkomst" class="btn btn-link" target="_blank" ng-href="{{ overeenkomstUrl }}">
-        <i class="fa fa-download fa-fw"></i>Huurovereenkomst (pdf)
-      </a>
-    </span>
-
-    <h2 class="card-title">
-      <span ng-if="userPerspective==='owner' && !hasAcceptedTimeframe(booking)">
-        {{ booking.person.firstName | wantsToRent : booking.resource }}
-      </span>
-      <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && !hasRequestedTimeframe(booking)">
-        {{ booking.person.firstName | hasRented : booking.resource }}
-      </span>
-      <span ng-if="userPerspective==='owner' && hasAcceptedTimeframe(booking) && hasRequestedTimeframe(booking)">
-        {{ booking.person.firstName | wantsToChangeBooking }}
-      </span>
-      <span ng-if="userPerspective==='renter' && !hasAcceptedTimeframe(booking)">
-        {{ 'BOOKING_REQUESTED_RENTER' | translate }}
-      </span>
-      <span ng-if="userPerspective==='renter' && hasAcceptedTimeframe(booking)">
-        {{ 'BOOKING_ACCEPTED_RENTER' | translate }}
-      </span>
-    </h2>
-  </div>
-
-  <div class="card-body">
-
-    <div ng-if="userPerspective==='owner'" ng-include="'resource/partials/resource-header3.tpl.html'"></div>
-    <div ng-if="userPerspective==='renter'" ng-include="'resource/partials/resource-header2.tpl.html'"></div>
-    <hr/>
-
-    <div class="alert alert-warning" ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) >= 0">
-      <span>{{ booking.status | bookingStatus }}</span>
-    </div>
-
-    <div ng-if="!hasRequestedTimeframe(booking)">
-      <div class="media">
-        <div class="media-object auto-height pull-left">
-          <div ng-if="hasAcceptedTimeframe(booking)" class="booking__timeframe booking__timeframe--accepted">
-            Begin boeking:<datetime datetime="{{ booking.beginBooking }}"></datetime>
-            Eind boeking:<datetime datetime="{{ booking.endBooking }}"></datetime>
-            <span class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
-          </div>
-        </div>
-        <div class="media-body no-padding">
-
-          <button ng-if="allowEdit && !showBookingForm && !hasRequestedTimeframe(booking)"
-            type="button" class="btn btn-default"
-            scroll-to="bookingFormContainer"
-            ng-click="editBooking(bookingRequest)">
-            {{ 'EDIT_BOOKING' | translate }}
-          </button>
-
-          <button ng-if="allowCancel && !showBookingForm && !allowEdit && !hasRequestedTimeframe(booking)"
-            type="button" class="btn btn-default"
-            ng-click="cancelBooking(booking)">
-            {{ 'CANCEL_BOOKING' | translate }}
-          </button>
-
-          <p ng-if="allowFinalize">Er is <b>{{booking.trip.odoEnd - booking.trip.odoBegin}} kilometer</b> gereden. Klopt dit niet? Neem dan <a href="https://mywheels.nl/contact">contact</a> met ons op. </p>
-          <a ng-if="allowFinalize"
-            class="btn btn-default"
-            ui-sref="owm.booking.finalize({booking: booking.id})">
-            {{ 'FINALIZE_BOOKING' | translate }}
-          </a>
-
-        </div>
-      </div>
-      <hr/>
-    </div>
-
-    <div ng-if="hasRequestedTimeframe(booking)">
-      <div class="media">
-        <div class="media-object auto-height pull-left">
-          <div class="booking__timeframe booking__timeframe--requested">
-            <datetime datetime="{{ booking.beginRequested }}"></datetime>
-            <datetime datetime="{{ booking.endRequested }}"></datetime>
-            <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
-            <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-requested">{{ 'requested' | bookingStatus }}</span>
-          </div>
-        </div>
-        <div class="media-body no-padding">
-          <div ng-if="hasRequestedTimeframe(booking) && hasAcceptedTimeframe(booking)">
-            <div style="float: left;" class="booking__timeframe booking__timeframe--requested">
-              <datetime datetime="{{ booking.beginBooking }}"></datetime>
-              <datetime datetime="{{ booking.endBooking }}"></datetime>
-              <span ng-if="!hasAcceptedTimeframe(booking)" class="tag tag-{{ booking.status }}">{{ booking.status | bookingStatus }}</span>
-              <span ng-if="hasAcceptedTimeframe(booking)" class="tag tag-accepted">{{ 'accepted' | bookingStatus }}</span>
-            </div>
-          </div>
-
-          <a ng-if="allowFinalize" class="btn btn-default" ui-sref="owm.booking.finalize({booking: booking.id})">
-            {{ 'FINALIZE_BOOKING' | translate }}
-          </a>
-
-        </div>
-      </div>
-      <hr/>
-    </div>
-
-  </div>
-</div>
--->
-
-<div class="card" ng-if="allowOvereenkomst">
-  <div class="card-heading">
-    <h3 class="card-title">
-      <a  href="{{ overeenkomstUrl }}" target="_blank" ng-href="{{ overeenkomstUrl }}">
-        <i class="fa fa-download fa-fw"></i>
-        Huurovereenkomst downloaden (pdf)
-      </a>
-    </h3>
-  </div>
-</div>
-
-<!-- OK not OK messages -->
-<!--
-<div class="card" ng-if="userPerspective==='renter' && booking.approved === 'BUY_VOUCHER'">
-  <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
-    <span>Deze rit is nog niet betaald. <a style="color: #832f2f" ui-sref="owm.finance.vouchers">Koop rijtegoed</a> om deze rit te betalen.</span>
-  </div>
-</div>
--->
-
-<!-- Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.
-
-<div class="card" ng-if="userPerspective==='owner' && booking.ok && !allowAcceptReject">
-  <div class="card-body card-inverse" style="background-color:#3bab78; color: white;">
-    <span>Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.</span>
-  </div>
-</div>
--->
 
 <div class="card" ng-if="userPerspective==='owner' && !booking.ok">
   <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
@@ -334,7 +224,7 @@
 </div>
 
 <!-- FORM -->
-<div id="bookingFormContainer" uib-collapse="!showBookingForm" ng-if="['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
+<div id="bookingFormContainer" uib-collapse="!showBookingForm" ng-if="userPerspective === 'renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
   <div class="card" ng-init="!editBookingIsOpen" >
     <div class="card-heading">
       <h3 class="card-title">
@@ -358,10 +248,6 @@
             </li>
           </ul>
         </div>
-
-        <!-- price
-        <div class="branding_booking_resource_price" ng-if="userPerspective === 'renter'" ng-include="'resource/partials/resource-price.tpl.html'"></div>
-        -->
 
         <div class="booking-form" >
           <form class="booking" timeframe begin="bookingRequest.beginRequested" end="bookingRequest.endRequested">
@@ -402,30 +288,6 @@
               <textarea class="form-control" ng-model="bookingRequest.remarkRequester"></textarea>
             </div>
 
-            <!-- disclaimer -->
-            <div id="bookingShowDisclaimer" class="alert alert-danger" ng-if="booking.approved==='OK' && booking.bookingAlterationStrategy !== 'mywheels_member' && booking.bookingAlterationStrategy !== 'mywheels_dim' && booking.bookingAlterationStrategy !== 'mywheels_premium'">
-              <i class="fa fa-exclamation-triangle text-danger"></i>&nbsp;
-              <span ng-switch="booking.bookingAlterationStrategy">
-              <span ng-switch-when="default">{{ 'BOOKING_ALTERATION_STRATEGY_DEFAULT' | translate }}</span>
-              <span ng-switch-when="mywheels_go">{{ 'BOOKING_ALTERATION_STRATEGY_MYWHEELS_GO' | translate }}</span>
-              <span ng-switch-when="anwb">{{ 'BOOKING_ALTERATION_STRATEGY_ANWB' | translate }}</span>
-            </span>
-            </div>
-
-            <!-- availability & price
-            <div class="form-group" ng-if="(price || isPriceLoading || availability || isAvailabilityLoading) && userPerspective === 'renter' ">
-              <div class="text-center">
-                <h4 ng-if="availability.available==='no'"><i class="fa fa-times text-danger" ></i> Niet beschikbaar</h4>
-                <h4 ng-if="availability.available==='yes'"><i class="fa fa-check text-success" ></i> Beschikbaar</h4>
-                <h4 ng-if="availability.available==='yes' && price">
-                  Kosten:
-                  <span>{{ price.total | currency }}</span>
-                  <info-icon tooltip-html="priceHtml(price)"></info-icon>
-                </h4>
-                <h4 ng-if="isPriceLoading || isAvailabilityLoading"><i class="fa fa-spinner fa-spin"></i></h4>
-              </div>
-            </div>
-            -->
             <!-- pay button -->
             <div class="form-group" ng-if="extraCredit">
               <div class="text-center">
@@ -482,7 +344,7 @@
   </div>
 </div><!--/ FORM -->
 
-<div class="card" ng-init="!paymentIsOpen" ng-if="userPerspective === 'renter' && !booking.ok && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
+<!-- <div class="card" ng-init="!paymentIsOpen" ng-if="userPerspective === 'renter' && !booking.ok && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
   <div class="card-heading">
       <span class="pull-right" ng-if="false">
         <small hide-xs style="padding-left: 1em" ng-if="booking.cancelAfter && booking.status != 'OK'">Betaal voor {{booking.cancelAfter|amDateFormat:'D MMMM YYYY HH:mm'}} om annulering te voorkomen</small>
@@ -510,7 +372,6 @@
     </div>
     <div class="card-body" ng-if="requiredValue.value.total > 0">
       <h2>Rijtegoed</h2>
-      <!-- credit -->
       <div style="margin-bottom: 15px;">
 
         <table class="table">
@@ -552,7 +413,7 @@
     </div>
 
   </div>
-</div>
+</div> -->
 
 <!-- remarks -->
 <div class="card" ng-if="booking.remarkRequester || booking.remarkAuthorizer">
@@ -574,152 +435,131 @@
   </div>
 </div>
 
-<div class="card" ng-init="!contactRenterOrOwnerisOpen" ng-if="userPerspective === 'renter'">
+<!-- owner information -->
+<div class="card"  ng-if="userPerspective === 'renter'">
   <div class="card-heading">
     <h3 class="card-title">
-      <a ng-click="toggleContactCard()">
-        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !contactRenterOrOwnerisOpen, 'fa-chevron-down': contactRenterOrOwnerisOpen }"></i>
-       Contact opnemen me de eigenaar
-      </a>
-
+      Gegevens van {{ resource.owner.firstName }}
     </h3>
   </div>
-  <div uib-collapse="!contactRenterOrOwnerisOpen">
-    <div class="card-body">
-      <div class="media">
-        <img class="media-object pull-left img-user-small" person-profile-image="{ person: booking.person, size: 'small' }">
-        <div class="media-body">
-          <h4 class="media-heading"><a ui-sref="member({ personId: resource.owner.id })">{{ resource.owner | fullname }}</a></h4>
-          <div ng-if="resource.owner.created" class="text-muted">
-            <small>{{ resource.owner.created | memberSince }}</small>
-          </div>
-          <div><span badge-list="resource.owner.badges"></span></div>
-          <button type="button" class="btn btn-link" ng-click="openChatWith(resource.owner)">
-            <i class="fa fa-comment fa-fw"></i>
-            {{ 'SEND_MESSAGE' | translate }}
-          </button>
-
-          <div ng-if="resource.advertisement">
-            <h5>{{ 'ABOUT_CAR' | translate}}</h5>
-            <p>{{ resource.advertisement }}</p>
-          </div>
-          <div ng-if="resource.owner.about">
-            <h5>{{ 'ABOUT_ME' | translate }}</h5>
-            <p>{{ resource.owner.about}}</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="card" ng-init="!contactRenterOrOwnerisOpen" ng-if="userPerspective === 'owner'">
-  <div class="card-heading">
-    <h3 class="card-title">
-      <a ng-click="toggleContactCard()">
-        <i class="fa fa-fw" ng-class="{ 'fa-chevron-right': !contactRenterOrOwnerisOpen, 'fa-chevron-down': contactRenterOrOwnerisOpen }"></i>
-        Contact opnemen me de huurder
-      </a>
-    </h3>
-  </div>
-  <div uib-collapse="!contactRenterOrOwnerisOpen">
-    <div class="card-body">
-      <div class="media">
-        <img class="media-object pull-left img-user-small" person-profile-image="{ person: booking.person, size: 'small' }">
-        <div class="media-body">
-          <h4 class="media-heading"><a ui-sref="member({ personId: booking.person.id })">{{ booking.person | fullname }}</a></h4>
-          <div ng-if="booking.person.created">
-            <small class="text-muted">{{ booking.person.created | memberSince }}</small>
-          </div>
-          <div><span badge-list="booking.person.badges"></span></div>
-          <button type="button" class="btn btn-link" ng-click="openChatWith(booking.person)">
-            <i class="fa fa-comment fa-fw"></i>
-            {{ 'SEND_MESSAGE' | translate }}
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- old
-
-<div class="card" ng-if="userPerspective==='owner'">
-  <div class="card-heading">
-    <h3 class="card-title">{{ 'RENTER' | translate }}</h3>
+  <div class="card-body">
     <div class="media">
-      <img class="media-object pull-left img-user-small" person-profile-image="{ person: booking.person, size: 'small' }">
+      <img class="media-object pull-left img-user-small" person-profile-image="{ person: resource.owner, size: 'small' }" hide-xs />
       <div class="media-body">
-        <h4 class="media-heading"><a ui-sref="member({ personId: booking.person.id })">{{ booking.person | fullname }}</a></h4>
-        <div ng-if="booking.person.created">
-          <small class="text-muted">{{ booking.person.created | memberSince }}</small>
+        <ul class="list-unstyled list-block list-spaced">
+          <li><md-icon>person_outline</md-icon>
+            {{ resource.owner | fullname }}
+          </li>
+          <li ng-if="resource.owner.created"><md-ico>perm_contact_calendar</md-icon> 
+            {{ resource.owner.created | memberSince }}
+          </li>
+          <li ng-if="resource.owner.streetName"><md-icon>place</md-icon>
+            {{ resource.owner.streetName }} {{ resource.owner.streetNumber }}, {{ resource.owner.city }}
+          </li>
+          <li ng-if="resource.owner.phoneNumbers[0].number"><md-icon>phone</md-icon>
+            <a href="tel:{{ resource.owner.phoneNumbers[0].number }}">{{ resource.owner.phoneNumbers[0].number }}</a>
+            <small ng-if="resource.owner.phoneNumbers[0].verified" class="text-success">(geverifieerd)</small>
+          </li>
+          <li><md-icon>check</md-icon>
+            {{ resource.numberOfBookings | wasBookedTimes }}
+          </li>
+          <li ng-if="resource.owner.facebookUid"><md-icon>share</md-icon>
+            <a target="_blank" ng-href="https://facebook.com/{{ resource.owner.facebookUid }}">Facebook</a>
+          </li>
+          <li ng-if="resource.owner.twitterUid"><md-icon>share</md-icon>
+            <a target="_blank" ng-href="https://twitter.com/{{ resource.owner.twitterUid }}">Twitter</a>
+          </li>
+          <li ng-if="resource.owner.linkedinUid"><md-icon>share</md-icon>
+            <a target="_blank" ng-href="https://www.linkedin.com/profile/view?id={{ resource.ownerbooking.person.linkedinUid }}">LinkedIn</a>
+          </li>
+          <li><md-icon>comment</md-icon>
+            <a ng-click="openChatWith(resource.owner)">{{ 'SEND_MESSAGE' | translate }}</a>
+          </li>
+        </ul>
+        <div><span badge-list="booking.person.badges"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- renter information -->
+<div class="card" ng-if="userPerspective === 'owner'">
+  <div class="card-heading">
+    <h3 class="card-title">
+        Gegevens van {{ booking.person.firstName }}
+    </h3>
+  </div>
+  <div class="card-body">
+    <div class="media">
+      <img class="media-object pull-left img-user-small" person-profile-image="{ person: booking.person, size: 'small' }" hide-xs />
+      <div class="media-body">
+        <ul class="list-unstyled list-block list-spaced">
+          <li><md-icon>person_outline</md-icon>
+            {{ booking.person | fullname }}
+          </li>
+          <li ng-if="booking.person.created"><md-icon>perm_contact_calendar</md-icon> 
+            {{ booking.person.created | memberSince }}
+          </li>
+          <li ng-if="booking.person.streetName"><md-icon>place</md-icon>
+            {{ booking.person.streetName }} {{ booking.person.streetNumber }}, {{ booking.person.city }}
+          </li>
+          <li ng-if="booking.person.phoneNumbers[0].number"><md-icon>phone</md-icon>
+            {{ booking.person.phoneNumbers[0].number }}
+            <small ng-if="booking.person.phoneNumbers[0].verified" class="text-success">(geverifieerd)</small>
+          </li>
+          <li><md-icon>check</md-icon>
+            {{ person.numberOfBookings | hasBookedTimes }}
+          </li>
+          <li ng-if="booking.person.facebookUid"><md-icon>share</md-icon>
+            <a target="_blank" ng-href="https://facebook.com/{{ booking.person.facebookUid }}">Facebook</a>
+          </li>
+          <li ng-if="booking.person.twitterUid"><md-ico>share</md-icon>
+            <a target="_blank" ng-href="https://twitter.com/{{ booking.person.twitterUid }}">Twitter</a>
+          </li>
+          <li ng-if="booking.person.linkedinUid"><md-icon>share</md-icon>
+            <a target="_blank" ng-href="https://www.linkedin.com/profile/view?id={{ booking.person.linkedinUid }}">LinkedIn</a>
+          </li>
+          <li><md-icon>comment</md-icon>
+            <a ng-click="openChatWith(booking.person)">{{ 'SEND_MESSAGE' | translate }}</a>
+          </li>
+        </ul>
+        <div>
+          <br>Bekijk het profiel van <a ui-sref="member({ personId: booking.person.id })">{{ booking.person.firstName }}</a> voor meer informatie en reviews.
         </div>
         <div><span badge-list="booking.person.badges"></span></div>
-        <button type="button" class="btn btn-link" ng-click="openChatWith(booking.person)">
-          <i class="fa fa-comment fa-fw"></i>
-          {{ 'SEND_MESSAGE' | translate }}
-        </button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="card" ng-if="userPerspective==='renter'">
-  <div class="card-heading">
-    <h3 class="card-title">{{ 'OWNER' | translate }}</h3>
-    <div class="media">
-      <img class="media-object pull-left img-user-small" person-profile-image="{ person: resource.owner, size: 'small' }" />
-      <div class="media-body">
-        <h4 class="media-heading"><a ui-sref="member({ personId: resource.owner.id })">{{ resource.owner | fullname }}</a></h4>
-        <div ng-if="resource.owner.created" class="text-muted">
-          <small>{{ resource.owner.created | memberSince }}</small>
-        </div>
-        <div><span badge-list="resource.owner.badges"></span></div>
-        <button type="button" class="btn btn-link" ng-click="openChatWith(resource.owner)">
-          <i class="fa fa-comment fa-fw"></i>
-          {{ 'SEND_MESSAGE' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="card-body">
-    <div ng-if="resource.advertisement">
-      <h5>{{ 'ABOUT_CAR' | translate}}</h5>
-      <p>{{ resource.advertisement }}</p>
-    </div>
-    <div ng-if="resource.owner.about">
-      <h5>{{ 'ABOUT_ME' | translate }}</h5>
-      <p>{{ resource.owner.about}}</p>
-    </div>
-  </div>
-</div>
-
--->
-
+<!-- contact person information -->
 <div class="card" ng-if="userPerspective==='renter' && resource.contactPerson && (resource.contactPerson.id !== resource.owner.id)">
   <div class="card-heading">
-    <h3 class="card-title">{{ 'CONTACT_PERSON' | translate }}</h3>
+    <h3 class="card-title">
+      Gegevens van de beheerder
+    </h3>
     <div class="media">
-      <img class="media-object pull-left img-user-small" person-profile-image="{ person: resource.contactPerson, size: 'small' }" />
+      <img class="media-object pull-left img-user-small" person-profile-image="{ person: resource.contactPerson, size: 'small' }" hide-xs />
       <div class="media-body">
-        <h4 class="media-heading"><a ui-sref="member({ personId: resource.contactPerson.id })">{{ resource.contactPerson | fullname }}</a></h4>
-        <div ng-if="resource.contactPerson.created" class="text-muted">
-          <small>{{ resource.contactPerson.created | memberSince }}</small>
-        </div>
-        <div><span badge-list="resource.contactPerson.badges"></span></div>
-        <button type="button" class="btn btn-link" ng-click="openChatWith(resource.contactPerson)">
-          <i class="fa fa-comment fa-fw"></i>
-          {{ 'SEND_MESSAGE' | translate }}
-        </button>
+        <ul class="list-unstyled list-block list-spaced">
+          <li><md-icon>person_outline</md-icon>
+            {{ resource.contactPerson | fullname }}
+          </li>
+          <li ng-if="resource.contactPerson.created"><md-icon>perm_contact_calendar</md-icon> 
+            {{ resource.contactPerson.created | memberSince }}
+          </li>
+          <li ng-if="resource.contactPerson.streetName"><md-icon>place</md-icon>
+            {{ resource.contactPerson.streetName }} {{ resource.contactPerson.streetNumber }}, {{ resource.contactPerson.city }}
+          </li>
+          <li ng-if="resource.contactPerson.phoneNumbers[0].number"><md-icon>phone</md-icon>
+            {{ resource.contactPerson.phoneNumbers[0].number }}
+            <small ng-if="resource.contactPerson.phoneNumbers[0].verified" class="text-success">(geverifieerd)</small>
+          </li>
+          <li><md-icon>comment</md-icon>
+            <a ng-click="openChatWith(resource.contactPerson)">{{ 'SEND_MESSAGE' | translate }}</a>
+          </li>
+        </ul>
       </div>
-    </div>
-  </div>
-  <div class="card-body">
-    <div ng-if="resource.contactPerson.about">
-      <h5>{{ 'ABOUT_ME' | translate }}</h5>
-      <p>{{ resource.contactPerson.about}}</p>
     </div>
   </div>
 </div>
@@ -761,7 +601,6 @@
     </div>
   </div>
 </div>
-
 
 <!-- sent invoices -->
 <div class="card" ng-if="sentInvoices.length > 0">
@@ -831,62 +670,10 @@
   </div>
 </div>
 
-<!-- pricing -->
-<!--
-<div class="card text-center" ng-if="receivedInvoices && receivedInvoices.length <= 0">
-  <div class="card-heading">
-    <h4 class="card-title">{{ 'RESOURCE_PRICE' | translate }}</h4>
-  </div>
-  <div class="card-body">
-
-    <div id="resource-price" class="text-center">
-      <ul class="resource__price-list list-inline">
-        <li ng-if="!showPricePerHour">
-          {{ resource.price.dayRateTotal | currency }}
-          <div class="resource_price-list__unit">{{ 'PER_DAY' | translate }}</div>
-        </li>
-        <li ng-show="showPricePerHour">
-          {{ resource.price.hourRate | currency }}
-          <div class="resource_price-list__unit">{{ 'PER_HOUR' | translate }}</div>
-        </li>
-
-        <li ng-hide="resource.refuelByRenter"><i class="fa fa-plus fa-lg text-muted"></i></li>
-        <li ng-hide="resource.refuelByRenter">
-          {{ resource.price.fuelPerKilometer | currency }}
-          <div class="resource_price-list__unit">{{ 'PER_FUEL' | translate }}</div>
-        </li>
-
-        <li><i class="fa fa-plus fa-lg text-muted"></i></li>
-
-        <li>
-          {{ resource.price.kilometerRate | currency }}
-          <div class="resource_price-list__unit">{{ 'PER_KM' | translate }}</div>
-        </li>
-      </ul>
-
-      <div ng-show="resource.price.kmFree" class="text-success">
-        <span ng-if="!showPricePerHour">{{ 'FREE_KM_DAY' | translate }}</span>
-        <span ng-if="showPricePerHour">{{ 'FREE_KM_HOUR' | translate }}</span>
-      </div>
-
-      <div ng-if="resource.refuelByRenter" class="text-success">
-        <span ng-bind="'RESOURCE_REFUEL_BY_RENTER' | translate"></span>
-      </div>
-
-      <div id="resource_price_per_hour_button">
-        <button type="button" class="btn btn-sm btn-link" ng-click="showPricePerHour = !showPricePerHour">{{ 'SHOW_PRICE' | translate }} {{ !showPricePerHour ? ('PER_HOUR' | translate) : ('PER_DAY' | translate) }}</button>
-      </div>
-    </div>
-
-  </div>
-</div>
- -->
-
-
 <!-- map -->
-<div class="card" ng-if="allowMap">
-  <div class="card-heading" ng-if="resource.location || resource.city">
-    <h3 class="card-title">{{ resource.location }} <small>{{ resource.city }}</small></h3>
+<div class="card" ng-if="resource.location || resource.city">
+  <div class="card-heading">
+    <h3 class="card-title">{{ resource.location }} {{ resource.streetNumber }} <small>{{ resource.city }}</small></h3>
   </div>
   <ui-gmap-google-map
        center="map.center"
