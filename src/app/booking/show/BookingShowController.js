@@ -63,10 +63,10 @@ angular.module('owm.booking.show', [])
   $scope.booking = booking;
   $scope.bookingStarted = moment().isAfter(moment(booking.beginBooking));
   $scope.bookingEnded = moment().isAfter(moment(booking.endBooking));
+  $scope.bookingRequestEnded = moment().isAfter(moment(booking.endRequested));
   $scope.bookingEndedRealy = moment().isAfter(moment(booking.endBooking).add('1', 'hour'));
   $scope.resource = booking.resource;
   $scope.isOpen = false;
-  $scope.contactRenterOrOwnerisOpen = false;
   $scope.agreementIsOpen = false;
   $scope.paymentIsOpen = booking.approved === 'BUY_VOUCHER' ? true : false;
   $scope.editBookingIsOpen = booking.approved !== 'BUY_VOUCHER' ? true : false;
@@ -121,17 +121,6 @@ angular.module('owm.booking.show', [])
     }
   }
 
-  $scope.editOwnerBookingIsOpen = false;
-  $scope.toggleEditOwnerBookingCard = function () {
-    var isOpen = $scope.editOwnerBookingIsOpen;
-    if(isOpen === true) {
-      $scope.editOwnerBookingIsOpen = false;
-    } else {
-      $scope.editOwnerBookingIsOpen = true;
-    }
-  };
-
-
   if ($scope.allowOvereenkomst) {
     $scope.overeenkomstUrl = linksService.bookingAgreementPdf(booking.id);
   }
@@ -148,7 +137,6 @@ angular.module('owm.booking.show', [])
     $scope.allowStop   = false;
     $scope.allowAcceptReject  = false;
     $scope.allowBoardComputer = false;
-    $scope.allowMap    = false;
     $scope.allowOvereenkomst = (booking.approved === null || booking.approved === 'OK') && booking.status === 'accepted';
     $scope.allowDeclarations = contract.type.canHaveDeclaration && ($scope.booking.approved === 'OK' || $scope.booking.approved === null) && $scope.bookingStarted && !$scope.booking.resource.refuelByRenter && !booking.resource.fuelCardCar;
     $scope.allowDeclarationsAdd = $scope.allowDeclarations && moment().isBefore(moment(booking.endBooking).add(5, 'days'));
@@ -189,8 +177,6 @@ angular.module('owm.booking.show', [])
           moment().isBefore(moment(booking.endBooking))
         );
       }());
-
-      $scope.allowMap = $scope.allowEdit;
     }
 
     if ($scope.userPerspective === 'owner') {
@@ -654,15 +640,6 @@ angular.module('owm.booking.show', [])
     $q.all({received: loadReceivedInvoices(), sent: loadSentInvoices()})
     .then(injectInvoiceLines);
   }
-
-  $scope.toggleContactCard = function () {
-    var isOpen = $scope.contactRenterOrOwnerisOpen;
-    if(isOpen === true) {
-      $scope.contactRenterOrOwnerisOpen = false;
-    } else {
-      $scope.contactRenterOrOwnerisOpen = true;
-    }
-  };
 
   $scope.toggleAgreementCard = function () {
     var isOpen = $scope.agreementIsOpen;
