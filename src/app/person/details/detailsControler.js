@@ -58,13 +58,17 @@ angular.module('owm.person.details', [])
     $scope.requiredValue = null;
     $scope.isAvailable = true;
     $scope.errorCreateBooking = false;
+    $scope.errorRentalCheck = false;
+    $scope.errorRentalCheckMessage = null;
     $scope.isbooking = $stateParams.resourceId !== undefined ? true : false;
     $scope.bookingStart = moment($stateParams.startDate).format(URL_DATE_TIME_FORMAT);
     $scope.bookingEnd = moment($stateParams.endDate).format(URL_DATE_TIME_FORMAT);
     $scope.licenceNumberValid = true;
+    $scope.licenceNumberRepeatValid = true;
     $scope.licenceDateValid = true;
     $scope.validLicenceMin = moment().format('YYYY');
     $scope.validLicenceMax = moment().add('years', 30).format('YYYY');
+    $scope.onlyNumbers = /^\d+$/;
 
     //licence upload sections
     // licence images
@@ -73,10 +77,22 @@ angular.module('owm.person.details', [])
     };
 
     $scope.images = images;
-    $scope.containsLicence = me.status === 'book-only' ? true : false;
-    $scope.licenceUploaded = me.status === 'book-only' ? true : false;
-    $scope.licenceImage = me.status === 'book-only' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
-    $scope.licenceFileName = 'Selecteer je rijbewijs';
+
+    //reload
+    initLicensePage();
+
+    function initLicensePage() {
+      if($scope.showSecond) {
+        return authService.me(!!'forceReload').then(function (me) {
+          initPerson(me);
+          $scope.containsLicence = me.status === 'book-only' || me.status === 'active' ? true : false;
+          $scope.licenceUploaded = me.status === 'book-only' || me.status === 'active' ? true : false;
+          $scope.licenceImage = me.status === 'book-only' || me.status === 'active' ? 'assets/img/rijbewijs_uploaded.jpg' : 'assets/img/rijbewijs_voorbeeld.jpg'; //WHAT IS THE URL??
+          $scope.licenceFileName = 'Selecteer je rijbewijs';
+        });
+      }
+    }
+
     // toggle the sections
     $scope.nextSection = function () {
       if ($scope.pageNumber < 3) {
@@ -90,6 +106,8 @@ angular.module('owm.person.details', [])
       if ($scope.pageNumber > 1) {
         var number = JSON.parse(elementNumber);
         var numberTwo = JSON.parse(elementNumberTwo);
+
+        initLicensePage();
 
         angular.element('.details--card__section')[number].classList.add('prevSection');
         angular.element('.details--card__section')[numberTwo].classList.add('prevSection');
@@ -150,14 +168,17 @@ angular.module('owm.person.details', [])
 
       $scope.driverLicenseNumber = $scope.person.driverLicenseNumber;
 
-      account2Service.forMe({
-        'onlyApproved': true
-      }).then(function (value) {
-        if (value.length > 0) {
-          $scope.accountApproved = true;
-        }
+      if($scope.showThird) {
+        account2Service.forMe({
+          'onlyApproved': true
+        }).then(function (value) {
+          if (value.length > 0) {
+            $scope.accountApproved = true;
+          }
 
-      });
+        });
+      }
+
       initAlerts();
     }
 
@@ -213,7 +234,7 @@ angular.module('owm.person.details', [])
     };
 
     $scope.prepareUpload = function () {
-      if($scope.driverLicenseNumber !== undefined && $scope.driverLicenseNumber.length < 11)
+      if($scope.driverLicenseNumber !== undefined && $scope.driverLicenseNumber.length === 10)
       {
         if(
           !isNaN($scope.licenceDate.day) &&
@@ -223,6 +244,14 @@ angular.module('owm.person.details', [])
           !isNaN($scope.licenceDate.year) &&
           $scope.licenceDataForm.year.$valid)
         {
+
+          if($scope.driverLicenseNumber !== $scope.driverLicenseNumberRepeat) {
+            $scope.licenceNumberValid = true;
+            $scope.licenceDateValid = true;
+            $scope.licenceNumberRepeatValid = false;
+            return;
+          }
+
           $scope.licenceDateValid = true;
           var newProps = $filter('returnDirtyItems')( angular.copy($scope.person), $scope.licenceDataForm);
           var licenceDateExpire = $scope.licenceDate.year + '-' + $scope.licenceDate.month+ '-' + $scope.licenceDate.day;
@@ -287,9 +316,9 @@ angular.module('owm.person.details', [])
             }).then(function (person) {
               angular.extend(authService.user.identity, person);
               $scope.nextSection();
+              $scope.driverLicenseAccepted = true;
               alertService.loaded();
               $scope.licenceUploaded = true;
-              $scope.isBusy = false;
             })
             // silently fail
               .catch(function (err) {
@@ -405,6 +434,15 @@ angular.module('owm.person.details', [])
         }
         else if (err.message === 'Er is een fout opgetreden') {
           $scope.errorCreateBooking = true;
+        }
+        else if (err.message.indexOf('Voor je kunt reserveren, hebben we jouw') >= 0) {
+          $scope.errorCreateBooking = true;
+          $scope.errorRentalCheckMessage = err.message;
+          $scope.errorRentalCheck = true;
+        }
+        else if (err.message) {
+          $scope.errorCreateBooking = true;
+          $scope.errorMessage = err.message;
         }
         alertService.loaded();
         $scope.isBusy = false;
