@@ -1,26 +1,27 @@
 <ul class="list-unstyled list-spaced">
-    <li ng-if="resource.fuelCardCode">
-        <md-icon class="text-success list-margin">credit_card</md-icon><span>{{ 'FUEL_CARD_CODE' | translate}}: {{ resource.fuelCardCode }}</span></li>
     <li>
-        <md-icon class="text-success list-margin">people</md-icon><span>{{ resource.numberOfSeats }} {{ 'SEATS' | translate }}</span></li>
+        <md-icon class="text-success list-margin">people</md-icon>
+        <span>{{ resource.numberOfSeats }} {{ 'SEATS' | translate }}</span>
+    </li>
     <li>
         <md-icon class="text-success list-margin">local_gas_station</md-icon>
-        <span ng-if="resource.fuelType">
-        {{  resource.fuelType | translate }}
-        </span> <span ng-if="!resource.fuelType">{{ 'UNKNOWN_FUELTYPE' | translate }}</span></li>
-
-    <!-- lock type -->
+        <span ng-if="resource.fuelType">{{  resource.fuelType | translate | lowercase }}</span>
+        <span ng-if="!resource.fuelType">{{ 'UNKNOWN_FUELTYPE' | translate | lowercase }}</span></li>
     <li>
         <md-icon class="text-success list-margin">vpn_key</md-icon>
-        <span ng-if="resource.locktype">{{  ('LOCKTYPE.' + resource.locktype) | translateOrDefault : resource.locktype }}</span>
-        <span ng-if="!resource.locktype">{{ 'UKNOWN_LOCKTYPE' | translate }}</span>
+        <span ng-repeat="locktype in resource.locktypes | unique:'locktype'">{{  ('LOCKTYPE.' + locktype) | translateOrDefault : locktype | lowercase }}<span ng-if="!$last"> & </span></span>
+        <span ng-if="!resource.locktypes">{{ 'UKNOWN_LOCKTYPE' | translate | lowercase }}</span>
     </li>
     <li ng-if="resource.properties.length >= 1">
         <md-icon class="text-success list-margin">star_rate</md-icon>
-        <span ng-repeat="prop in resource.properties">{{ prop.id | toSentenceCase }}<span ng-if="$index !== resource.properties.length - 1">, </span></span>
+        <span ng-repeat="prop in resource.properties">{{ prop.id | lowercase }}<span ng-if="!$last">, </span></span>
     </li>
     <li>
-        <md-icon class="text-success list-margin">event_available</md-icon><span>{{ resource.numberOfBookings | wasBookedTimes }}</span></li>
+        <md-icon class="text-success list-margin">event_available</md-icon>
+        <span>{{ resource.numberOfBookings | wasBookedTimes }}</span>
+    </li>
     <li ng-if="resource.numberOfBookings > 0">
-        <md-icon class="text-success list-margin">check</md-icon><span>{{ resource.response_accept | percentage : 0 }} {{ 'ACCEPTED_REQUESTS' | translate}}</span></li>
+        <md-icon class="text-success list-margin">check</md-icon>
+        <span>{{ resource.response_accept | percentage : 0 }} {{ 'ACCEPTED_REQUESTS' | translate}}</span>
+    </li>
 </ul>
