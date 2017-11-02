@@ -24,10 +24,10 @@
 
     <div id="booking-list-item-owner_ok" class="pull-right text-right">
       <!-- OK ICON -->
-      <span ng-if="b.ok">
+      <span ng-if="b.ok && b.approved !== 'BUY_VOUCHER'">
         <i class="fa fa-check-circle fa-2x text-success" uib-tooltip="Deze boeking is akkoord, je kunt de auto meegeven aan de huurder"></i>
       </span>
-      <span ng-if="!b.ok">
+      <span ng-if="!b.ok || b.approved === 'BUY_VOUCHER'">
         <i class="fa fa-exclamation-circle fa-2x text-danger" uib-tooltip="Deze boeking is (nog) niet akkoord, geef de auto niet mee aan de huurder"></i>
       </span>
       <!-- EDIT BUTTON -->

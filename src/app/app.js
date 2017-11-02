@@ -84,6 +84,7 @@ angular.module('openwheels', [
   'personalDataDirective',
   'sameHeightDirective',
   'autoblurDirective',
+  'restrictToDirective',
 
   /* Filters */
   'filters.util',
