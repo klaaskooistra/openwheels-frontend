@@ -15,7 +15,7 @@ angular.module('owm.pages.list-your-car', [])
 
   $scope.licencePlate = {
     content: '',
-    data: true,
+    data: false,
     showError: false,
     error: ''
   };
