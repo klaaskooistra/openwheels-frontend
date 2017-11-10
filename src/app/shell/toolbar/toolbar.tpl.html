@@ -19,21 +19,21 @@
       <span flex></span>
 
       <!-- help button -->
-      <md-button id="toolbarHelp" hide-gt-xs ng-if="user.isAuthenticated && !centralb" class="md-icon-button" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
+      <md-button id="toolbarHelp" hide-gt-xs ng-if="user.isAuthenticated" class="md-icon-button" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
         <md-icon>help_outline</md-icon>
       </md-button>
-      <md-button id="toolbarHelp" hide-xs ng-if="user.isAuthenticated  && !centralb" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
+      <md-button id="toolbarHelp" hide-xs ng-if="user.isAuthenticated" href="{{ 'NAVBAR.HOW_IT_WORKS_URL' | translate }}">
         <md-icon>help_outline</md-icon>
         <span>Help</span>
       </md-button>
 
       <!-- add resource -->
-      <md-button class="app--toolbar--button--text btn-blue" id="toolbarMyWheelsOpen" hide-xs hide-sm ng-if="!user.isAuthenticated" href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header">
+      <md-button class="app--toolbar--button--text btn-blue" id="toolbarMyWheelsOpen" hide-xs hide-sm ng-if="!user.isAuthenticated && !onSignUpPage" href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header">
         <!-- <md-icon>directions_car</md-icon> -->
         <span>{{ 'MYWHEELS_OPEN_HEADLINE' | translate }}</span>
       </md-button>
       <!-- add MyWHeels Open -->
-      <md-button id="toolbarListyourcar" hide-xs hide-sm ng-if="!user.isAuthenticated" ui-sref="list-your-car">
+      <md-button id="toolbarListyourcar" hide-xs hide-sm ng-if="!user.isAuthenticated && !onSignUpPage" ui-sref="list-your-car">
         <md-icon>directions_car</md-icon>
         <span>{{ 'LIST_YOUR_CAR' | translate }}</span>
       </md-button>
@@ -44,7 +44,7 @@
       </div>
 
       <!-- signup -->
-      <md-button id="toolbarSignup" ng-if="!user.isPending && !user.isAuthenticated" class="btn-green app--toolbar--button--text" ui-sref="owm.auth.signup">
+      <md-button id="toolbarSignup" ng-if="!user.isPending && !user.isAuthenticated && !onSignUpPage" class="btn-green app--toolbar--button--text" ui-sref="owm.auth.signup">
         <md-icon hide-xs>person_outline</md-icon>
         <span>{{ 'SIGNUP' | translate }}</span>
       </md-button>
