@@ -15,7 +15,7 @@ angular.module('owm.pages.list-your-car', [])
 
   $scope.licencePlate = {
     content: '',
-    data: false,
+    data: true,
     showError: false,
     error: ''
   };
@@ -40,8 +40,8 @@ angular.module('owm.pages.list-your-car', [])
   //the four buttons to add add an remove the number of days and dayPrice
   $scope.changePrice = function (e, change, elm, max) {
     if (change === '-') {
-      if($scope.calculateYourPrice[elm] <= 15) {
-        $scope.calculateYourPrice[elm] = 15;
+      if($scope.calculateYourPrice.dayPrice <= 15) {
+        $scope.calculateYourPrice.dayPrice = 15;
       }
       else
       {

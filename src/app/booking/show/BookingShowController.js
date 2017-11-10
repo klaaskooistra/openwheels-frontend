@@ -772,68 +772,66 @@ angular.module('owm.booking.show', [])
     });
   };
 
-  //test
+  // $scope.requiredValue = null;
+  // $scope.credit = null;
+  // $scope.debt = null;
 
-  $scope.requiredValue = null;
-  $scope.credit = null;
-  $scope.debt = null;
+  // reload();
 
-  reload();
+  // function reload () {
+  //   alertService.load();
+  //   $q.all([ getVouchers(), getRequiredValue(), getCredit(), getDebt() ]).finally(function () {
+  //     alertService.loaded();
+  //   });
+  // }
 
-  function reload () {
-    alertService.load();
-    $q.all([ getVouchers(), getRequiredValue(), getCredit(), getDebt() ]).finally(function () {
-      alertService.loaded();
-    });
-  }
+  // function getVouchers () {
+  //   $scope.vouchers = null;
+  //   var promise = voucherService.search({ person: booking.person.id, minValue: 0 });
+  //   promise.then(function (vouchers) {
+  //     $scope.vouchers = vouchers;
+  //   })
+  //     .catch(function (err) {
+  //       $scope.vouchers = [];
+  //     });
+  //   return promise;
+  // }
 
-  function getVouchers () {
-    $scope.vouchers = null;
-    var promise = voucherService.search({ person: booking.person.id, minValue: 0 });
-    promise.then(function (vouchers) {
-      $scope.vouchers = vouchers;
-    })
-      .catch(function (err) {
-        $scope.vouchers = [];
-      });
-    return promise;
-  }
+  // function getRequiredValue () {
+  //   $scope.requiredValue = null;
+  //   var promise = voucherService.calculateRequiredCredit({ person: booking.person.id });
+  //   promise.then(function (value) {
+  //     $scope.requiredValue = { value: value };
+  //   })
+  //     .catch(function (err) {
+  //       $scope.requiredValue = { error: err };
+  //     });
+  //   return promise;
+  // }
 
-  function getRequiredValue () {
-    $scope.requiredValue = null;
-    var promise = voucherService.calculateRequiredCredit({ person: booking.person.id });
-    promise.then(function (value) {
-      $scope.requiredValue = { value: value };
-    })
-      .catch(function (err) {
-        $scope.requiredValue = { error: err };
-      });
-    return promise;
-  }
+  // function getCredit () {
+  //   $scope.credit = null;
+  //   var promise = voucherService.calculateCredit({ person: booking.person.id });
+  //   promise.then(function (credit) {
+  //     $scope.credit = { value: credit };
+  //   })
+  //     .catch(function (err) {
+  //       $scope.credit = { error: err };
+  //     });
+  //   return promise;
+  // }
 
-  function getCredit () {
-    $scope.credit = null;
-    var promise = voucherService.calculateCredit({ person: booking.person.id });
-    promise.then(function (credit) {
-      $scope.credit = { value: credit };
-    })
-      .catch(function (err) {
-        $scope.credit = { error: err };
-      });
-    return promise;
-  }
-
-  function getDebt () {
-    $scope.debt = null;
-    var promise = voucherService.calculateDebt({ person: booking.person.id });
-    promise.then(function (debt) {
-      $scope.debt = { value: debt };
-    })
-      .catch(function (err) {
-        $scope.debt = { error: err };
-      });
-    return promise;
-  }
+  // function getDebt () {
+  //   $scope.debt = null;
+  //   var promise = voucherService.calculateDebt({ person: booking.person.id });
+  //   promise.then(function (debt) {
+  //     $scope.debt = { value: debt };
+  //   })
+  //     .catch(function (err) {
+  //       $scope.debt = { error: err };
+  //     });
+  //   return promise;
+  // }
 
 
   $scope.openChatWith = openChatWith;
