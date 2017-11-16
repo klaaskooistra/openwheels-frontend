@@ -37,10 +37,6 @@ angular.module('owm.booking.show', [])
     acceptRejectRemark: ''
   };
 
-  if ($scope.allowAgreement) {
-    $scope.allowAgreementUrl = linksService.bookingAgreementPdf(booking.id);
-  }
-
   // Is person the renter of the owner
   $scope.userPerspective = (function () {
     if (booking.person.id === me.id) {
@@ -103,9 +99,12 @@ angular.module('owm.booking.show', [])
     $scope.allowStop   = false;
     $scope.allowAcceptReject  = false;
     $scope.allowBoardComputer = false;
-    $scope.allowAgreement = (booking.approved === null || booking.approved === 'OK') && booking.status === 'accepted';
     $scope.allowDeclarations = contract.type.canHaveDeclaration && ($scope.booking.approved === 'OK' || $scope.booking.approved === null) && $scope.bookingStarted && !$scope.booking.resource.refuelByRenter && !booking.resource.fuelCardCar;
     $scope.allowDeclarationsAdd = $scope.allowDeclarations && moment().isBefore(moment(booking.endBooking).add(5, 'days'));
+
+    if ($scope.booking.ok) {
+      $scope.allowAgreementUrl = linksService.bookingAgreementPdf(booking.id);
+    }
 
     if ($scope.userPerspective === 'renter') {
       $scope.allowEdit = (function () {

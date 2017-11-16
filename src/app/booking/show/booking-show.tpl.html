@@ -130,12 +130,12 @@
 
 <div class="card" ng-if="userPerspective==='owner' && booking.ok && booking.status !== 'requested' && !bookingEndedRealy">
   <div class="card-body card-inverse" style="background-color:#82b955; color: white;">
-    <span>Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder.</span>
+    <span>Alles voor deze rit is geregeld, je kunt de auto meegeven aan de huurder. Vergeet niet de huurovereenkomst samen met de huurder in te vullen.</span>
   </div>
 </div>
 
 <!-- Agreement -->
-<div class="card" ng-if="allowAgreement && !bookingEnded">
+<div class="card" ng-if="booking.ok && booking.status !== 'requested' && !bookingEndedRealy">
   <div class="card-heading">
     <h3 class="card-title">
       <a href="{{ allowAgreementUrl }}" target="_blank" ng-href="{{ allowAgreementUrl }}">

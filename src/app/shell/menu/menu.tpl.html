@@ -44,11 +44,11 @@
 
     <md-divider></md-divider>
 
-    <md-list-item id="menuGegevens" class="menu-item-profile" ng-click="navigate('owm.person.profile')" ng-if="user.identity.preference === 'owner' || user.identity.status !== 'new'">
+    <md-list-item id="menuGegevens" class="menu-item-profile" ng-click="navigate('owm.person.profile')" ng-if="user.identity.preference === 'owner' || user.identity.status !== 'new' || user.identity.provider.id !== 1">
       <md-icon>settings</md-icon><p>{{ 'MY_PROFILE' | translate }}</p>
     </md-list-item>
 
-    <md-list-item id="menuGegevens" class="menu-item-profile" ng-click="navigate('owm.person.details', {pageNumber: '1'})" ng-if="user.identity.preference !== 'owner' && user.identity.status === 'new'">
+    <md-list-item id="menuGegevens" class="menu-item-profile" ng-click="navigate('owm.person.details', {pageNumber: '1'})" ng-if="user.identity.preference !== 'owner' && user.identity.status === 'new' && user.identity.provider.id === 1">
       <md-icon>settings</md-icon><p>{{ 'MY_PROFILE' | translate }}</p>
     </md-list-item>
 
