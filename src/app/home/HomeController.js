@@ -3,7 +3,7 @@
 angular.module('owm.home', ['owm.resource', 'slick'])
 
 //Module in app/pages/pagesModule.js
-.controller('HomeController', function ($scope, $translate, $location, resourceQueryService, $state, resourceService, $localStorage) {
+.controller('HomeController', function ($scope, $translate, $location, resourceQueryService, $state, resourceService, $localStorage, $http) {
 
   $scope.$watch(function () {
     return $translate.use();
@@ -12,6 +12,24 @@ angular.module('owm.home', ['owm.resource', 'slick'])
       $scope.lang = lang;
     }
   });
+
+  // loadBlogItems();
+
+  // function loadBlogItems () {
+  //   $http({
+  //     method: 'GET',
+  //     url: 'https://mywheels.nl/blog/feed/json'
+  //   })
+  //   .then(function (response) {
+  //     var maxResults = 2;
+  //     if (response.data && response.data.items) {
+  //       $scope.blogItems = response.data.items.slice(0, maxResults);
+  //     }
+  //   })
+  //   .catch(function () {
+  //     $scope.blogItems = [];
+  //   });
+  // }
 
   if ($scope.features.featuredSlider) {
     resourceService.all({

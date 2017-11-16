@@ -459,11 +459,7 @@ angular.module('owm.resource.reservationForm', [])
           } else {
             alertService.add('info', $filter('translate')('BOOKING_REQUESTED'), 5000);
           }
-          if (response.approved === 'BUY_VOUCHER') {
-            return $state.go('owm.finance.vouchers');
-          } else {
-            return $state.go('owm.booking.show', { bookingId: bookingId });
-          }
+          return $state.go('owm.booking.show', { bookingId: bookingId });
         })
         .catch(alertService.addError)
         .finally(function() {
