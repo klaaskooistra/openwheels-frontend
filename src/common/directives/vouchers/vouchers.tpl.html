@@ -79,7 +79,7 @@
             <b>Totale huurprijs</b>
             <span style="padding-top:1em" ng-if="booking.cancelAfter && booking.status !== 'OK' && booking.details.discount === 0">
                 <br><br>
-                Betaal voor {{booking.cancelAfter | amDateFormat:'D MMMM YYYY HH:mm'}}, anders wordt de rit automatisch geannuleerd.
+                Betaal voor {{booking.cancelAfter | amDateFormat:'D MMMM YYYY HH:mm'}} om automatische annulering te voorkomen.
             </span>
             </td>
             <td class="text-right">
@@ -96,7 +96,7 @@
             <b>Totaal</b>
             <span style="margin-top:1em" ng-if="booking.cancelAfter && booking.status !== 'OK'">
                 <br><br>
-                Betaal voor {{booking.cancelAfter | amDateFormat:'D MMMM YYYY HH:mm'}}, anders wordt de rit automatisch geannuleerd.
+                Betaal voor {{booking.cancelAfter | amDateFormat:'D MMMM YYYY HH:mm'}} om automatische annulering te voorkomen.
             </span>
           </td>
           <td class="text-right"><b>{{ (booking.details.booking_price.total + booking.details.km_price - booking.details.discount) | currency }}</b></td>

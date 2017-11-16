@@ -72,8 +72,15 @@
             </md-button>
           </md-menu-item>
 
-          <md-menu-item>
+          <md-menu-item ng-if="user.identity.preference === 'owner' || user.identity.status !== 'new'">
             <md-button id="toolbarPersonmenuGegevens" ui-sref="owm.person.profile">
+              <md-icon>settings</md-icon>
+              <span>{{ 'MY_PROFILE' | translate }}</span>
+            </md-button>
+          </md-menu-item>
+
+          <md-menu-item ng-if="user.identity.preference !== 'owner' && user.identity.status === 'new'">
+            <md-button id="toolbarPersonmenuGegevens" ui-sref="owm.person.details({pageNumber: '1'})">
               <md-icon>settings</md-icon>
               <span>{{ 'MY_PROFILE' | translate }}</span>
             </md-button>
