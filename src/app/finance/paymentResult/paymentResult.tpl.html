@@ -74,7 +74,7 @@
                         <md-tabs md-selected="data.selectedIndex" md-align-tabs="top">
                             <md-tab id="tab1" ng-if="booking.resource.locktype === 'chipcard'">
                                 <md-tab-label title="Eerste keer OV-chipkaart" class="text-success">
-                                    <md-icon class="text-success">credit_card</md-icon><span>{{ 'LOCKTYPE.ophalen' | translate }}</span>
+                                    <md-icon class="text-success">credit_card</md-icon><span class="md-tab-icon-black">{{ 'LOCKTYPE.ophalen' | translate }}</span>
                                 </md-tab-label>
                                 <md-tab-body>
                                     <p ng-if="fish" translate="PAYMENT_APROVED_PAYED_FISH" translate-values="{pincode: fish.pincode, location: booking.resource.location, city: booking.resource.city }"></p>
@@ -83,7 +83,7 @@
                             </md-tab>
                             <md-tab id="tab2" ng-if="booking.resource.locktype === 'smartphone'">
                                 <md-tab-label title="Openen met smartphone" class="text-succes">
-                                    <md-icon class="text-success">smartphone</md-icon><span>{{ 'LOCKTYPE.ophalen' | translate }}</span>
+                                    <md-icon class="text-success">smartphone</md-icon><span class="md-tab-icon-black">{{ 'LOCKTYPE.ophalen' | translate }}</span>
                                 </md-tab-label>
                                 <md-tab-body>
                                     <p translate="PAYMENT_APROVED_PAYED_SMARTPHONE" translate-values="{location: booking.resource.location, city: booking.resource.city }"></p>
@@ -91,18 +91,18 @@
                             </md-tab>
                             <md-tab id="tab3" ng-if="booking.resource.locktype === 'meeting'">
                                 <md-tab-label title="Afspraak" class="text-success">
-                                    <md-icon class="text-success">vpn_key</md-icon> <span>{{ 'LOCKTYPE.ophalen' | translate }}</span>
+                                    <md-icon class="text-success">vpn_key</md-icon> <span class="md-tab-icon-black">{{ 'LOCKTYPE.ophalen' | translate }}</span>
                                 </md-tab-label>
                                 <md-tab-body>
                                     <p ng-if="booking.status === 'requested'">{{ 'PAYMENT_APROVED_PAYED_FUEL_KEY_WAIT' | translate }}</p>
                                     <p translate="PAYMENT_APROVED_PAYED_FUEL_KEY" translate-values="{link: booking.link, location: booking.resource.location, city: booking.resource.city }" ng-if="booking.status === 'accepted' && booking.approved === 'OK'"></p>
                                     <p translate="PAYMENT_APROVED_PAYED_FUEL_KEY_NOT_APPROVED" translate-values="{link: booking.link, location: booking.resource.location, city: booking.resource.city }" ng-if="booking.approved !== 'OK'"></p>
-                                    <a type="button" name="button" ng-if="booking.status === 'accepted' && booking.approved === 'OK'" class="mywheels-btn mywheels-btn-default" href="{{booking.link}}">{{'PAYMENT_APROVED_PAYED_FUEL_KEY_BUTTON' | translate }}</a>
+                                    <a type="button" name="button" ng-if="booking.status === 'accepted' && booking.approved === 'OK'" class="mywheels-btn mywheels-btn-default" href="{{booking.link}}" target="_blank">{{'PAYMENT_APROVED_PAYED_FUEL_KEY_BUTTON' | translate }}</a>
                                 </md-tab-body>
                             </md-tab>
                             <md-tab id="tab4">
                                 <md-tab-label title="Brandstof" class="text-success">
-                                    <md-icon class="text-success">local_gas_station</md-icon> <span>{{ 'DRIVE' | translate }}</span>
+                                    <md-icon class="text-success">local_gas_station</md-icon> <span class="md-tab-icon-black">{{ 'DRIVE' | translate }}</span>
                                 </md-tab-label>
                                 <md-tab-body>
                                     <p ng-if="booking.fuelCard" translate="PAYMENT_APROVED_PAYED_FUEL_CARD"></p>
