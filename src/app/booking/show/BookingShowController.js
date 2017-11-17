@@ -691,6 +691,8 @@ angular.module('owm.booking.show', [])
   };
 
   function redirectExtraCredit(url) {
+    //remove old stateparms
+    $location.url($location.path());
     var redirectTo = appConfig.appUrl + $state.href('owm.booking.show', { bookingId: $scope.booking.id }) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
     $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo);
   }
@@ -700,14 +702,18 @@ angular.module('owm.booking.show', [])
     $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo);
   }
 
-  $scope.alteredAfterBuyVoucher = false;
-
   updateBookingTimesAfterPayment();
 
   //change booking times if user has bought voucher via Pay
   function updateBookingTimesAfterPayment () {
+    $scope.paymentError = false;
+    $scope.alteredAfterBuyVoucher = false;
 
-    if ($stateParams.end) {
+    if ($stateParams.orderStatusId <= 0) {
+      $scope.paymentError = true;
+    }
+
+    if ($stateParams.end && $stateParams.orderStatusId > 0) {
       bookingService.alterRequest({
         booking: booking.id,
         timeFrame: {
@@ -727,7 +733,10 @@ angular.module('owm.booking.show', [])
           alertService.add('success', $filter('translate')('BOOKING_ALTER_ACCEPTED'), 5000);
         }
       })
-      .catch(errorHandler)
+      .catch(function (error) {
+        //remove stateparams
+        alertService.add('danger', error.message, 5000);
+      })
       .finally(function () {
         alertService.loaded();
       });

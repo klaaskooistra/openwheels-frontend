@@ -134,6 +134,26 @@
   </div>
 </div>
 
+<!-- Booking altered after buy voucher -->
+<div class="card" ng-if="alteredAfterBuyVoucher">
+  <div class="card-body card-inverse" style="background-color:#3bab78; color: white;">
+    <span>Gelukt! De betaling is ontvangen en de reservering is gewijzigd.</span>
+  </div>
+</div>
+
+<!-- If payment has error -->
+<section ng-if="paymentError" class="card" ng-cloak>
+    <div class="card-body">
+        <h2 class="card-title">
+          <md-icon class="text-warning">warning</md-icon> {{ 'PAYMENT_FAILURE_TITLE' | translate }} </h2>
+        <p>{{ 'PAYMENT_FAILURE_BODY' | translate }}</p>
+
+        <button ng-if="afterPayment" ng-click="goAfterPayment()" type="button" class="mywheels-btn mywheels-btn-default" md-ink-ripple="#3a6d81">
+            {{ 'GO' | translate }}
+        </button>
+    </div>
+</section>
+
 <!-- Agreement -->
 <div class="card" ng-if="booking.ok && booking.status !== 'requested' && !bookingEndedRealy">
   <div class="card-heading">
@@ -199,14 +219,6 @@
     </div>
   </div>
 </div>
-
-<!-- Booking altered after buy voucher -->
-<div class="card" ng-if="alteredAfterBuyVoucher">
-  <div class="card-body card-inverse" style="background-color:#3bab78; color: white;">
-    <span>Gelukt! De betaling is ontvangen en de reservering is gewijzigd.</span>
-  </div>
-</div>
-
 <!-- Booking alterations for renter -->
 <div id="bookingFormContainer" ng-if="userPerspective === 'renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && !bookingEndedRealy">
   <div class="card">
