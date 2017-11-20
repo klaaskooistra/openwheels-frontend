@@ -13,23 +13,23 @@ angular.module('owm.home', ['owm.resource', 'slick'])
     }
   });
 
-  // loadBlogItems();
+  loadBlogItems();
 
-  // function loadBlogItems () {
-  //   $http({
-  //     method: 'GET',
-  //     url: 'https://mywheels.nl/blog/feed/json'
-  //   })
-  //   .then(function (response) {
-  //     var maxResults = 2;
-  //     if (response.data && response.data.items) {
-  //       $scope.blogItems = response.data.items.slice(0, maxResults);
-  //     }
-  //   })
-  //   .catch(function () {
-  //     $scope.blogItems = [];
-  //   });
-  // }
+  function loadBlogItems () {
+    $http({
+      method: 'GET',
+      url: 'https://mywheels.nl/blog/feed/json'
+    })
+    .then(function (response) {
+      var maxResults = 4;
+      if (response.data && response.data.items) {
+        $scope.blogItems = response.data.items.slice(0, maxResults);
+      }
+    })
+    .catch(function () {
+      $scope.blogItems = [];
+    });
+  }
 
   if ($scope.features.featuredSlider) {
     resourceService.all({

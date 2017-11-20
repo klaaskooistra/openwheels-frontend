@@ -13,17 +13,26 @@
     <!-- /SEARCHBAR -->
 
     <!-- BLOG ITEMS -->
-    <!-- <div class="blog-items">
-        <h2>Recente blogs</h2>
-        <ul class="list-unstyled">
-            <li class="blog-item">
-                <a target="_blank" href="https://mywheels.nl/blog/2017/11/emissieloos-autodelen-in-de-buurt/">Emissieloos autodelen. Wat doet dat met de buurt?</a>
-            </li>
-            <li class="blog-item">
-                <a target="_blank" href="https://mywheels.nl/blog/2017/11/hoe-boek-je-een-mywheels-deelauto/">Hoe boek je een MyWheels deelauto?</a>
-            </li>
-        </ul>
-    </div> -->
+    <div class="blog--overview" ng-if="features.homePage">
+        <section class="center">
+            <h2>Ons laatste nieuws</h2>
+            <a type="button" name="button" class="mywheels-btn mywheels-btn-default mywheels-btn-big" href="/blog" md-ink-ripple="#3a6d81" hide-xs>
+                Lees alles
+            </a>
+        </section>
+        <div class="blog--overview--items">
+            <section>
+                <ul>
+                    <li class="blog--item" ng-repeat="item in blogItems">
+                        <a target="_blank" href="{{ item.url }}" ng-bind="item.title"></a>
+                    </li>
+                </ul>
+                <a type="button" name="button" class="mywheels-btn mywheels-btn-default mywheels-btn-margin-top mywheels-btn-big" href="/blog" md-ink-ripple="#3a6d81" hide-gt-xs>
+                    Lees alles
+                </a>
+            </section>
+        </div>
+    </div>
 
     <div class="renter--actions" ng-if="features.homePage">
         <!-- RENTER CALL TO ACTION -->
