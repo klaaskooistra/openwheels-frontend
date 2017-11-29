@@ -189,6 +189,7 @@ angular.module('vouchersDirective', [])
             alertService.addError(e);
           })
           .finally(function() {
+            $rootScope.extraDriverAdded = true;
             $scope.onChanged($scope.booking);
             $scope.extraDrivers.new = '';
             $scope.extraDrivers.check = true;
