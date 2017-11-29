@@ -256,7 +256,7 @@
   <div class="card-body">
     <voucher me="me" booking="booking" discount="discount" on-changed="bookingChanged(booking)"></voucher>
 
-    <div ng-if="requiredValue.value.total == 0 || ((requiredValue.value.total | number:2) == ((booking.details.booking_price.total + booking.details.km_price - booking.details.discount) | number:2))" class="text-center">
+    <div ng-if="(requested && requiredValue.value.total === 0) || ((requiredValue.value.total | number:2) == ((booking.details.booking_price.total + booking.details.km_price - booking.details.discount) | number:2))" class="text-center">
       <button type="button" class="btn btn-success btn-lg" ng-click="buyVoucher(booking.details.booking_price.total + booking.details.km_price - booking.details.discount)">
         Koop {{ booking.details.booking_price.total + booking.details.km_price - booking.details.discount | currency }} rijtegoed
       </button>
@@ -269,7 +269,7 @@
     </div>
   </div>
 
-  <div class="card-body" ng-if="requiredValue.value.total !== 0 && ((requiredValue.value.total | number:2) != ((booking.details.booking_price.total + booking.details.km_price - booking.details.discount) | number:2))">
+  <div class="card-body" ng-if="(!requested || requiredValue.value.total > 0) && ((requiredValue.value.total | number:2) != ((booking.details.booking_price.total + booking.details.km_price - booking.details.discount) | number:2))">
     <h3>Rijtegoed</h3>
     <div style="margin-bottom: 15px;">
       <table class="table">
