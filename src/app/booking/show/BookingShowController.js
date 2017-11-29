@@ -670,8 +670,6 @@ angular.module('owm.booking.show', [])
       });
   };
 
-  $location.url($location.path());
-
   function redirectExtraCredit(url) {
     var redirectTo = appConfig.appUrl + $state.href('owm.booking.show', { bookingId: $scope.booking.id }) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
     $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo);
