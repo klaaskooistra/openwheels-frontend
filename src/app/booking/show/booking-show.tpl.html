@@ -20,7 +20,7 @@
 
 <div class="card" ng-if="userPerspective ==='renter' && !errorExtraCredit && !paymentError && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && !bookingEnded" id="thankYouText">
   <!-- If booking is ok -->
-  <div class="card-body card-inverse" ng-if="booking.ok">
+  <div class="card-body card-inverse" ng-if="booking.ok && !requested">
     <h2 class="text-white">De auto is gereserveerd</h2>
     <p class="text-white">
       Onderstaande reservering is geaccepteerd en het bedrag is betaald. Alles is in orde voor je rit en je kan goed verzekerd op weg.
