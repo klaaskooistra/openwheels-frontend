@@ -454,11 +454,6 @@ angular.module('owm.resource.reservationForm', [])
         })
         .then(function (response) {
           var bookingId = response.id;
-          if (response.beginBooking) {
-            alertService.add('success', $filter('translate')('BOOKING_ACCEPTED'), 10000);
-          } else {
-            alertService.add('info', $filter('translate')('BOOKING_REQUESTED'), 5000);
-          }
           return $state.go('owm.booking.show', { bookingId: bookingId });
         })
         .catch(alertService.addError)
