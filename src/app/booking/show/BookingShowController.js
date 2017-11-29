@@ -7,12 +7,14 @@ angular.module('owm.booking.show', [])
   $q, $timeout, $log, $scope, $location, $filter, $translate, $state, $stateParams, appConfig, API_DATE_FORMAT,
   bookingService, resourceService, invoice2Service, alertService, dialogService,
   authService, boardcomputerService, discountUsageService, chatPopupService, linksService,
-  booking, me, declarationService, $mdDialog, contract, Analytics, paymentService, voucherService, $window, $mdMedia, discountService, account2Service) {
+  booking, me, declarationService, $mdDialog, contract, Analytics, paymentService, voucherService,
+  $window, $mdMedia, discountService, account2Service, $rootScope, chipcardService) {
 
   $scope.appConfig = appConfig;
   $scope.contract = contract;
   $scope.booking = booking;
   $scope.resource = booking.resource;
+  $scope.me = me;
 
   /*
   * Init booking times
@@ -22,7 +24,7 @@ angular.module('owm.booking.show', [])
   function initBookingRequestScope(booking) {
     $scope.bookingRequest = angular.copy(booking);
     $scope.bookingRequest.beginRequested = booking.beginRequested ? booking.beginRequested : booking.beginBooking;
-    $scope.bookingRequest.endRequested= booking.endRequested ? booking.endRequested : booking.endBooking;
+    $scope.bookingRequest.endRequested = booking.endRequested ? booking.endRequested : booking.endBooking;
   }
 
   $scope.bookingStarted = moment().isAfter(moment(booking.beginBooking));
@@ -31,7 +33,7 @@ angular.module('owm.booking.show', [])
   $scope.bookingEndedRealy = moment().isAfter(moment(booking.endBooking).add(1, 'hour'));
   $scope.bookingRequestEndedRealy = moment().isAfter(moment(booking.endRequested).add(1, 'hour'));
   $scope.showBookingForm = !$scope.bookingEndedRealy;
-  $scope.showPricePerHour = false;
+  $scope.requested = $scope.booking.status === 'requested' ? true : false;
 
   $scope.userInput = {
     acceptRejectRemark: ''
@@ -45,27 +47,6 @@ angular.module('owm.booking.show', [])
       return 'owner';
     }
   }());
-
-  /*
-  * Declarations
-  */
-  if(booking.resource.refuelByRenter) {
-    $scope.contract.type.canHaveDeclaration = false;
-  }
-
-  loadDeclarations();
-
-  function loadDeclarations() {
-    if(contract.type.canHaveDeclaration) {
-      declarationService.forBooking({booking: booking.id})
-      .then(function(res) {
-        $scope.booking.declarations = res;
-      })
-      .catch(function(err) {
-        alertService.add('danger', 'Tankbonnen konden niet opgehaald worden.', 4000);
-      });
-    }
-  }
 
   $scope.openDialog = function($event, declaration) {
     $mdDialog.show({
@@ -91,7 +72,7 @@ angular.module('owm.booking.show', [])
   */
   initPermissions();
 
-  function initPermissions () {
+  function initPermissions() {
     var booking = $scope.booking;
 
     $scope.allowEdit   = false;
@@ -216,7 +197,7 @@ angular.module('owm.booking.show', [])
   };
 
   /*
-  * Close and open door
+  * Boardcomputers functions
   */
   $scope.openDoor = function(resource) {
     alertService.load();
@@ -257,6 +238,30 @@ angular.module('owm.booking.show', [])
       alertService.loaded();
     });
   };
+
+  // check is resource has fuelcard
+  if ([282, 519038].indexOf(booking.resource.owner.id) >= 0 && booking.resource.boardcomputer) {
+    $scope.fuelCard = true;
+  } else {
+    $scope.fuelCard = false;
+  }
+
+  // get chipcard fish if boardcomputer is convadis
+  $scope.fish = false;
+
+  $scope.getFish = function() {
+    chipcardService.getFish({
+      person: me.id
+    }).then(function (fish) {
+      if (fish !== null || fish !== undefined) {
+        $scope.fish = fish;
+      }
+    });
+  };
+
+  if (booking.resource.locktypes.indexOf('smartphone') < 0 && booking.resource.locktypes.indexOf('chipcard') >= 0) {
+    $scope.getFish();
+  }
 
   /*
   * Booking alterations
@@ -302,7 +307,7 @@ angular.module('owm.booking.show', [])
         booking: booking
       });
     };
-    if(booking.status === 'requested'){
+    if($scope.requested){
       promise = function() { return $q.when(true); };
     }
 
@@ -415,43 +420,31 @@ angular.module('owm.booking.show', [])
   };
 
   /*
-  * Price availability
+  * Load availability
   */
-  $scope.price = null;
-  $scope.isPriceLoading = false;
-  loadDiscount();
-
-  $scope.hasDiscount = false;
-  $scope.discount = null;
-
-  var unbindWatch = $scope.$watch('showBookingForm', function (val) {
-    if (val) {
-      $scope.$watch('bookingRequest.beginRequested', onTimeFrameChange);
-      $scope.$watch('bookingRequest.endRequested', onTimeFrameChange);
-      unbindWatch();
-    }
-  });
-
+  $scope.availability = null;
+  $scope.isAvailabilityLoading = false;
   var timer;
-  function onTimeFrameChange () {
+
+  $scope.$watch('[bookingRequest.beginRequested, bookingRequest.endRequested]', function(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      onTimeFrameChange();
+    }
+  }, true);
+
+  function onTimeFrameChange() {
     $scope.extraCredit = false;
     $timeout.cancel(timer);
     timer = $timeout(function () {
-      loadAvailability().then(function (availability) {
-        loadPrice();
-      });
+      loadAvailability();
     }, 100);
   }
 
-  $scope.availability = null;
-  $scope.isAvailabilityLoading = false;
-
-  function loadAvailability () {
+  function loadAvailability() {
     var dfd = $q.defer();
     var b = $scope.bookingRequest;
     var r = $scope.resource;
     $scope.availability = null;
-    $scope.price = null;
 
     if (b.beginRequested && b.endRequested && $scope.userPerspective==='renter') {
       $scope.isAvailabilityLoading = true;
@@ -478,46 +471,9 @@ angular.module('owm.booking.show', [])
     return dfd.promise;
   }
 
-  function loadPrice () {
-    var r = $scope.resource;
-    var b = $scope.bookingRequest;
-    var params;
-    $scope.price = null;
-
-    if ( $scope.availability &&
-         ['yes','unknown'].indexOf($scope.availability.available) >= 0 &&
-         (b.beginRequested && b.endRequested) ) {
-      $scope.isPriceLoading = true;
-      params = {
-        resource : r.id,
-        timeFrame: {
-          startDate: b.beginRequested,
-          endDate: b.endRequested
-        }
-      };
-      if (b.contract) {
-        params.contract = b.contract.id;
-      }
-      invoice2Service.calculatePrice(params).then(function (price) {
-        $scope.price = price;
-      })
-      .finally(function () {
-        $scope.isPriceLoading = false;
-      });
-    }
-  }
-
-  $scope.priceHtml = function (price) {
-    var s = '';
-    if (price.rent > 0) { s += 'Huur: ' + $filter('currency')(price.rent) + '<br/>'; }
-    if (price.insurance > 0) { s += 'Verzekering: ' + $filter('currency')(price.insurance) + '<br/>'; }
-    if (price.booking_fee > 0) { s += 'Boekingskosten: ' + $filter('currency')(price.booking_fee) + '<br/>'; }
-    if (price.redemption > 0) { s+='Verlagen eigen risico: ' + $filter('currency')(price.redemption) + '<br/>'; }
-    s += 'Totaal: ' + $filter('currency')(price.total);
-    return s;
-  };
-
-
+  /*
+  * Chat
+  */
   $scope.openChatWith = openChatWith;
   function openChatWith(otherPerson) {
     var otherPersonName = $filter('fullname')(otherPerson);
@@ -527,28 +483,33 @@ angular.module('owm.booking.show', [])
   /*
   * Discount
   */
-  function loadDiscount () {
+  loadDiscount();
+
+  $scope.discount = [];
+
+  function loadDiscount() {
     discountUsageService.search({
       booking: $scope.booking.id
     })
     .then(function (discount) {
       $scope.discount = discount;
-      if($scope.discount.length > 0){
-        $scope.hasDiscount = true;
-      }
     });
   }
 
   function addDiscount(value) {
-    return discountService.apply({ //apply the discount code
+    return discountService.apply({
       booking: booking.id,
       discount: value
-    }).then(function () {
-      alertService.addSaveSuccess('De kortingscode is toegevoegd aan je boeking.'); //if there is something wrong show a err
-      $scope.hasDiscount = true;
+    }).then(function (discount) {
+      $scope.discount.push(discount);
+      $rootScope.discountAdded = true;
+      alertService.addSaveSuccess('De kortingscode is toegevoegd aan je boeking.');
+      if ($scope.paymentInit) {
+        $scope.bookingChanged(booking);
+      }
       $mdDialog.cancel();
     }).catch(function (err) {
-      alertService.addError(err); //if there is something wrong show a err
+      alertService.addError(err);
     });
   }
 
@@ -579,6 +540,25 @@ angular.module('owm.booking.show', [])
   };
 
   /*
+  * Load declarations
+  */
+  if($scope.allowDeclarations) {
+    loadDeclarations();
+  }
+
+  function loadDeclarations() {
+    declarationService.forBooking({
+      booking: booking.id
+    })
+    .then(function(res) {
+      $scope.booking.declarations = res;
+    })
+    .catch(function(err) {
+      alertService.add('danger', 'Tankbonnen konden niet opgehaald worden.', 4000);
+    });
+  }
+
+  /*
   * Invoices
   */
   function injectInvoiceLines(res) {
@@ -600,17 +580,17 @@ angular.module('owm.booking.show', [])
   $scope.sentInvoices = null;
   $scope.sentInvoicesTotalAmount = 0;
 
-  if ($scope.userPerspective === 'renter') {
+  if ($scope.userPerspective === 'renter' && !$scope.requested) {
     $q.all({received: loadReceivedInvoices()})
     .then(injectInvoiceLines);
   }
 
-  if ($scope.userPerspective === 'owner') {
+  if ($scope.userPerspective === 'owner' && !$scope.requested) {
     $q.all({received: loadReceivedInvoices(), sent: loadSentInvoices()})
     .then(injectInvoiceLines);
   }
 
-  function loadReceivedInvoices () {
+  function loadReceivedInvoices() {
     var booking = $scope.booking;
     return invoice2Service.getReceived({ person: me.id, booking: booking.id }).then(function (invoices) {
 
@@ -632,7 +612,7 @@ angular.module('owm.booking.show', [])
     });
   }
 
-  function loadSentInvoices () {
+  function loadSentInvoices() {
     var booking = $scope.booking;
     return invoice2Service.getSent({ person: me.id, booking: booking.id }).then(function (invoices) {
 
@@ -690,9 +670,9 @@ angular.module('owm.booking.show', [])
       });
   };
 
+  $location.url($location.path());
+
   function redirectExtraCredit(url) {
-    //remove old stateparms
-    $location.url($location.path());
     var redirectTo = appConfig.appUrl + $state.href('owm.booking.show', { bookingId: $scope.booking.id }) + '?start=' + moment($scope.bookingRequest.beginRequested).format('YYMMDDHHmm') + '&end=' + moment($scope.bookingRequest.endRequested).format('YYMMDDHHmm');
     $window.location.href = url + '?redirectTo=' + encodeURIComponent(redirectTo);
   }
@@ -705,11 +685,14 @@ angular.module('owm.booking.show', [])
   updateBookingTimesAfterPayment();
 
   //change booking times if user has bought voucher via Pay
-  function updateBookingTimesAfterPayment () {
+  function updateBookingTimesAfterPayment() {
     $scope.paymentError = false;
     $scope.alteredAfterBuyVoucher = false;
 
     if ($stateParams.orderStatusId <= 0) {
+      //remove old stateparms
+      $location.url($location.path());
+
       $scope.paymentError = true;
     }
 
@@ -734,22 +717,41 @@ angular.module('owm.booking.show', [])
         }
       })
       .catch(function (error) {
-        //remove stateparams
+        //remove old stateparms
+        $location.url($location.path());
         alertService.add('danger', error.message, 5000);
       })
       .finally(function () {
+        //remove old stateparms
+        $location.url($location.path());
         alertService.loaded();
       });
     }
   }
 
+  // open payment block to add extra driver
+  $scope.addExtraDriver = false;
+
+  $scope.addExtraDriverButton = function () {
+    $scope.addExtraDriver = true;
+    $scope.initPayment();
+    reload();
+  };
+
   // check if renter needs to pay the booking
-  $scope.paymentInit = (function () {
-    if((['requested'].indexOf(booking.status) >= 0 && booking.person.numberOfBookings === 0) || booking.approved === 'BUY_VOUCHER') {
-      return true;
+  $scope.initPayment = function() {
+    if((
+        ($scope.requested && booking.person.numberOfBookings === 0) ||
+        booking.approved === 'BUY_VOUCHER' ||
+        $scope.addExtraDriver) &&
+        ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0
+      ) {
+      $scope.paymentInit = true;
+    } else {
+      $scope.paymentInit = false;
     }
-    return false;
-  }());
+  };
+  $scope.initPayment();
 
   // check if person is renter and needs to pay the booking
   if($scope.paymentInit && $scope.userPerspective === 'renter') {
@@ -785,14 +787,14 @@ angular.module('owm.booking.show', [])
 
   }
 
-  function reload () {
+  function reload() {
     alertService.load();
     $q.all([ getVouchers(), getRequiredValue(), getCredit(), getDebt() ]).finally(function () {
       alertService.loaded();
     });
   }
 
-  function getVouchers () {
+  function getVouchers() {
     var promise = voucherService.search({ person: booking.person.id, minValue: 0 });
     promise.then(function (vouchers) {
       $scope.vouchers = vouchers;
@@ -803,7 +805,7 @@ angular.module('owm.booking.show', [])
     return promise;
   }
 
-  function getRequiredValue () {
+  function getRequiredValue() {
     var promise = voucherService.calculateRequiredCredit({ person: booking.person.id });
     promise.then(function (value) {
       $scope.requiredValue = { value: value };
@@ -814,7 +816,7 @@ angular.module('owm.booking.show', [])
     return promise;
   }
 
-  function getCredit () {
+  function getCredit() {
     var promise = voucherService.calculateCredit({ person: booking.person.id });
     promise.then(function (credit) {
       $scope.credit = { value: credit };
@@ -825,7 +827,7 @@ angular.module('owm.booking.show', [])
     return promise;
   }
 
-  function getDebt () {
+  function getDebt() {
     var promise = voucherService.calculateDebt({ person: booking.person.id });
     promise.then(function (debt) {
       $scope.debt = { value: debt };
@@ -839,13 +841,12 @@ angular.module('owm.booking.show', [])
   /*
   * Error handling
   */
-  function errorHandler (err) {
+  function errorHandler(err) {
     if (err && err.level && err.message) {
       $scope.extraCredit = false;
       if(err.message.match('onvoldoende')) {
         $scope.extraCredit = err.data.extra_credit;
-        err.message = err.message + '. Je hebt nog <strong>&euro;' + err.data.extra_credit + '</strong> extra rijtegoed nodig voordat je de boeking kan verlengen.';
-        alertService.add(err.level, err.message, 5000);
+        $scope.errorExtraCredit = err.message + '. Betaal hieronder ' + err.data.extra_credit + ' euro extra rijtegoed om de rit te kunnen verlengen.';
       } else {
         alertService.add(err.level, err.message, 5000);
       }

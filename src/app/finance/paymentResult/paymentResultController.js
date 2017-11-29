@@ -85,7 +85,7 @@ angular.module('owm.finance.paymentResult', [])
             } else if (elm.resource.locktype === 'meeting') {
               elm.link = linksService.bookingAgreementPdf(elm.id);
             }
-            if ([282, 519038].indexOf(elm.resource.owner.id) >= 0 && elm.resource.boardcomputer !== null) {
+            if ([282, 519038].indexOf(elm.resource.owner.id) >= 0 && elm.resource.boardcomputer) {
               elm.fuelCard = true;
             } else {
               elm.fuelCard = false;
