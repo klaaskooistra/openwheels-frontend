@@ -29,7 +29,7 @@
         </md-menu-content>
       </md-menu>
     </div>
-    <div class="button button--no-grow md-ink-ripple" md-ink-ripple="#232521">
+    <div class="button button--no-grow md-ink-ripple" md-ink-ripple="#232521" id="searchButton">
       <button ng-if="!searcher.loading" hide-xs hide-sm type="button" class="btn btn-success" ng-click="doSearch()">Zoek een auto</button>
       <button ng-if="searcher.loading" hide-xs hide-sm disabled type="button" class="btn btn-success"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></button>
       <button ng-if="!searcher.loading" hide-gt-sm type="button" class="btn auto-width btn-success" ng-click="doSearch()"><md-icon class="text-white">search</md-icon></button>

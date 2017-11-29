@@ -690,9 +690,6 @@ angular.module('owm.booking.show', [])
     $scope.alteredAfterBuyVoucher = false;
 
     if ($stateParams.orderStatusId <= 0) {
-      //remove old stateparms
-      $location.url($location.path());
-
       $scope.paymentError = true;
     }
 
@@ -717,13 +714,9 @@ angular.module('owm.booking.show', [])
         }
       })
       .catch(function (error) {
-        //remove old stateparms
-        $location.url($location.path());
         alertService.add('danger', error.message, 5000);
       })
       .finally(function () {
-        //remove old stateparms
-        $location.url($location.path());
         alertService.loaded();
       });
     }

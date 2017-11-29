@@ -174,7 +174,7 @@
 </div>
 
 <!-- Add kilometers -->
-<div class="card" ng-if="booking.ok && bookingEnded && (!booking.trip.odoBegin || !booking.trip.odoEnd) && !booking.resource.boardcomputer">
+<div class="card" ng-if="booking.ok && bookingEnded && (!booking.trip.odoBegin || !booking.trip.odoEnd) && !booking.resource.boardcomputer && !booking.trip.finalized">
   <div class="card-body card-inverse" style="background-color:#5faac8; color:white;" layout="row" layout-xs="column">
     <div flex="75" flex-xs="100">
       <h3 style="color:#fff; margin-bottom:10px;">Kilometerstanden doorgeven</h3>
@@ -190,7 +190,7 @@
 </div>
 
 <!-- Wait for finalizing trip by other -->
-<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id === me.id && !booking.resource.boardcomputer">
+<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id === me.id && !booking.resource.boardcomputer && !booking.trip.finalized">
   <div class="card-body card-inverse" style="background-color:#5faac8; color:white;">
     <h3 style="color:#fff; margin-bottom:10px;">Controle kilometers</h3>
     <span ng-if="userPerspective==='owner'">Je hebt onderstaande kilometerstanden doorgegeven. We hebben {{ booking.person.firstName }} gevraagd om de kilometerstanden te controleren. Als {{ booking.person.firstName }} dit niet binnen zeven dagen doet, worden de kilometerstanden automatisch geaccordeerd.</span>
@@ -214,7 +214,7 @@
 </div>
 
 <!-- Finalize trip -->
-<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id !== me.id && !booking.resource.boardcomputer">
+<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id !== me.id && !booking.resource.boardcomputer && !booking.trip.finalized">
   <div class="card-body card-inverse" style="background-color:#5faac8; color:white;" layout="row" layout-xs="column">
     <div flex="70" flex-xs="100">
       <h3 style="color:#fff; margin-bottom:10px;">Controleer kilometers</h3>
@@ -455,7 +455,7 @@
 </div>
 
 <!-- Smartwheels information -->
-<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && (booking.resource.locktypes.indexOf('chipcard') >= 0 || booking.resource.locktypes.indexOf('smartphone') >= 0)">
+<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && (booking.resource.locktypes.indexOf('chipcard') >= 0 || booking.resource.locktypes.indexOf('smartphone') >= 0) && !bookingEndedRealy">
   <div class="card-heading">
     <h3 class="card-title">Smartwheels</h3>
   </div>
@@ -490,7 +490,7 @@
 </div>
 
 <!-- Meeting information, without boardcomputer -->
-<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && booking.resource.locktypes.indexOf('meeting') >= 0 && !booking.resource.boardcomputer">
+<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && booking.resource.locktypes.indexOf('meeting') >= 0 && !booking.resource.boardcomputer && !bookingEndedRealy">
   <div class="card-heading">
     <h3 class="card-title">Sleuteloverdracht</h3>
   </div>
