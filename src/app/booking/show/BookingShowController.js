@@ -733,6 +733,7 @@ angular.module('owm.booking.show', [])
   $rootScope.$watch('extraDriverAdded', function(newValue, oldValue) {
     if (newValue !== oldValue) {
       reload();
+      $rootScope.extraDriverAdded = false;
     }
   }, true);
 
