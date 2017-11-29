@@ -44,14 +44,17 @@
 
     <md-divider></md-divider>
 
-    <md-list-item id="menuGegevens" class="menu-item-profile" ng-click="navigate('owm.person.profile')">
+    <md-list-item id="menuGegevens" class="menu-item-profile" ng-click="navigate('owm.person.profile')" ng-if="user.identity.preference === 'owner' || user.identity.status !== 'new' || user.identity.provider.id !== 1">
       <md-icon>settings</md-icon><p>{{ 'MY_PROFILE' | translate }}</p>
     </md-list-item>
 
-    <md-list-item id="menuContracts" class="menu-item-contracts" ng-click="navigate('owm.person.contract')" ng-if="features.myContractsMenuItem && user.identity.preference !== 'owner'">
-      <md-icon>content_paste</md-icon><p>{{ 'MY_CONTRACTS' | translate }}</p>
+    <md-list-item id="menuGegevens" class="menu-item-profile" ng-click="navigate('owm.person.details', {pageNumber: '1'})" ng-if="user.identity.preference !== 'owner' && user.identity.status === 'new' && user.identity.provider.id === 1">
+      <md-icon>settings</md-icon><p>{{ 'MY_PROFILE' | translate }}</p>
     </md-list-item>
 
+    <md-list-item id="menuContracts" class="menu-item-contracts" ng-click="navigate('owm.person.contract')">
+      <md-icon>content_paste</md-icon><p>{{ 'MY_CONTRACTS' | translate }}</p>
+    </md-list-item>
 
     <md-list-item id="menuRijtegoed" class="menu-item-vouchers" ng-click="navigate('owm.finance.vouchers')" ng-if="user.identity.preference !== 'owner'">
 
