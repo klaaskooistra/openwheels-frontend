@@ -730,6 +730,12 @@ angular.module('owm.booking.show', [])
     reload();
   };
 
+  $rootScope.$watch('extraDriverAdded', function(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      reload();
+    }
+  }, true);
+
   // check if renter needs to pay the booking
   $scope.initPayment = function() {
     if((
