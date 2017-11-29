@@ -2,9 +2,19 @@
     <!-- SEARCHBAR -->
     <div ng-if="!features.homeCarousel" class="hero inverted text-center">
         <div class="hero-overlay"></div>
-        <section class="container homepage-baseline">
-            <h1 id="tagline" class="homepage-baseline-header fadeInDown animated">{{'TAGLINE_HOME' | translate}}</h1>
-
+        <section class="container homepage-baseline" id="oldTagline" hide>
+            <div class="homepage-baseline-header">
+                <h1 id="tagline" class="fadeInDown animated">{{'TAGLINE_HOME' | translate}}</h1>
+            </div>
+        </section>
+        <section class="container homepage-baseline" id="newTagline">
+            <div class="homepage-baseline-header">
+                <span><h1 id="tagline" class="fadeInDown animated">{{'TAGLINE_HOME_NEW' | translate}}</h1></span>
+                <span><h3 id="taglineSubtitle" class="fadeInDown animated">{{'TAGLINE_HOME_NEW_SUBTITLE' | translate}}</h3></span>
+                <span hide-xs>
+                    <a id="homepageSignup" type="button" name="button" class="mywheels-btn btn-green mywheels-btn-big" style="background:#82b955;" ui-sref="owm.auth.signup">{{'TAGLINE_HOME_BUTTON' | translate}}</a>
+                </span>
+            </div>
         </section>
         <section ng-if="features.homePage" class="homepage-searchbar-frontpage">
           <ow-geocoder-searchbar></ow-geocoder-searchbar>
@@ -13,17 +23,26 @@
     <!-- /SEARCHBAR -->
 
     <!-- BLOG ITEMS -->
-    <!-- <div class="blog-items">
-        <h2>Recente blogs</h2>
-        <ul class="list-unstyled">
-            <li class="blog-item">
-                <a target="_blank" href="https://mywheels.nl/blog/2017/11/emissieloos-autodelen-in-de-buurt/">Emissieloos autodelen. Wat doet dat met de buurt?</a>
-            </li>
-            <li class="blog-item">
-                <a target="_blank" href="https://mywheels.nl/blog/2017/11/hoe-boek-je-een-mywheels-deelauto/">Hoe boek je een MyWheels deelauto?</a>
-            </li>
-        </ul>
-    </div> -->
+    <div class="blog--overview" ng-if="features.homePage">
+        <section class="center">
+            <h2>Ons laatste nieuws</h2>
+            <a type="button" name="button" class="mywheels-btn mywheels-btn-default mywheels-btn-big" href="/blog" md-ink-ripple="#3a6d81" hide-xs>
+                Lees alles
+            </a>
+        </section>
+        <div class="blog--overview--items">
+            <section>
+                <ul>
+                    <li class="blog--item" ng-repeat="item in blogItems">
+                        <a target="_blank" href="{{ item.url }}" ng-bind="item.title"></a>
+                    </li>
+                </ul>
+                <a type="button" name="button" class="mywheels-btn mywheels-btn-default mywheels-btn-margin-top mywheels-btn-big" href="/blog" md-ink-ripple="#3a6d81" hide-gt-xs>
+                    Lees alles
+                </a>
+            </section>
+        </div>
+    </div>
 
     <div class="renter--actions" ng-if="features.homePage">
         <!-- RENTER CALL TO ACTION -->
@@ -46,7 +65,7 @@
                 <h2>Verhuur en verdien</h2>
                 <p>Je auto aanbieden is gratis. We vragen een kleine vergoeding zodra deze is verhuurd. En je weet zeker dat je goed verzekerd bent, want dat regelen wij voor je. Vul je kenteken in, plaats een paar mooie foto's en je kunt beginnen. Zo verdien
                     jij iets extra's aan je auto en kunnen jouw buren op pad.</p>
-                  <p>Met <a href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header&utm_term=list-your-car-copy">MyWheels Open</a> kan je nog makkelijker en vaker je auto delen. Lees <a href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header&utm_term=list-your-car-copy">hier</a> hoe het werkt</p>
+                  <p>Met <a href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header&utm_term=list-your-car-copy">MyWheels Open</a> kan je nog makkelijker en vaker je auto delen. Lees <a href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header&utm_term=list-your-car-copy">hier</a> hoe het werkt.</p>
                 <button type="button" name="button" class="mywheels-btn mywheels-btn-default mywheels-btn-margin-top mywheels-btn-big" ui-sref="list-your-car" md-ink-ripple="#3a6d81">
                     Meld je auto aan
                 </button>

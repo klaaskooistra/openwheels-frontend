@@ -4,9 +4,11 @@
 <div class="modal-body">
   <p>
     Weet je zeker dat je de reservering wilt annuleren?
-    <span ng-if="[60, 62, 63, 64, 75].indexOf(modalOptions.contract.type.id) >= 0 && booking.approved === 'OK'">
-      Aan kort van te voren annuleren kunnen kosten verbonden zijn.
-      Bekijk de <a href="https://mywheels.nl/autodelen/hoe-huren-werkt/tarieven-huren/" target="_blank">tarieven</a> voor meer informatie.
+    <span ng-if="userPerspective==='renter' && booking.approved === 'OK'">
+      Aan kort van te voren annuleren kunnen kosten verbonden zijn. Bekijk de <a href="https://mywheels.nl/autodelen/hoe-huren-werkt/tarieven-huren/" target="_blank">tarieven</a> voor meer informatie.
+    </span>
+    <span ng-if="userPerspective==='owner' && booking.approved === 'OK'">
+      Aan kort van te voren annuleren kunnen kosten verbonden zijn. Bekijk de <a href="https://mywheels.nl/autodelen/veelgestelde-vragen/kan-ik-een-geaccepteerde-verhuring-annuleren/" target="_blank">FAQ</a> voor meer informatie.
     </span>
   </p>
 </div>
