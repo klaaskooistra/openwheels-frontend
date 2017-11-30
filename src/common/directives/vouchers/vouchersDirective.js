@@ -10,6 +10,7 @@ angular.module('vouchersDirective', [])
       me: '=',
       booking: '=',
       onChanged: '&',
+      discount: '='
     },
     controller: function ($scope, voucherService, alertService, bookingService, $rootScope, paymentService, appConfig, $state, $window, contractService, $mdDialog) {
       $scope.features = $rootScope.features;
@@ -20,8 +21,17 @@ angular.module('vouchersDirective', [])
         message: ''
       };
 
+      // update required credit on discount change
+      $scope.$watch('discount', function(newValue, oldValue) {
+        if (newValue !== oldValue && $rootScope.discountAdded) {
+          init($scope.booking);
+        }
+      }, true);
+
       init($scope.booking);
       function init(booking) {
+        alertService.closeAll();
+        alertService.load();
         var _booking = booking;
         contractService.forBooking({booking: _booking.id})
         .then(function(contract) {
@@ -33,12 +43,16 @@ angular.module('vouchersDirective', [])
           }
         })
         .then(function(drivers) {
+          alertService.loaded();
           _booking.drivers = drivers;
           getVoucherPrice(_booking);
         });
       }
 
       function getVoucherPrice(booking) {
+        alertService.closeAll();
+        alertService.load();
+
         return voucherService.calculateRequiredCreditForBooking({
           booking: booking.id
         }).then(function (value) {
@@ -175,6 +189,7 @@ angular.module('vouchersDirective', [])
             alertService.addError(e);
           })
           .finally(function() {
+            $rootScope.extraDriverAdded = true;
             $scope.onChanged($scope.booking);
             $scope.extraDrivers.new = '';
             $scope.extraDrivers.check = true;
@@ -183,7 +198,6 @@ angular.module('vouchersDirective', [])
           });
         }
       };
-
 
       $scope.removeExtraDriver = function(driver) {
         alertService.closeAll();
@@ -199,12 +213,11 @@ angular.module('vouchersDirective', [])
             alertService.addError(e);
           })
           .finally(function() {
-            $scope.onChanged($scope.booking);
+            init($scope.booking);
             alertService.loaded();
           });
         }
       };
-      /* //end//EXTRA DRIVER FOR GO CONTRACT */
 
     }
   };
