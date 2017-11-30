@@ -136,19 +136,19 @@
 </md-card>
 
 <!-- Wait for acceptation alert -->
-<div class="card" ng-if="userPerspective==='renter' && hasRequestedTimeframe(booking) && hasAcceptedTimeframe(booking)">
+<div class="card" ng-if="userPerspective==='renter' && hasRequestedTimeframe(booking) && hasAcceptedTimeframe(booking)" id="ownerText">
   <div class="card-body card-inverse" style="background-color:#e6a500; color:white;">
     <span>De wijzging van je reeds geaccepteerde reservering is naar de verhuurder verstuurd. Na goedkeuring ontvang je per mail een bevestiging, pas dan is je wijziging definitief.</span>
   </div>
 </div>
 
-<div class="card" ng-if="userPerspective==='owner' && !booking.ok && !requested">
+<div class="card" ng-if="userPerspective==='owner' && !booking.ok && !requested" id="ownerText">
   <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
     <span>De huurder moet nog actie ondernemen om deze aanvraag definitief te maken. Mogelijk moet de huurder nog betalen of andere gegevens doorgeven. Geef de auto niet mee zolang deze melding zichtbaar is.</span>
   </div>
 </div>
 
-<div class="card" ng-if="userPerspective==='owner' && booking.ok && !requested && !bookingEnded && !hasRequestedTimeframe(booking)">
+<div class="card" ng-if="userPerspective==='owner' && booking.ok && !requested && !bookingEnded && !hasRequestedTimeframe(booking)" id="ownerText">
   <div class="card-body card-inverse" style="background-color:#82b955; color: white;">
     <span>De huurder heeft alles geregeld voor deze rit. Je kan de auto aan de huurder meegeven. <span ng-if="!booking.resource.boardcomputer">Vergeet niet de huurovereenkomst samen met de huurder in te vullen.</span></span>
   </div>
@@ -174,7 +174,7 @@
 </div>
 
 <!-- Add kilometers -->
-<div class="card" ng-if="booking.ok && bookingEnded && (!booking.trip.odoBegin || !booking.trip.odoEnd) && !booking.resource.boardcomputer && !booking.trip.finalized">
+<div class="card" ng-if="booking.ok && bookingEnded && (!booking.trip.odoBegin || !booking.trip.odoEnd) && !booking.resource.boardcomputer && !booking.trip.finalized" id="kilometerForm">
   <div class="card-body card-inverse" style="background-color:#5faac8; color:white;" layout="row" layout-xs="column">
     <div flex="75" flex-xs="100">
       <h3 style="color:#fff; margin-bottom:10px;">Kilometerstanden doorgeven</h3>
@@ -190,7 +190,7 @@
 </div>
 
 <!-- Wait for finalizing trip by other -->
-<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id === me.id && !booking.resource.boardcomputer && !booking.trip.finalized">
+<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id === me.id && !booking.resource.boardcomputer && !booking.trip.finalized" id="kilometerForm">
   <div class="card-body card-inverse" style="background-color:#5faac8; color:white;">
     <h3 style="color:#fff; margin-bottom:10px;">Controle kilometers</h3>
     <span ng-if="userPerspective==='owner'">Je hebt onderstaande kilometerstanden doorgegeven. We hebben {{ booking.person.firstName }} gevraagd om de kilometerstanden te controleren. Als {{ booking.person.firstName }} dit niet binnen zeven dagen doet, worden de kilometerstanden automatisch geaccordeerd.</span>
@@ -214,7 +214,7 @@
 </div>
 
 <!-- Finalize trip -->
-<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id !== me.id && !booking.resource.boardcomputer && !booking.trip.finalized">
+<div class="card" ng-if="booking.ok && bookingEnded && booking.trip.odoBegin && booking.trip.odoEnd && booking.trip.updatedBy.id !== me.id && !booking.resource.boardcomputer && !booking.trip.finalized" id="kilometerForm">
   <div class="card-body card-inverse" style="background-color:#5faac8; color:white;" layout="row" layout-xs="column">
     <div flex="70" flex-xs="100">
       <h3 style="color:#fff; margin-bottom:10px;">Controleer kilometers</h3>
@@ -455,7 +455,7 @@
 </div>
 
 <!-- Smartwheels information -->
-<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && (booking.resource.locktypes.indexOf('chipcard') >= 0 || booking.resource.locktypes.indexOf('smartphone') >= 0) && !bookingEndedRealy">
+<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && (booking.resource.locktypes.indexOf('chipcard') >= 0 || booking.resource.locktypes.indexOf('smartphone') >= 0) && !bookingEndedRealy" id="smartwheelsInfo">
   <div class="card-heading">
     <h3 class="card-title">Smartwheels</h3>
   </div>
@@ -490,7 +490,7 @@
 </div>
 
 <!-- Meeting information, without boardcomputer -->
-<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && booking.resource.locktypes.indexOf('meeting') >= 0 && !booking.resource.boardcomputer && !bookingEndedRealy">
+<div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && booking.resource.locktypes.indexOf('meeting') >= 0 && !booking.resource.boardcomputer && !bookingEndedRealy" id="meetingInfo">
   <div class="card-heading">
     <h3 class="card-title">Sleuteloverdracht</h3>
   </div>
