@@ -212,7 +212,7 @@ angular.module('owm.person.dashboard', [])
 
   function loadFavoriteResources() {
     resourceService.getFavorites({
-        maxResults: 3
+        maxResults: 5
       }).then(function (favoriteResources) {
         $scope.favoriteResources = favoriteResources || [];
       })

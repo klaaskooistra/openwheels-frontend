@@ -454,6 +454,23 @@
   </div>
 </div>
 
+<!-- Resource alternatives if booking is requested -->
+<div class="card" ng-if="userPerspective === 'renter' && requested && resourceAlternatives.length >= 1" id="resourceAlternatives">
+  <div class="card-heading">
+    <h2 class="card-title">{{ 'ALTERNATIVE_RESOURCES' | translate }}</h2>
+  </div>
+
+  <div class="card-body">
+    <p>Wil je met zekerheid een auto huren? Reserveer dan een van onderstaande Smartwheels in de buurt. Je reservering wordt direct geaccepteerd en je opent de auto met je OV-chipkaart of smartphone.</p>
+    <ul class="list-row">
+      <li ng-repeat="resource in resourceAlternatives" ng-click="selectResourceAlternative(resource)">
+        <div ng-include="'resource/partials/resource-header1.tpl.html'"></div>
+      </li>
+    </ul>
+    <a ui-sref="owm.resource.search.list(params)" class="btn btn-success">{{ 'SHOW_MORE_RESOURCES' | translate }}</a>
+  </div>
+</div>
+
 <!-- Smartwheels information -->
 <div class="card" ng-if="userPerspective==='renter' && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && (booking.resource.locktypes.indexOf('chipcard') >= 0 || booking.resource.locktypes.indexOf('smartphone') >= 0) && !bookingEndedRealy" id="smartwheelsInfo">
   <div class="card-heading">

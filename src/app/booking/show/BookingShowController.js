@@ -122,6 +122,10 @@ angular.module('owm.booking.show', [])
           moment().isBefore(moment(booking.endBooking))
         );
       }());
+
+      if ($scope.requested) {
+        loadAlternatives();
+      }
     }
 
     if ($scope.userPerspective === 'owner') {
@@ -470,6 +474,47 @@ angular.module('owm.booking.show', [])
     }
     return dfd.promise;
   }
+
+  /*
+  * load alternatives for requested bookings
+  */
+  function loadAlternatives() {
+    var params = {};
+
+    params.timeframe = {
+      startDate: $scope.booking.beginRequested,
+      endDate: $scope.booking.endRequested
+    };
+
+    params.location = {
+      latitude: $scope.booking.person.latitude,
+      longitude: $scope.booking.person.longitude
+    };
+
+    params.filters = {
+      smartwheels: 'true'
+    };
+
+    params.radius = 5000;
+    params.maxresults = 3;
+    params.person = $scope.booking.person.id;
+    params.sort = 'relevance';
+
+    resourceService.searchV3(params)
+    .then(function (resourceAlternatives) {
+      $scope.resourceAlternatives = resourceAlternatives.results || [];
+    })
+    .catch(function () {
+      $scope.resourceAlternatives = [];
+    });
+  }
+
+  $scope.selectResourceAlternative = function (resource) {
+    $state.go('owm.resource.show', {
+      resourceId: resource.id,
+      city: resource.city
+    });
+  };
 
   /*
   * Chat
