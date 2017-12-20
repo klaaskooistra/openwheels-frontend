@@ -509,9 +509,13 @@ angular.module('owm.booking.show', [])
     .then(function (alternatives) {
       // remove current resource
       var resourceAlternatives = alternatives.results;
-      var currentResource = resourceAlternatives.findIndex(resourceAlternative => resourceAlternative.id === $scope.booking.resource.id);
-      resourceAlternatives.splice(currentResource, 1);
-      $scope.resourceAlternatives = resourceAlternatives || [];
+      for (var i=0; i<resourceAlternatives.length; i++) {
+        if (resourceAlternatives[i].id === booking.resource.id) {
+          resourceAlternatives.splice(i, 1);
+          $scope.resourceAlternatives = resourceAlternatives;
+          break;
+        }
+      }
     })
     .catch(function () {
       $scope.resourceAlternatives = [];
