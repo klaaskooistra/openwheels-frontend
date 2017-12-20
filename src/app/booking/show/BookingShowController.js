@@ -479,6 +479,10 @@ angular.module('owm.booking.show', [])
   * load alternatives for requested bookings
   */
   function loadAlternatives() {
+    var URL_DATE_TIME_FORMAT = 'YYMMDDHHmm';
+    $scope.startDate = moment($scope.booking.beginRequested).format(URL_DATE_TIME_FORMAT);
+    $scope.endDate = moment($scope.booking.endRequested).format(URL_DATE_TIME_FORMAT);
+
     var params = {};
 
     params.timeframe = {
@@ -492,7 +496,8 @@ angular.module('owm.booking.show', [])
     };
 
     params.filters = {
-      smartwheels: 'true'
+      minSeats: $scope.booking.resource.numberOfSeats,
+      resourceType: $scope.booking.resource.resourceType
     };
 
     params.radius = 5000;
@@ -501,8 +506,12 @@ angular.module('owm.booking.show', [])
     params.sort = 'relevance';
 
     resourceService.searchV3(params)
-    .then(function (resourceAlternatives) {
-      $scope.resourceAlternatives = resourceAlternatives.results || [];
+    .then(function (alternatives) {
+      // remove current resource
+      var resourceAlternatives = alternatives.results;
+      var currentResource = resourceAlternatives.findIndex(resourceAlternative => resourceAlternative.id === $scope.booking.resource.id);
+      resourceAlternatives.splice(currentResource, 1);
+      $scope.resourceAlternatives = resourceAlternatives || [];
     })
     .catch(function () {
       $scope.resourceAlternatives = [];
@@ -512,7 +521,9 @@ angular.module('owm.booking.show', [])
   $scope.selectResourceAlternative = function (resource) {
     $state.go('owm.resource.show', {
       resourceId: resource.id,
-      city: resource.city
+      city: resource.city,
+      start: $scope.startDate,
+      end: $scope.endDate
     });
   };
 
