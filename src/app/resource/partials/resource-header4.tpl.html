@@ -1,0 +1,73 @@
+<md-card class="ow-card" ng-click="select()" style="box-shadow:none;">
+  <div class="md-card-image" style="position: relative">
+    <div resource="resource" size="normal" class="ng-isolate-scope">
+      <img class="media-object img-resource-large pull-left" ng-src="{{ resource.pictures[0] | resourceAvatar:'large' }}" />
+    </div>
+    <div class="price">
+        <h2 class="no-margin" style="color:#fff">
+      {{ resource.price.dayRateTotal | currency }}
+      </h2>
+        <div ng-if="resource.price.kmFree" class="">
+            <small>{{ 'FREE_KM_DAY' | translate }}</small>
+        </div>
+    </div>
+  </div>
+  <div style="position: relative">
+      <md-card-title>
+          <md-card-title-text>
+            <a ui-sref="owm.resource.show({city: resource.city, resourceId: resource.id})">
+              <h3 class="no-margin" style="font-size: 2rem" >
+                <span>{{ resource.alias || ('RESOURCE_NO_NAME' | translate) }} </span>
+              </h3>
+            </a>
+          </md-card-title-text>
+      </md-card-title>
+      <md-card-body class="ow-list-compact">
+          <md-list class="margin-right">
+              <md-list-item>
+                <!-- location -->
+                <md-icon>directions_car</md-icon>
+                <div flex>
+                    <span ng-if="resource.brand || resource.model" flex="none">{{ (resource.brand + ' ' + resource.model) | toTitleCase }}</span>
+                    <span class="tag tag-warning" ng-if="['smartphone', 'chipcard'].indexOf(resource.locktype) >= 0" flex="none"> {{ 'SMART_WHEELS_TIP' | translate }} 
+                    <md-tooltip class="multiline" md-direction="bottom" ng-if="['smartphone', 'chipcard'].indexOf(resource.locktype) >= 0">
+                        {{ 'SMART_WHEELS_INFO' | translate }}
+                    </md-tooltip></span>
+                    <span class="tag tag-success" ng-if="resource.isNew" flex="none"> {{ 'NEW_TIP' | translate }} </span>
+                </div>
+              </md-list-item>
+              <md-list-item>
+                <!-- location -->
+                <md-icon>location_on</md-icon>
+                <div flex>
+                    <span> {{ resource.location }}, {{ resource.city }}
+                      <span ng-if="resource.distance_to"> ({{ resource.distance_to | formatKilometers }})</span>
+                    </span>
+                </div>
+              </md-list-item>
+              <md-list-item>
+                <!-- person -->
+                <md-icon>person</md-icon>
+                <div flex>
+                    {{ resource.owner.firstName }}
+                    <span rating-thumb="{ value : resource.rating.satisfaction, senders: resource.rating.senders }"></span>
+                </div>
+              </md-list-item>
+              <md-list-item hide-xs>
+                <!-- number of bookings -->
+                <md-icon>check</md-icon>
+                  <div flex>
+                    <span>
+                      {{ resource.numberOfBookings | wasBookedTimes }}
+                    </span>
+                  </div>
+              </md-list-item>
+          </md-list>
+          <div class="next-icon">
+              <a ui-sref="owm.resource.show({city: resource.city, resourceId: resource.id, start: startDate, end: endDate})">
+                  <md-icon>navigate_next</md-icon>
+              </a>
+          </div>
+      </md-card-body>
+    </div>
+</md-card>
