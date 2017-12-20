@@ -64,7 +64,7 @@
 
 <div class="card" ng-if="userPerspective==='owner'" id="ownerText">
   <!-- If booking is not ok -->
-  <div class="card-body card-inverse" style="background-color:#c85f5f;" ng-if="!booking.ok && !requested && !bookingEnded && !hasRequestedTimeframe(booking)">
+  <div class="card-body card-inverse" style="background-color:#c85f5f;" ng-if="!booking.ok && !requested && !bookingEnded">
     <h2 class="text-white">De aanvraag is nog niet definitief</h2>
     <p class="text-white">
       De huurder moet nog actie ondernemen om deze aanvraag definitief te maken. Mogelijk moet de huurder nog betalen of andere gegevens doorgeven. Geef de auto niet mee zolang deze melding zichtbaar is.
