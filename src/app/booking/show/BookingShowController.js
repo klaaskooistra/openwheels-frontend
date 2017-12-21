@@ -501,7 +501,7 @@ angular.module('owm.booking.show', [])
     };
 
     params.radius = 5000;
-    params.maxresults = 3;
+    params.maxresults = 4;
     params.person = $scope.booking.person.id;
     params.sort = 'relevance';
 
