@@ -30,7 +30,7 @@
   <div class="card-body card-inverse" ng-if="booking.approved === 'BUY_VOUCHER'">
     <h2 class="text-white">Bijna klaar! Alleen nog rijtegoed kopen</h2>
     <p class="text-white">
-      Je reservering is gemaakt. Je hoeft enkel de reservering nog te betalen.
+      Je reservering is gemaakt. Je hoeft alleen de reservering nog te betalen.
     </p>
   </div>
   <!-- If booking is requested -->
@@ -58,6 +58,24 @@
     <h2 class="text-white">{{ 'PAYMENT_FAILURE_TITLE' | translate }}</h2>
     <p class="text-white">
       {{ 'PAYMENT_FAILURE_BODY' | translate }}
+    </p>
+  </div>
+</div>
+
+<div class="card" ng-if="userPerspective==='owner'" id="ownerText">
+  <!-- If booking is not ok -->
+  <div class="card-body card-inverse" style="background-color:#c85f5f;" ng-if="!booking.ok && !requested && !bookingEnded">
+    <h2 class="text-white">De aanvraag is nog niet definitief</h2>
+    <p class="text-white">
+      De huurder moet nog actie ondernemen om deze aanvraag definitief te maken. Mogelijk moet de huurder nog betalen of andere gegevens doorgeven. Geef de auto niet mee zolang deze melding zichtbaar is.
+    </p>
+  </div>
+
+  <!-- If booking is ok -->
+  <div class="card-body card-inverse" ng-if="booking.ok && !requested && !bookingEnded && !hasRequestedTimeframe(booking)">
+    <h2 class="text-white">De aanvraag is definitief</h2>
+    <p class="text-white">
+      De huurder heeft alles geregeld voor deze rit. Je kan de auto aan de huurder meegeven. <span ng-if="!booking.resource.boardcomputer">Vergeet niet de huurovereenkomst samen met de huurder in te vullen.</span>
     </p>
   </div>
 </div>
@@ -139,18 +157,6 @@
 <div class="card" ng-if="userPerspective==='renter' && hasRequestedTimeframe(booking) && hasAcceptedTimeframe(booking)" id="ownerText">
   <div class="card-body card-inverse" style="background-color:#e6a500; color:white;">
     <span>De wijzging van je reeds geaccepteerde reservering is naar de verhuurder verstuurd. Na goedkeuring ontvang je per mail een bevestiging, pas dan is je wijziging definitief.</span>
-  </div>
-</div>
-
-<div class="card" ng-if="userPerspective==='owner' && !booking.ok && !requested" id="ownerText">
-  <div class="card-body card-inverse" style="background-color:#c85f5f; color: white;">
-    <span>De huurder moet nog actie ondernemen om deze aanvraag definitief te maken. Mogelijk moet de huurder nog betalen of andere gegevens doorgeven. Geef de auto niet mee zolang deze melding zichtbaar is.</span>
-  </div>
-</div>
-
-<div class="card" ng-if="userPerspective==='owner' && booking.ok && !requested && !bookingEnded && !hasRequestedTimeframe(booking)" id="ownerText">
-  <div class="card-body card-inverse" style="background-color:#82b955; color: white;">
-    <span>De huurder heeft alles geregeld voor deze rit. Je kan de auto aan de huurder meegeven. <span ng-if="!booking.resource.boardcomputer">Vergeet niet de huurovereenkomst samen met de huurder in te vullen.</span></span>
   </div>
 </div>
 
@@ -403,7 +409,9 @@
 
           <!-- requested bookings can't be changed -->
           <div ng-if="requested">
-            Deze reservering is nog niet geaccepteerd en kan daarom niet gewijzigd worden. Je kunt deze reservering kosteloos annuleren en een nieuwe reservering maken.<br/><br/>
+            Deze reservering is nog niet geaccepteerd en kan daarom niet gewijzigd worden. Je kunt deze reservering kosteloos annuleren en een nieuwe reservering maken.
+            <span ng-show="discount.length == 0">Als je bent vergeten je kortingscode toe te voegen, kun je dat nu alsnog doen.</span>
+            <br/><br/>
           </div>
 
           <!-- buttons -->
@@ -451,6 +459,30 @@
         </form>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Resource alternatives if booking is requested -->
+<div class="card" ng-if="userPerspective === 'renter' && requested && resourceAlternatives.length >= 1 && (!paymentInit || !((credit.value === 0 && debt.value === 0) || booking.approved === 'BUY_VOUCHER'))" id="resourceAlternatives">
+  <div class="card-heading">
+    <h3 class="card-title">{{ 'ALTERNATIVE_RESOURCES' | translate }}</h3>
+  </div>
+
+  <div class="card-body">
+    <p>Verhoog de kans op een auto en reserveer meerdere auto's. Zodra een huurverzoek geaccepteerd wordt, verlopen de andere huurverzoeken.</p>
+    <ul class="list-row">
+      <li ng-repeat="resource in resourceAlternatives" ng-click="selectResourceAlternative(resource)">
+        <div ng-include="'resource/partials/resource-header4.tpl.html'"></div>
+      </li>
+    </ul>
+
+    <ul class="list-inline text-center">
+      <li id="dashboard_rent_a_car">
+        <a ui-sref="owm.resource.search.list({start: startDate, end: endDate, type: booking.resource.resourceType, seats: booking.resource.numberOfSeats})" class="btn btn-success btn-lg">
+          Bekijk alle auto's
+        </a>
+      </li>
+    </ul>
   </div>
 </div>
 
@@ -589,6 +621,22 @@
   </div>
   <div class="card-body">
     <span>{{ booking.person | fullname }} heeft kortingscode {{ discount[0].discount.code }} gebruikt voor deze reservering. Met deze code krijgt {{ booking.person.firstName }} tot <span ng-if="discount[0].discount.amount">€ {{ discount[0].discount.amount }}</span> <span ng-if="discount[0].discount.percentage">{{ discount[0].discount.percentage }}%</span> korting van jou.</span>
+  </div>
+</div>
+
+<!-- MyWheels Open info -->
+<div class="card" ng-if="userPerspective==='owner' && !requested && !booking.resource.boardcomputer && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0 && !bookingEnded" id="mywheelsOpenInfo">
+  <div class="card-body" layout="row" layout-xs="column">
+    <div flex="75" flex-xs="100">
+      <h3 style="margin-bottom:10px;">Verhuur je auto altijd en overal</h3>
+      Wil je verhuren zonder sleuteloverdracht? Meld je dan aan voor MyWheels Open.
+    </div>
+
+    <p hide-gt-xs></p>
+
+    <div flex="25" flex-xs="100" class="text-center">
+      <md-button class="md-raised" href="http://open.mywheels.nl/" target="_blank">Lees meer</md-button>
+    </div>
   </div>
 </div>
 
