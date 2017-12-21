@@ -54,16 +54,22 @@ angular.module('bookingListDirective', [])
             $scope.bookings = bookings;
           }).then(function () {
             //Get the total hours of the bookings in the current timeframe
+            var bookingsHours = 0;
+            var bookingsLength = 0;
+
             $scope.getTotalHours = function(){
-              var total = 0;
               for(var i = 0; i < $scope.bookings.length; i++){
                 if([50076, 53808, 904804, 904803, 886218].indexOf($scope.bookings[i].contract.id) < 0) {
-                  var bookingHours = moment($scope.bookings[i].endBooking).diff(moment($scope.bookings[i].beginBooking), 'hours');
-                  total += bookingHours;
+                  var hours = moment($scope.bookings[i].endBooking).diff(moment($scope.bookings[i].beginBooking), 'hours');
+                  bookingsHours += hours;
+                  bookingsLength += 1;
                 }
               }
-              return total;
             };
+
+            $scope.getTotalHours();
+            $scope.bookingsHours = bookingsHours;
+            $scope.bookingsLength = bookingsLength;
           })
           .catch(function (err) {
             $log.debug('error loading bookings', err);

@@ -6,15 +6,15 @@
   </div>
 
   <div id="bookingListText">
-    <p ng-if="!busy && bookings.length === 0">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er nog <strong>geen reservering </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
+    <p ng-if="!busy && bookingsLength === 0">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er nog <strong>geen reservering </strong> op de {{ resource.alias }} in {{ resource.city}}.
 
-    <p ng-if="!busy && bookings.length === 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er <strong>{{ bookings.length }} reservering </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
+    <p ng-if="!busy && bookingsLength === 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} is er <strong>{{ bookingsLength }} reservering </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ bookingsHours }} uur</strong> gereserveerd.</p>
 
-    <p ng-if="!busy && bookings.length > 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} zijn er <strong>{{ bookings.length }} reserveringen </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ getTotalHours() }} uur</strong> gereserveerd.</p>
+    <p ng-if="!busy && bookingsLength > 1">In {{ currentTimeFrame.startDate | amDateFormat:'MMMM YYYY' }} zijn er <strong>{{ bookingsLength }} reserveringen </strong> op de {{ resource.alias }} in {{ resource.city}}. De {{ resource.brand|toTitleCase }} is in totaal <strong>{{ bookingsHours }} uur</strong> gereserveerd.</p>
 
-    <p ng-if="!busy">Een gemiddelde MyWheels auto heeft <strong>15 reserveringen</strong> per maand en wordt <strong>110 uur</strong> gereserveerd.</p>
+    <p ng-if="!busy">Een gemiddelde MyWheels auto heeft <strong>13 reserveringen</strong> per maand en wordt <strong>90 uur</strong> gereserveerd.</p>
 
-    <p>De rode reserveringen zijn gemaakt op het contract van {{ resource.owner.firstName }}. Deze reserveringen worden niet meegenomen in bovenstaande telling.</p>
+    <p>De rode reserveringen zijn gemaakt op het contract van {{ resource.owner | fullname }}. Deze reserveringen worden niet meegenomen in bovenstaande telling.</p>
 
     <p ng-if="!busy && currentTimeFrame.endDate > now">
       Het is vandaag {{ now | amDateFormat:'dddd DD MMMM YYYY' | lowercase }}.
@@ -30,7 +30,7 @@
       <th>Huurder</th>
     </tr>
     <tr ng-repeat="booking in bookings | orderBy:'-beginBooking'" ng-if="bookings.length > 0" ng-class="{danger: [50076, 53808, 904804, 904803, 886218].indexOf(booking.contract.id) >= 0}">
-      <td hide-xs>#{{ booking.id }}</td>
+      <td hide-xs>{{ booking.id }}</td>
       <td>
         <span style="float:left; width:27px;">{{ booking.beginBooking | amDateFormat:'dd.' | lowercase }}</span> 
         {{ booking.beginBooking | amDateFormat:'DD-MM-YY HH:mm' }}
@@ -39,7 +39,7 @@
         <span style="float:left; width:27px;">{{ booking.endBooking | amDateFormat:'dd.' | lowercase }}</span> 
         {{ booking.endBooking | amDateFormat:'DD-MM-YY HH:mm' }}
       </td>
-      <td><a ui-sref="member({ personId: booking.person.id })">{{ booking.person.firstName|toTitleCase }}</a></td>
+      <td><a ui-sref="member({ personId: booking.person.id })">{{ booking.person.firstName }}</a></td>
     </tr>
     <tr ng-if="bookings.length == 0 && !busy">
       <td>Geen reserveringen gevonden.</td>
