@@ -463,7 +463,7 @@
 </div>
 
 <!-- Resource alternatives if booking is requested -->
-<div class="card" ng-if="userPerspective === 'renter' && requested && resourceAlternatives.length >= 1 && (!paymentInit || credit.value > 0 || debt.value > 0)" id="resourceAlternatives">
+<div class="card" ng-if="userPerspective === 'renter' && requested && resourceAlternatives.length >= 1 && (!paymentInit || credit.value !== 0 || debt.value !== 0)" id="resourceAlternatives">
   <div class="card-heading">
     <h3 class="card-title">{{ 'ALTERNATIVE_RESOURCES' | translate }}</h3>
   </div>
