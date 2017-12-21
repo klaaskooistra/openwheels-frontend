@@ -508,17 +508,12 @@ angular.module('owm.booking.show', [])
     resourceService.searchV3(params)
     .then(function (alternatives) {
       // remove current resource
-      var resourceAlternatives = alternatives.results;
-      for (var i=0; i<resourceAlternatives.length; i++) {
-        if (resourceAlternatives[i].id === booking.resource.id) {
-          resourceAlternatives.splice(i, 1);
-          $scope.resourceAlternatives = resourceAlternatives;
-          break;
+      $scope.resourceAlternatives = alternatives.results;
+      for (var i=0; i<$scope.resourceAlternatives.length; i++) {
+        if ($scope.resourceAlternatives[i].id === booking.resource.id) {
+          $scope.resourceAlternatives.splice(i, 1);
         }
       }
-    })
-    .catch(function () {
-      $scope.resourceAlternatives = [];
     });
   }
 
