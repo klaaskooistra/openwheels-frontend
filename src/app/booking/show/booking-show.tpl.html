@@ -72,7 +72,7 @@
   </div>
 
   <!-- If booking is ok -->
-  <div class="card-body card-inverse" ng-if="booking.ok && !requested && !bookingEnded && !hasRequestedTimeframe(booking)">
+  <div class="card-body card-inverse" ng-if="booking.ok && !requested && !bookingEnded && !hasRequestedTimeframe(booking) && ['cancelled', 'owner_cancelled', 'rejected'].indexOf(booking.status) < 0">
     <h2 class="text-white">De aanvraag is definitief</h2>
     <p class="text-white">
       De huurder heeft alles geregeld voor deze rit. Je kan de auto aan de huurder meegeven. <span ng-if="!booking.resource.boardcomputer">Vergeet niet de huurovereenkomst samen met de huurder in te vullen.</span>
