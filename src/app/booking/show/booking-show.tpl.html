@@ -542,7 +542,7 @@
     <h3 class="card-title">Kortingscode</h3>
   </div>
   <div class="card-body">
-    Je hebt kortingscode {{ discount[0].discount.code }} gebruikt voor deze reservering. Je krijgt tot <span ng-if="discount[0].discount.amount">€ {{ discount[0].discount.amount }}</span> <span ng-if="discount[0].discount.percentage">{{ discount[0].discount.percentage }}%</span> korting van <span ng-if="discount[0].discount.sender.id === resource.owner.id">verhuurder</span> {{ discount[0].discount.sender | fullname }}.
+    Je hebt kortingscode {{ discount[0].discount.code }} gebruikt voor deze reservering. Je krijgt tot <span ng-if="discount[0].discount.amount > 0">€ {{ discount[0].discount.amount }}</span> <span ng-if="discount[0].discount.percentage > 0">{{ discount[0].discount.percentage }}%</span> korting van <span ng-if="discount[0].discount.sender.id === resource.owner.id">verhuurder</span> {{ discount[0].discount.sender | fullname }}.
   </div>
 </div>
 
@@ -620,7 +620,7 @@
     <h3 class="card-title">Kortingscode</h3>
   </div>
   <div class="card-body">
-    <span>{{ booking.person | fullname }} heeft kortingscode {{ discount[0].discount.code }} gebruikt voor deze reservering. Met deze code krijgt {{ booking.person.firstName }} tot <span ng-if="discount[0].discount.amount">€ {{ discount[0].discount.amount }}</span> <span ng-if="discount[0].discount.percentage">{{ discount[0].discount.percentage }}%</span> korting van jou.</span>
+    <span>{{ booking.person | fullname }} heeft kortingscode {{ discount[0].discount.code }} gebruikt voor deze reservering. Met deze code krijgt {{ booking.person.firstName }} tot <span ng-if="discount[0].discount.amount > 0">€ {{ discount[0].discount.amount }}</span> <span ng-if="discount[0].discount.percentage > 0">{{ discount[0].discount.percentage }}%</span> korting van jou.</span>
   </div>
 </div>
 
