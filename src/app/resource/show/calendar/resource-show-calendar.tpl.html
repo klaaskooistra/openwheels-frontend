@@ -12,7 +12,7 @@
 <div class="card">
 
   <!--/ show normal calender if me is not contactPerson of the resource -->
-  <div class="card-body" id="resource-calendar" ng-show="me.id !== resource.contactPerson.id || resource.owner.id === resource.contactPerson.id">
+  <div class="card-body" id="resource-calendar" ng-show="me.id !== resource.contactPerson.id && (me.id !== resource.owner.id && !resource.boardcomputer)">
 
     <div ng-if="me && me.id === resource.owner.id">
       <i class="fa fa-fw fa-info-circle text-info"></i>{{ 'RESOURCE_CAL_INFO_FOR_OWNER' | translateOrDefault }}
@@ -32,7 +32,7 @@
   </div><!--/ card-body -->
 
   <!--/ show overview of trips if me is contactPerson of the resource -->
-  <div class="card-body" id="resourceShowCalendarContactPerson" ng-show="me && me.id === resource.contactPerson.id && resource.owner.id !== resource.contactPerson.id || (me.id === resource.owner.id && resource.boardcomputer)">
+  <div class="card-body" id="resourceShowCalendarContactPerson" ng-show="me && me.id === resource.contactPerson.id || (me.id === resource.owner.id && resource.boardcomputer)">
     <booking-list resource="resource" />
   </div><!--/ card-body -->
 
