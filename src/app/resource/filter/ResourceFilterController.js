@@ -89,7 +89,7 @@ angular.module('owm.resource.filter', [])
     };
 
     $scope.cancel = function () {
-      $mdDialog.hide('cancel');
+      $mdDialog.hide({filters: $scope.filters, options: $scope.options, props: $scope.props });
     };
   })
 
