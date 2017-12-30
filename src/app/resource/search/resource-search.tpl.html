@@ -79,7 +79,7 @@
         <div style="padding-left: 0px" ng-if="features.filtersSidebar && isWindowSizeMD" class="hidden-xs hidden-sm col-md-4 col-lg-3">
             <div class="card">
                 <div class="card-heading">
-                    <h3><i class="fa fa-filter"></i> {{ 'FILTER' | translate }}</h3>
+                    <h3 class="no-margin"><md-icon>filter_list</md-icon><span> Filter</span></h3>
                 </div>
                 <div class="card-body">
                     <div resource-filter on-change="sidebarFiltersChanged" props="filters.props" filters="filters.filters" options="filters.options"></div>
@@ -88,7 +88,6 @@
         </div>
 
         <div ng-class="{ 'col-xs-12 col-md-8 col-lg-9' : features.filtersSidebar }" class="no-padding" id="topsearch">
-
 
             <uib-alert type="info" close="removeTimeframe()" ng-if="booking.beginRequested && booking.endRequested">
                 <i class="fa fa-clock-o"></i> Beschikbare auto's voor <span class="text-success">{{ booking.beginRequested | amCalendar }}</span> tot <span class="text-success">{{ booking.endRequested  | amCalendar }}</span>
