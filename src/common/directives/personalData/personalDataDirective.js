@@ -18,7 +18,6 @@ angular.module('personalDataDirective', [])
       //set all vars
       $scope.person = null;
       $scope.genderText = '';
-      $scope.person = null;
       $scope.submitPersonalDataForm = null;
       $scope.ownerflow = false;
       $rootScope.personSubmitted = false;
@@ -61,7 +60,6 @@ angular.module('personalDataDirective', [])
           // check if person had verified phone numbers
           that.initPhoneNumbers();
 
-          $scope.person.dateOfBirth = $scope.date.year + '-' + $scope.date.month + '-' + $scope.date.day;
           var newProps = $filter('returnDirtyItems')(angular.copy($scope.person), $scope.personalDataForm);
 
           //add fields not in form
@@ -74,9 +72,12 @@ angular.module('personalDataDirective', [])
           if($scope.person.companyName) {
             newProps.isCompany = true;
           }
+          if (moment($scope.person.dateOfBirth).format('YYYY') + '-' + moment($scope.person.dateOfBirth).format('M') + '-' + moment($scope.person.dateOfBirth).format('D') !== $scope.date.year + '-' + $scope.date.month + '-' + $scope.date.day) {
+            $scope.person.dateOfBirth = $scope.date.year + '-' + $scope.date.month + '-' + $scope.date.day;
+            newProps.dateOfBirth = $scope.person.dateOfBirth;
+          }
 
           newProps.male = $scope.person.male;
-          newProps.dateOfBirth = $scope.person.dateOfBirth;
 
           var firstName = $scope.person.firstName,
             surname = $scope.person.surname,
@@ -152,8 +153,17 @@ angular.module('personalDataDirective', [])
                       } else if ($state.current.name === 'owm.resource.create.details') {
                         makeResourceAvailable();
                       }
-                    }).catch(function (err) {
-                      alertService.addError(err);
+                    })
+                    .catch(function (err) {
+                      if (err.message.match('surname')) {
+                        alertService.add('danger', 'Je achternaam mag je op dit moment niet aanpassen.', 5000);
+                      } else if (err.message.match('firstName')) {
+                        alertService.add('danger', 'Je voornaam mag je op dit moment niet aanpassen.', 5000);
+                      } else if (err.message.match('dateOfBirth')) {
+                        alertService.add('danger', 'Je geboortedatum mag je op dit moment niet aanpassen.', 5000);
+                      } else {
+                        alertService.add(err.level, err.message, 5000);
+                      }
                     })
                     .finally(function () {
                       alertService.loaded();

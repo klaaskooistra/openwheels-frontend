@@ -13,7 +13,7 @@
       </button>
     </div>
     <div ng-if="showFilters" class="hide-xs button button--small md-ink-ripple" md-ink-ripple="#232521">
-      <button ng-clas="{active: filters.hasAny === true}" class="hidden-lg hidden-md btn btn-default" type="button" ng-click="doClickFilters()">
+      <button ng-class="{'active': filters.filters.smartwheels || filters.filters.fuelType || filters.filters.resourceType || filters.filters.minSeats || filters.props.radius !== 25000}" class="hidden-lg hidden-md btn btn-default" type="button" ng-click="doClickFilters()">
         <md-icon>filter_list</md-icon><span> Filter</span>
       </button>
     </div>
@@ -44,8 +44,8 @@
       </button>
     </div>
     <div flex="auto" ng-if="showFilters" class="hide-gt-xs button button--small md-ink-ripple" md-ink-ripple="#232521">
-      <button ng-clas="{active: filters.hasAny === true}" class="hidden-lg hidden-md btn btn-default" type="button" ng-click="doClickFilters()">
-        <md-icon>filter_list</md-icon><span class="hide-xxs"> Filter</span>
+      <button ng-class="{'active': filters.filters.smartwheels || filters.filters.fuelType || filters.filters.resourceType || filters.filters.minSeats || filters.props.radius !== 25000}" class="hidden-lg hidden-md btn btn-default" type="button" ng-click="doClickFilters()">
+        <md-icon>filter_list</md-icon><span class="hide-xxs"> Filter {{ filters.length }}</span>
       </button>
     </div>
     <div flex="auto" ng-show="showSort" class="hide-gt-xs button button--small button--sort md-ink-ripple" md-ink-ripple="#232521">

@@ -4,7 +4,7 @@ angular.module('owm.resource.search', [
     'owm.resource.search.list',
     'owm.resource.search.map',
   ])
-  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore, preloader) {
+  .controller('ResourceSearchController', function ($location, me, $scope, $state, $stateParams, $uibModal, $mdMedia, $mdDialog, $filter, $anchorScroll, appConfig, Geocoder, alertService, resourceService, resourceQueryService, user, place, Analytics, $cookieStore, preloader) {
 
     $scope.me = me;
 
@@ -282,21 +282,18 @@ angular.module('owm.resource.search', [
 
     //select filters modal
     $scope.setFilters = function () {
-      $uibModal.open({
+      $mdDialog.show({
+        autoWrap: false,
         templateUrl: 'resource/filter/resource-filter-modal.tpl.html',
-        controller: 'ResourceFilterController',
-        resolve: {
-          props: function () {
-            return $scope.filters.props;
-          },
-          filters: function () {
-            return $scope.filters.filters;
-          },
-          options: function () {
-            return $scope.filters.options;
-          }
-        }
-      }).result.then(function (selected) {
+        controller : 'ResourceFilterController',
+        locals: {
+          props: $scope.filters.props,
+          filters: $scope.filters.filters,
+          options: $scope.filters.options
+        },
+        fullscreen: $mdMedia('xs')
+      })
+      .then(function (selected) {
         Analytics.trackEvent('discovery', 'filters_applied', user.isAuthenticated, undefined, true);
         $scope.filters.props = selected.props;
         $scope.filters.filters = selected.filters;
