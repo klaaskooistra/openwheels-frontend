@@ -62,7 +62,15 @@ angular.module('personalDataDirective', [])
 
           var newProps = $filter('returnDirtyItems')(angular.copy($scope.person), $scope.personalDataForm);
 
-          //add fields not in form
+          // don't alter firstname or surname if value isn't changed
+          if(masterPerson.firstName === $scope.person.firstName) {
+            newProps.firstName = undefined;
+          }
+          if(masterPerson.surname === $scope.person.surname) {
+            newProps.surname = undefined;
+          }
+
+          // add fields not in form
           if (newProps.zipcode || newProps.streetNumber) {
             newProps.streetName = $scope.person.streetName;
             newProps.city = $scope.person.city;
@@ -76,7 +84,6 @@ angular.module('personalDataDirective', [])
             $scope.person.dateOfBirth = $scope.date.year + '-' + $scope.date.month + '-' + $scope.date.day;
             newProps.dateOfBirth = $scope.person.dateOfBirth;
           }
-
           newProps.male = $scope.person.male;
 
           var firstName = $scope.person.firstName,
@@ -89,7 +96,6 @@ angular.module('personalDataDirective', [])
             city = $scope.person.city,
             zipcode = $scope.person.zipcode,
             streetNumber = $scope.person.streetNumber;
-
 
           // add phone numbers (not automatically included by 'returnDirtyItems')
           var shouldSavePhoneNumbers = $scope.person.phoneNumbers && (!angular.equals(masterPerson.phoneNumbers, $scope.person.phoneNumbers));
@@ -155,10 +161,12 @@ angular.module('personalDataDirective', [])
                       }
                     })
                     .catch(function (err) {
-                      if (err.message.match('surname')) {
-                        alertService.add('danger', 'Je achternaam mag je op dit moment niet aanpassen.', 5000);
-                      } else if (err.message.match('firstName')) {
+                      if (err.message.match('firstName')) {
                         alertService.add('danger', 'Je voornaam mag je op dit moment niet aanpassen.', 5000);
+                        that.initPerson($scope.person);
+                      } else if (err.message.match('surname')) {
+                        alertService.add('danger', 'Je achternaam mag je op dit moment niet aanpassen.', 5000);
+                        that.initPerson($scope.person);
                       } else if (err.message.match('dateOfBirth')) {
                         alertService.add('danger', 'Je geboortedatum mag je op dit moment niet aanpassen.', 5000);
                       } else {
