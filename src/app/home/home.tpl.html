@@ -2,18 +2,10 @@
     <!-- SEARCHBAR -->
     <div ng-if="!features.homeCarousel" class="hero inverted text-center">
         <div class="hero-overlay"></div>
-        <section class="container homepage-baseline" id="oldTagline" hide>
+        <section class="container homepage-baseline">
             <div class="homepage-baseline-header">
-                <h1 id="tagline" class="fadeInDown animated">{{'TAGLINE_HOME' | translate}}</h1>
-            </div>
-        </section>
-        <section class="container homepage-baseline" id="newTagline">
-            <div class="homepage-baseline-header">
-                <span><h1 id="tagline" class="fadeInDown animated">{{'TAGLINE_HOME_NEW' | translate}}</h1></span>
-                <span><h3 id="taglineSubtitle" class="fadeInDown animated">{{'TAGLINE_HOME_NEW_SUBTITLE' | translate}}</h3></span>
-                <span hide-xs>
-                    <a id="homepageSignup" type="button" name="button" class="mywheels-btn btn-green mywheels-btn-big" style="background:#82b955;" ui-sref="owm.auth.signup">{{'TAGLINE_HOME_BUTTON' | translate}}</a>
-                </span>
+                <span><h1 id="tagline" class="fadeInDown animated">{{'TAGLINE_HOME' | translate}}</h1></span>
+                <span><h3 id="taglineSubtitle" class="fadeInDown animated">{{'TAGLINE_HOME_SUBTITLE' | translate}}</h3></span>
             </div>
         </section>
         <section ng-if="features.homePage" class="homepage-searchbar-frontpage">
@@ -22,7 +14,11 @@
     </div>
     <!-- /SEARCHBAR -->
 
-    <!-- BLOG ITEMS -->
+    <!-- TRIANGLE BAR HOME -->
+    <div class="triangle--bar--home triangle--bar--home-white"></div>
+    <!-- /TRIANGLE BAR -->
+
+    <!-- BLOG ITEMS -->   
     <div class="blog--overview" ng-if="features.homePage">
         <section class="center">
             <h2>Ons laatste nieuws</h2>
