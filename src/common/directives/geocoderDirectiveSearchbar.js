@@ -10,10 +10,16 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
       'onNewPlace': '=',
       'onClickTime': '=',
       'onClickFilters': '=',
-      'onSortChange': '='
+      'onSortChange': '=',
+      'filters': '='
     },
     link: function($scope, element) {
 
+      if($scope.filters) {
+        $scope.hasFilters = !$scope.filters.filters.fuelType && !$scope.filters.filters.resourceType && !$scope.filters.filters.minSeats;
+      } else {
+        $scope.hasFilters = false;
+      }
       $scope.$mdMenu = $mdMenu;
       $scope.search = {};
       $scope.search.text = resourceQueryService.data.text;
