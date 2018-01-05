@@ -1,45 +1,79 @@
-<form role="form">
+<form role="form" class="mywheels-form">
+
   <div class="form-group" id="smartwheels">
     <label for="smartwheels">{{ 'SMART_WHEELS_TIP' | translate }}</label>
     <md-switch name="smartwheels" ng-model="filters.smartwheels" aria-label="smartwheels" ng-true-value="'true'" ga-track-event="['interaction', 'smartwheelsToggle', 'auto-huren']"></md-switch>
     <p class="smartwheels-tip-search">{{ 'SMART_WHEELS_INFO' | translate }}.</p>
   </div>
+
   <div class="form-group">
-    <label for="minSeats">
-      {{ 'SEARCH_RADIUS' | translate }}
-    </label>
-    <select class="form-control" name="radius" id="radius" ng-model="props.radius" ng-options="o.value as o.label for o in radiusOptions">
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="minSeats">
-      {{ 'MIN_SEATS' | translate }}
-    </label>
-    <select class="form-control" name="minSeats" id="minSeats" ng-model="filters.minSeats" ng-options="o.value as o.label for o in minSeatOptions">
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="fuelType">
-      {{ 'FUEL_TYPE' | translate }}
-    </label>
-    <select class="form-control" name="fuelType" id="fuelType" ng-model="filters.fuelType" ng-options="o.value as o.label for o in fuelTypeOptions">
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="resourceType">
-      {{ 'RESOURCE_TYPE' | translate }}
-    </label>
-    <select class="form-control" name="resourceType" id="resourceType" ng-model="filters.resourceType" ng-options="o.value as o.label for o in resourceTypeOptions">
-    </select>
+    <label for="radius">{{ 'SEARCH_RADIUS' | translate }}</label><hr>
+    <div ng-repeat="radius in radiusOptions">
+      <div class="filter-item" ng-if="props.radius !== radius.value">
+        <span ng-click="selectRadius(radius.value)">{{ radius.label }}</span>
+      </div>
+      <div class="filter-item tag-selected" ng-if="props.radius === radius.value">
+        <span class="pull-left">{{ radius.label }}</span>
+        <span class="pull-right" ng-click="resetRadius()">
+          <md_icon>close</md_icon>
+        </span>
+      </div>
+    </div>
   </div>
 
   <div class="form-group">
-    <label>Opties</label>
-    <div class="checkbox" ng-repeat="(key, value) in options" style="margin-left: 20px">
-      <label>
-        <input type="checkbox" ng-model="options[key]" id="{{key}}"> {{optionsLabels[key]}}
-      </label>
+    <label for="fuelType">{{ 'FUEL_TYPE' | translate }}</label><hr>
+    <div ng-repeat="fuelType in fuelTypeOptions">
+      <div class="filter-item" ng-if="filters.fuelType !== fuelType.value">
+        <span ng-click="selectFuelType(fuelType.value)">{{ fuelType.label }}</span>
+      </div>
+      <div class="filter-item tag-selected" ng-if="filters.fuelType === fuelType.value">
+        <span class="pull-left">{{ fuelType.label }}</span>
+        <span class="pull-right" ng-click="resetFuelType()">
+          <md_icon>close</md_icon>
+        </span>
+      </div>
     </div>
+  </div>
+
+  <div class="form-group">
+    <label for="resourceType">{{ 'RESOURCE_TYPE' | translate }}</label><hr>
+    <div ng-repeat="resourceType in resourceTypeOptions">
+      <div class="filter-item" ng-if="filters.resourceType !== resourceType.value">
+        <span ng-click="selectResourceType(resourceType.value)">{{ resourceType.label }}</span>
+      </div>
+      <div class="filter-item tag-selected" ng-if="filters.resourceType === resourceType.value">
+        <span class="pull-left">{{ resourceType.label }}</span>
+        <span class="pull-right" ng-click="resetResourceType()">
+          <md_icon>close</md_icon>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="minSeats">{{ 'MIN_SEATS' | translate }}</label><hr>
+    <div ng-repeat="minSeats in minSeatOptions">
+      <div class="filter-item" ng-if="filters.minSeats !== minSeats.value">
+        <span ng-click="selectMinSeats(minSeats.value)">{{ minSeats.label }}</span>
+      </div>
+      <div class="filter-item tag-selected" ng-if="filters.minSeats === minSeats.value">
+        <span class="pull-left">{{ minSeats.label }}</span>
+        <span class="pull-right" ng-click="resetMinSeats()">
+          <md_icon>close</md_icon>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+      <label>{{ 'RESOURCE_PROPERTIES' | translate }}</label><hr>
+      <div class="checkbox" ng-repeat="(key, value) in optionsLabels">
+          <input type="checkbox" ng-model="options[key]" id="{{key}}" />
+          <label for="{{ option.value }}">
+            {{optionsLabels[key]}}
+          </label>
+      </div>
   </div>
 
 </form>

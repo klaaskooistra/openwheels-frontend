@@ -5,99 +5,81 @@
 </div>
 
 <section class="details--profile__overview">
-    <!-- PERSONAL DATA  -->
+    <!-- FIRST PAGE / PERSONAL DATA  -->
     <div class="card details--card__section" id="personal-data" ng-show="showFirst">
         <div class="card-body details--card">
+
             <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking && showFirst"></section>
-            <!-- HERE -->
+
             <section class="details--card--form">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_BASIC' | translate }}</h2>
                 <p ng-if="isbooking" translate="DETAILS_PROFILE_BASIC_TEXT" translate-values="{firstName: person.firstName}"> </p>
                 <h3>{{ 'MY_PROFILE_PERSONAL' | translate }}</h3>
                 <personal-data next="nextSection()"></personal-data>
             </section>
+
         </div>
     </div>
     <!--/ card -->
 
-    <!-- card -->
+    <!-- SECOND PAGE / LICENSE INFORMATION -->
     <div class="card details--card__section" id="license-upload" ng-show="showSecond">
         <div class="card-body details--license-upload details--card">
+
             <section resource-sidebar class="details--profile__sidebar" ng-if="isbooking && showSecond"></section>
-            <!-- upload license -->
+
             <section class="details--card--form" ng-show="!checkedLater">
-                <h2 class="card-title">{{ 'DETAILS_PROFILE_LICENCE' | translate }}</h2>
+                <h2 class="card-title">{{ 'DETAILS_PROFILE_LICENSE' | translate }}</h2>
 
-                <div class="checklist">
-                    <ul>
-                        <li>
-                            <md-icon>check</md-icon><span>{{ 'LICENSE_READABLE' | translate }}</span></li>
-                        <li>
-                            <md-icon>check</md-icon><span>{{ 'LICENSE_FRONT' | translate }}</span></li>
-                        <li>
-                            <md-icon>check</md-icon><span>{{ 'LICENSE_VALID' | translate }}</span></li>
-                    </ul>
-                </div>
-                <div class="file-input" ng-show="!containsLicence">
-                    <span class="filename" id="filename"> {{licenceFileName}}</span>
-                    <label for="licenseFrontFile" class="mywheels-btn mywheels-btn-normal">Selecteer
-                        <input type="file" name="imageFile" for="licenseFrontFile" value="" class="uploadfile-input" id="licenseFrontFile" accept="image/x-png, image/gif, image/jpeg, image/jpg, application/pdf">
-                    </label>
-                </div>
-                <div class="details--card--form__preview">
-                    <img ng-src="{{licenceImage}}" alt="lincence preview" id="licence-preview">
+                <div ng-show="licenseUploaded">
+                    {{ 'LICENSE_ALREADY_UPLOADED' | translate }}
                 </div>
 
-                <div ng-show="containsLicence && !licenceUploaded">
-
-                    <section class="details--card--form">
-                        <div class="ng-isolate-scope" aria-hidden="true">
-                            <form class="mywheels-form details--profile--form ng-pristine ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength ng-valid" name="licenceDataForm" style="">
-
-                                <p class="ng-scope">{{ 'LICENSE_DATA' | translate }}</p>
-                                <div class="licenceNumberGroup">
-                                    <h3 class="ng-binding">{{ 'LICENSE_NUMBER' | translate }}</h3>
-                                    <div id="licenceNumber_group" class="icon payment">
-                                        <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" ng-change="licenceNumberValid = true" required>
-                                    </div>
-                                    <div id="licenceNumberRepeat_group" class="icon replay" ng-show="driverLicenseNumber.length === 10">
-                                        <input ng-paste="$event.preventDefault();" name="driverLicenseNumberRepeat" id="driverLicenseNumberRepeat" ng-model="driverLicenseNumberRepeat" placeholder="Voer opnieuw je rijbewijsnummer in" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" required>
-                                    </div>
-                                    <div class="err-block" ng-if="!isBusy && (!licenceNumberValid || !licenceNumberRepeatValid || (driverLicenseNumber !== driverLicenseNumberRepeat))" aria-hidden="true">
-                                        <span class="text-danger ng-binding" aria-hidden="true" ng-show="!licenceNumberValid">{{ 'INCORRECT_LICENSE' | translate }}</span>
-                                        <span class="text-danger ng-binding" aria-hidden="true" ng-show="driverLicenseNumberRepeat && driverLicenseNumber !== driverLicenseNumberRepeat">{{ 'LICENSE_NUMBERS_NO_MATCH' | translate }}</span>
-                                    </div>
-                                </div>
-
-                                <div class="autoDateInput">
-                                    <h3 class="ng-binding">Verloopdatum</h3>
-                                    <div id="date" class="icon date">
-                                        <input id="day" name="day" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.day" placeholder="DD" maxlength="2" max="31" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
-                                        <input id="month" name="month" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.month" placeholder="MM" maxlength="2" max="12" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
-                                        <input id="year" name="year" inputmode="numeric" pattern="[0-9]*" ng-model="licenceDate.year" placeholder="JJJJ" maxlength="4" max="{{ validLicenceMax }}" min="{{ validLicenceMin }}" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
-                                    </div>
-
-                                    <div class="err-block" ng-if="!isBusy && (!licenceDateValid || !licenceDataForm.day.$valid || !licenceDataForm.month.$valid || !licenceDataForm.year.$valid)" aria-hidden="true">
-                                        <span class="text-danger ng-binding" aria-hidden="true">De verloopdatum van je rijbewijs is ongeldig</span>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </section>
-
-                    <div>
-                        <br/>
-                        <p>{{ 'LICENSE_CONFIRM' | translate }}</p>
+                <div ng-show="!licenseUploaded && !loadLicenseState">
+                    <div class="checklist">
+                        <p class="ng-scope">{{ 'LICENSE_DATA' | translate }}</p>
+                        <p><ul>
+                            <li><md-icon>check</md-icon><span>{{ 'LICENSE_NOT_FOREIGN' | translate }}</span></li>
+                            <li><md-icon>check</md-icon><span>{{ 'LICENSE_VALID' | translate }}</span></li>
+                            <li><md-icon>check</md-icon><span>{{ 'LICENSE_OWN' | translate }}</span></li>
+                        </ul></p>
                     </div>
 
-                    <button title="upload" type="button" class="mywheels-btn mywheels-btn-normal btn--navigation__previous mywheels-btn-big" md-ink-ripple="#4b702c" ng-disabled="isBusy" ng-click="prepareUpload()">
-                        {{'YES' | translate }}
-                    </button>
-                    <button type="button" class="mywheels-btn mywheels-btn-error btn--navigation__previous mywheels-btn-big" md-ink-ripple="#9a3d26" ng-click="cancelUpload()">
-                        {{'NO' | translate }}
-                    </button>
-                </div>
+                    <div>
+                        <section class="details--card--form">
+                            <div class="ng-isolate-scope" aria-hidden="true">
+                                <form class="mywheels-form details--profile--form ng-pristine ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength ng-valid" name="licenseDataForm">
+                                    <div class="licenseNumberGroup">
+                                        <h3 class="ng-binding">{{ 'LICENSE_NUMBER' | translate }}</h3>
+                                        <div id="licenseNumber_group" class="icon payment">
+                                            <input name="driverLicenseNumber" id="driverLicenseNumber" ng-model="driverLicenseNumber" placeholder="Rijbewijsnummer" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" ng-change="licenseNumberValid = true" required>
+                                        </div>
+                                        <div id="licenseNumberRepeat_group" class="icon replay" ng-show="driverLicenseNumber.length === 10">
+                                            <input ng-paste="$event.preventDefault();" name="driverLicenseNumberRepeat" id="driverLicenseNumberRepeat" ng-model="driverLicenseNumberRepeat" placeholder="Voer opnieuw je rijbewijsnummer in" class="ng-pristine ng-untouched ng-valid" aria-invalid="false" type="text" restrict-to="[0-9]" maxlength="10" required>
+                                        </div>
+                                        <div class="err-block" ng-if="!isBusy && (!licenseNumberValid || !licenseNumberRepeatValid || !licenseNumberMatch)" aria-hidden="true">
+                                            <span class="text-danger ng-binding" aria-hidden="true" ng-show="!licenseNumberValid">{{ 'INCORRECT_LICENSE' | translate }}</span>
+                                            <span class="text-danger ng-binding" aria-hidden="true" ng-show="(!licenseNumberRepeatValid || !licenseNumberMatch) && licenseNumberValid && driverLicenseNumber !== driverLicenseNumberRepeat">{{ 'LICENSE_NUMBERS_NO_MATCH' | translate }}</span>
+                                        </div>
+                                    </div>
 
+                                    <div class="autoDateInput">
+                                        <h3 class="ng-binding">{{ 'LICENSE_DATE' | translate }}</h3>
+                                        <div id="date" class="icon date">
+                                            <input id="day" name="day" inputmode="numeric" pattern="[0-9]*" ng-model="licenseDate.day" placeholder="DD" maxlength="2" max="31" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
+                                            <input id="month" name="month" inputmode="numeric" pattern="[0-9]*" ng-model="licenseDate.month" placeholder="MM" maxlength="2" max="12" min="0" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
+                                            <input id="year" name="year" inputmode="numeric" pattern="[0-9]*" ng-model="licenseDate.year" placeholder="JJJJ" maxlength="4" max="{{ validLicenseMax }}" min="{{ validLicenseMin }}" class="ng-pristine ng-untouched ng-valid ng-valid-min ng-valid-max ng-valid-pattern ng-valid-maxlength" aria-invalid="false" type="number" required="">
+                                        </div>
+
+                                        <div class="err-block" ng-if="!isBusy && (!licenseDateValid || !licenseDataForm.day.$valid || !licenseDataForm.month.$valid || !licenseDataForm.year.$valid)" aria-hidden="true">
+                                            <span class="text-danger ng-binding" aria-hidden="true">{{ 'LICENSE_DATE_INVALID' | translate }}</span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </div>
 
                 <div class="details--card--form__navigation-buttons">
                     <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="prevSection(0, 1)">
@@ -105,23 +87,28 @@
                         {{ 'PREVIOUS' | translate}}
                     </button>
                     <div>
-                        <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="skipFlow()" ng-show="$root.isWindowSizeSM && !containsLicence && isbooking|| $root.isWindowSizeSM && !licenceUploaded && isbooking">
+                        <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="skipFlow()" ng-show="$root.isWindowSizeSM && isbooking && !licenseUploaded">
                             {{ 'LATER' | translate}}
                             <md-icon>navigate_next</md-icon>
                         </button>
-                        <button rel="next" type="button" class="mywheels-btn mywheels-btn-default btn--navigation__next" ng-click="nextSection()" ng-disabled="!licenceUploaded">
+                        <button rel="next" type="button" class="mywheels-btn mywheels-btn-default btn--navigation__next" ng-click="submitDriverLicense()" ng-if="!licenseUploaded">
+                            {{ 'NEXT' | translate}}
+                            <md-icon class="text-white">navigate_next</md-icon>
+                        </button>
+                        <button rel="next" type="button" class="mywheels-btn mywheels-btn-default btn--navigation__next" ng-click="nextSection()" ng-if="licenseUploaded">
                             {{ 'NEXT' | translate}}
                             <md-icon class="text-white">navigate_next</md-icon>
                         </button>
                     </div>
                 </div>
 
-                <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="skipFlow()" ng-show="!$root.isWindowSizeSM && !containsLicence && isbooking || !$root.isWindowSizeSM && !licenceUploaded && isbooking"
+                <button rel="prev" type="button" class="mywheels-btn mywheels-btn-transparant btn--navigation__previous" md-ink-ripple="#ded8d8" ng-click="skipFlow()" ng-show="!$root.isWindowSizeSM && isbooking && !licenseUploaded"
                         style="float: right; margin: 1em 0 0 0;">
                     {{ 'LATER' | translate}}
                     <md-icon>navigate_next</md-icon>
                 </button>
             </section>
+
             <section class="details--card--form" ng-show="checkedLater">
                 <h2 class="card-title">{{ 'DETAILS_PROFILE_LATER' | translate }}</h2>
                 <p>{{ 'DETAILS_PROFILE_LATER_TEXT' | translate }}</p>
@@ -133,11 +120,12 @@
                     </button>
                 </div>
             </section>
+
         </div>
     </div>
     <!--/ card -->
 
-    <!-- card -->
+    <!-- THIRD PAGE / PAYMENT OR MAKE BOOKING -->
     <div class="card details--card__section" ng-show="showThird">
         <div class="card-body details--card">
 

@@ -27,13 +27,14 @@
         <span>Help</span>
       </md-button>
 
-      <!-- add resource -->
-      <md-button class="app--toolbar--button--text btn-blue" id="toolbarMyWheelsOpen" hide-xs hide-sm ng-if="!user.isAuthenticated && !onSignUpPage" href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header">
+      <!-- mywheels open -->
+      <md-button class="app--toolbar--button--text btn-blue" id="toolbarMyWheelsOpen" hide-xs hide-sm ng-if="!user.isAuthenticated && onListYourCarPage" href="http://open.mywheels.nl/?utm_source=website&utm_medium=homepage&utm_campaign=activation-mywheels-open-header" target="_blank">
         <!-- <md-icon>directions_car</md-icon> -->
         <span>{{ 'MYWHEELS_OPEN_HEADLINE' | translate }}</span>
       </md-button>
-      <!-- add MyWHeels Open -->
-      <md-button id="toolbarListyourcar" hide-xs hide-sm ng-if="!user.isAuthenticated && !onSignUpPage" ui-sref="list-your-car">
+
+      <!-- add resource -->
+      <md-button id="toolbarListyourcar" hide-xs hide-sm ng-if="!user.isAuthenticated && !onSignUpPage && !onListYourCarPage" ui-sref="list-your-car">
         <md-icon>directions_car</md-icon>
         <span>{{ 'LIST_YOUR_CAR' | translate }}</span>
       </md-button>

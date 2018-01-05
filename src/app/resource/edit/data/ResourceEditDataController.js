@@ -98,6 +98,9 @@ angular.module('owm.resource.edit.data', [])
     value: 'van',
     label: $translate.instant('RESOURCE_TYPE.VAN')
   }, {
+    value: 'station',
+    label: $translate.instant('RESOURCE_TYPE.STATION')
+  }, {
     value: 'oldtimer',
     label: $translate.instant('RESOURCE_TYPE.OLDTIMER')
   }];
