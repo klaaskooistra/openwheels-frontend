@@ -199,14 +199,6 @@ angular.module('openwheels', [
       $logProvider.debugEnabled(false);
     }
   })
-  .config(function (optimizelyProvider) {
-    optimizelyProvider.setKey('5390511383');
-    optimizelyProvider.setActivationEventName('$stateChangeSuccess');
-  })
-  .run(function (optimizely) {
-    optimizely.loadProject();
-  })
-
 
 .run(function (windowSizeService, oAuth2MessageListener, stateAuthorizer, authService, featuresService) {
   /* Intentionally left blank */
