@@ -1,0 +1,62 @@
+<md-dialog flex-gt-md="50" flex-md="60" flex="80" >
+
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Upload foto</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="cancel()">
+				<md-icon>close</md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content>
+    <div layout="row" style="margin:2px;">
+      <md-button ng-show="image" ng-click="clear();"><md-icon>arrow_back</md-icon> Andere foto</md-button>
+      <span flex></span>
+    </div>
+
+    <div class="md-dialog-content">
+      <div layout="column" style="width: 500px; margin: auto;">
+
+        <div flex ng-show="!image" >
+          <p class="text-center"><file-input-change file-props="fileProps" on-change="newImage" /></p>
+          <div ng-if="fileProps.hasUploaded">
+            <span class="inputfile-error" ng-if="!fileProps.isImage">Alleen afbeeldings typen worden ondersteund (.jpg, .jpeg, .png).</span>
+            <span class="inputfile-error" ng-if="fileProps.isImage && !fileProps.sizeOk">Deze afbeelding is te klein, de minimale grootte moet 800x600 zijn.</span>
+          </div>
+        </div>
+
+        <div flex ng-style="{width: crapject.canvasSize.w+'px'}" style="margin: auto;" ng-show="showEditor">
+
+          <ui-cropper flex cropject="crapject" init-max-area="true" max-canvas-dimensions="{w: 500, h: 500}" image="inputImage" area-type="rectangle" class="text-center" aspect-ratio="aspectratio" result-image="image" canvas-scalemode="full-width" result-image-size="resultImageSize"></ui-cropper>
+
+          <div layout="row">
+            <span flex></span>
+            <md-button class="no-margin" ng-click="doneEditing()">Klaar</md-button>
+            <span flex></span>
+          </div>
+        </div>
+
+        <div flex ng-show="image && !showEditor">
+          <p class="text-center"><img width="500" height="330" ng-src="{{image}}" /></p>
+              
+          <div layout="row">
+            <span flex></span>
+            <md-button class="no-margin" ng-show="!showEditor && image" ng-click="showEditor=true">Bewerken</md-button>
+            <span flex></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button ng-hide="showEditor" ng-click="cancel()">Annuleren</md-button>
+    <span flex></span>
+		<md-button class="md-primary" ng-hide="showEditor" ng-disabled="showEditor || !image" md-no-ink ng-click="return()">Opslaan</md-button>
+    <md-button class="no-margin md-primary" ng-show="showEditor && image" ng-click="doneEditing()">Klaar</md-button>
+	</md-dialog-actions>
+
+</md-dialog>
