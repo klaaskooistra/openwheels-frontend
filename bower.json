@@ -1,6 +1,6 @@
 {
   "name": "OpenWheels",
-  "version": "2.01.0",
+  "version": "2.02.0",
   "dependencies": {
     "angular": "1.4.8",
     "angular-animate": "1.4.8",
@@ -27,7 +27,6 @@
     "font-awesome": "~4.4.0",
     "angular-material": "1.0.2",
     "bootstrap": "3.3.6",
-    "ng-optimizely": "^2.0.0",
     "angular-slick": "~0.2.1",
     "slick-carousel": "1.6.0"
   },
