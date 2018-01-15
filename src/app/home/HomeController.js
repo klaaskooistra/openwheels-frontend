@@ -33,32 +33,9 @@ angular.module('owm.home', ['owm.resource', 'slick'])
 
   //get resources for slider if page is loaded
   angular.element($window.document).ready(function () {
-    if ($scope.features.featuredSlider) {
-      if($window.navigator.geolocation) {
-        $window.navigator.geolocation.getCurrentPosition(getNearbyResources, getFeaturedResources);
-      } else {
-        getFeaturedResources();
-      }
-    }
+    getFeaturedResources();
   });
 
-  //get resources nearby geolocation
-  function getNearbyResources(position) {
-    resourceService.searchV3({
-      location: {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      },
-      radius: 15000,
-      maxresults: 15,
-      sort: 'relevance'
-    })
-    .then(function (res) {
-      $scope.resources_slider = res.results;
-    });
-  }
-
-  //get featured resources if no geolocation is available
   function getFeaturedResources() {
     resourceService.all({
       'onlyFeatured': 'true'
