@@ -2,7 +2,7 @@
 
 angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMaterial'])
  
-.directive('owGeocoderSearchbar', function ($filter, Geocoder, resourceQueryService, $state, $mdMenu) {
+.directive('owGeocoderSearchbar', function ($filter, Geocoder, resourceQueryService, $state, $mdMenu, $window) {
   return {
     restrict: 'E',
     templateUrl: 'directives/geocoderDirectiveSearchbar.tpl.html',
@@ -69,6 +69,34 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
           $scope.onClickTime();
         }
       };
+
+      if($window.navigator.geolocation) {
+        $scope.geolocation = true;
+      }
+
+      $scope.getLocation = function() {
+        $window.navigator.geolocation.getCurrentPosition(setLocation);
+      };
+
+      function setLocation(position) {
+        var geocoder = new google.maps.Geocoder();
+        var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        geocoder.geocode({
+          latLng: latLng
+        }, function (results, status) {
+          if (status === google.maps.GeocoderStatus.OK) {
+            if (results.length) {
+              resourceQueryService.setText(results[0].formatted_address);
+              resourceQueryService.setLocation({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              });
+              doCall(resourceQueryService.createStateParams());
+            }
+          }
+        });
+      }
 
       $scope.doSearch = function() {
         if($scope.search.text === '') {
