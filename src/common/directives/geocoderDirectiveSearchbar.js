@@ -14,6 +14,7 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
       'filters': '='
     },
     link: function($scope, element) {
+      $scope.geolocation = false;
 
       if($scope.filters) {
         $scope.hasFilters = !$scope.filters.filters.fuelType && !$scope.filters.filters.resourceType && !$scope.filters.filters.minSeats;

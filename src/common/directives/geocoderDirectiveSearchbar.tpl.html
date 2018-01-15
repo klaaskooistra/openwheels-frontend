@@ -6,7 +6,7 @@
       <div ng-show="search.text" hide-gt-sm class="clearbutton__flex" ng-click="search.text = ''">
         <i class="fa fa-times text-muted" ></i>
       </div>
-      <div class="clearbutton__flex" ng-show="!search.text">
+      <div class="clearbutton__flex" ng-show="!search.text && geolocation">
         <md-button class="md-icon-button geo-button" ng-click="getLocation()">
           <md-icon>near_me</md-icon>
         </md-button>
