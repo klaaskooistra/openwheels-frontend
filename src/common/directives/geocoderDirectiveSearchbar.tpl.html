@@ -3,11 +3,13 @@
   <form class="mywheels-form searchbar searchbar--no-opacity">
     <div class="icon location searchbar searchbar--no-opacity">
       <input type="text" g-places-autocomplete options="options" force-selection="true" ng-model="search.text" class="form-control" placeholder="Waar wil je huren?" style="font-weight: normal;" />
-      <div ng-show="search.text" hide-gt-sm class="clearbutton__flex" ng-click="search.text = ''">
-        <i class="fa fa-times text-muted" ></i>
+      <div class="clearbutton__flex" hide-gt-sm ng-show="search.text">
+        <md-button class="md-icon-button geo-button" style="width:24px !important;" ng-click="search.text = ''">
+          <md-icon>close</md-icon>
+        </md-button>
       </div>
       <div class="clearbutton__flex" ng-show="!search.text && geolocation">
-        <md-button class="md-icon-button geo-button" ng-click="getLocation()" style="width:24px !important;">
+        <md-button class="md-icon-button geo-button" style="width:24px !important;" ng-click="getLocation()">
           <md-icon>near_me</md-icon>
         </md-button>
       </div>
