@@ -101,6 +101,7 @@ angular.module('owm.trips.index', [])
 
     // Define which API call to use for which role
 
+    $scope.showLoaderSpinner = true;
     var bookingsPromise = {};
 
     if(role === 'asRenter') {
@@ -115,9 +116,13 @@ angular.module('owm.trips.index', [])
 
     bookingsPromise
       .then(function(bookings) {
+
         $scope.bookings[role] = bookings;
         $scope.totalBookings[role] = bookings.total;
         $scope.lastPage[role] = Math.ceil($scope.totalBookings[role] / $scope.perPage[role]);
+
+        $scope.showLoaderSpinner = false;
+
       });
   }
 
