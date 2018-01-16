@@ -10,8 +10,42 @@ angular.module('owm.trips.index', [])
   // Set the default values for the loader spinner and collapsible toggles
 
   $scope.showLoaderSpinner = false;
-  $scope.showRenterBookings = false;
-  $scope.showOwnerBookings = false;
+  $scope.showBookings = {};
+  $scope.showBookings.asRenter = false;
+  $scope.showBookings.asOwner = false;
+
+  // Define the booking variables
+
+  $scope.bookings = {};
+  $scope.totalBookings = {};
+
+  // Set pagination defaults
+
+  setPaginationDefaults('asRenter');
+  setPaginationDefaults('asOwner');
+
+  function setPaginationDefaults (role) {
+    $scope.curPage = {};
+    $scope.perPage = {};
+    $scope.offset = {};
+    $scope.lastPage = {};
+
+    $scope.curPage[role] = 1;
+    $scope.perPage[role] = 10;
+    $scope.offset[role] = ($scope.curPage[role] - 1) * $scope.perPage[role];
+  }
+
+  // Pagination buttons and their actions
+
+  $scope.nextPage = function(role) {
+    $scope.curPage[role] = $scope.curPage[role] + 1;
+    loadBookings(role);
+  };
+
+  $scope.prevPage = function(role) {
+    $scope.curPage[role] = $scope.curPage[role] - 1;
+    loadBookings(role);
+  };
 
   // Define the years to be displayed
 
@@ -31,23 +65,7 @@ angular.module('owm.trips.index', [])
     loadYear();
   });
 
-  // Pagination for the owner bookings
-
-  $scope.curPage = 1;
-  $scope.perPage = 10;
-  $scope.offset = ($scope.curPage - 1) * $scope.perPage;
-
-  $scope.nextPage = function() {
-    $scope.curPage = $scope.curPage + 1;
-    $scope.offset = ($scope.curPage - 1) * $scope.perPage;
-    loadOwnerBookings();
-  };
-
-  $scope.prevPage = function() {
-    $scope.curPage = $scope.curPage - 1;
-    $scope.offset = ($scope.curPage - 1) * $scope.perPage;
-    loadOwnerBookings();
-  };
+  // Load all bookings for the selected year
 
   function loadYear ()
   {
@@ -57,38 +75,50 @@ angular.module('owm.trips.index', [])
     $scope.endDate = moment([$scope.selectedYear + 1, 0, 1]);
 
     // Get the bookings for this person as renter
+    loadBookings('asRenter');
 
-    bookingService.getBookingList({
+    // Get the bookings for this person as an owner
+    loadBookings('asOwner');
+  }
+
+  // Load all bookings for this person in the role of either a renter or an owner with pagination
+
+  function loadBookings(role)
+  {
+    // Set the offset for the pagination for this role based on the current page and elements per page
+    $scope.offset[role] = ($scope.curPage[role] - 1) * $scope.perPage[role];
+
+    // Define the parameters for getting the bookings
+    var parameters = {
       person: me.id,
       timeFrame: {
         startDate: $scope.startDate.format(API_DATE_FORMAT),
         endDate: $scope.endDate.format(API_DATE_FORMAT)
-      }
-    }).then(function(renterBookings) {
-      $scope.renterBookings = renterBookings;
-    });
-
-    // Get the bookings for this person as an owner
-    loadOwnerBookings();
-  }
-
-  function loadOwnerBookings()
-  {
-    // Get the bookings for this person as owner with pagination
-
-    bookingService.forOwner({
-      person: me.id,
-      timeFrame: {
-        startDate: $scope.startDate.format(API_DATE_FORMAT),
-        endDate  : $scope.endDate.format(API_DATE_FORMAT),
       },
-      offset: $scope.offset,
-      limit: $scope.perPage
-    }).then(function(ownerBookings) {
-      $scope.ownerBookings = ownerBookings.result;
-      $scope.totalOwnerBookings = ownerBookings.total;
-      $scope.lastPage = Math.ceil($scope.totalOwnerBookings / $scope.perPage);
-    });
+      offset: $scope.offset[role],
+      limit: $scope.perPage[role]
+    };
+
+    // Define which API call to use for which role
+
+    var bookingsPromise = {};
+
+    if(role === 'asRenter') {
+      bookingsPromise = bookingService.getBookingList(parameters);
+    }
+
+    if(role === 'asOwner') {
+      bookingsPromise = bookingService.forOwner(parameters);
+    }
+
+    // Get the bookings
+
+    bookingsPromise
+      .then(function(bookings) {
+        $scope.bookings[role] = bookings;
+        $scope.totalBookings[role] = bookings.total;
+        $scope.lastPage[role] = Math.ceil($scope.totalBookings[role] / $scope.perPage[role]);
+      });
   }
 
   $scope.createTripDetailsLink = function (booking) {
