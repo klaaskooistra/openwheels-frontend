@@ -4,88 +4,95 @@ angular.module('owm.trips.index', [])
 
 .controller('TripsIndexController', function ($log, $timeout, $q, API_DATE_FORMAT, alertService, bookingService, me, $scope, linksService) {
 
-  // keys
-  var FOR_OWNER = 'forOwner';
-  var FOR_RENTER = 'forRenter';
-
-  // map bookingService methods
-  var methods = {};
-  methods[FOR_RENTER] = 'getBookingList';
-  methods[FOR_OWNER] = 'forOwner';
-
-  var isFirstLoad = true;
-
-  // scope
   $scope.me = me;
   $scope.provider = me.provider.id;
+
+  // Set the default values for the loader spinner and collapsible toggles
+
+  $scope.showLoaderSpinner = false;
+  $scope.showRenterBookings = false;
+  $scope.showOwnerBookings = false;
+
+  // Define the years to be displayed
+
   $scope.years = (function () {
     var y = moment().year();
     return [y-2, y-1, y, y+1];
   }());
-  var bookings = $scope.bookings = {};
-  bookings[FOR_RENTER] = {
-    data: [],
-    isLoading: false,
-    isCollapsed: true
-  };
-  bookings[FOR_OWNER] = {
-    data: [],
-    isLoading: false,
-    isCollapsed: true
-  };
 
-  $scope.selectedYear  = moment().year();
+  // Load all bookings for the current year on first run
+
+  $scope.selectedYear = moment().year();
+  loadYear();
+
+  // When the year changes, load all bookings for the selected year
   $scope.$watch('selectedYear', function (year) {
-    loadYear(year);
+    $scope.selectedYear = year;
+    loadYear();
   });
 
-  function loadYear (year) {
-    var range = {
-      startDate: moment([year    , 0, 1]),
-      endDate  : moment([year + 1, 0, 1])
-    };
-    $log.debug('Load year: ', toLog(range));
+  // Pagination for the owner bookings
 
-    bookings[FOR_RENTER].data = [];
-    bookings[FOR_OWNER].data = [];
+  $scope.curPage = 1;
+  $scope.perPage = 10;
+  $scope.offset = ($scope.curPage - 1) * $scope.perPage;
 
-    // alertService.closeAll();
-    // alertService.load();
+  $scope.nextPage = function() {
+    $scope.curPage = $scope.curPage + 1;
+    $scope.offset = ($scope.curPage - 1) * $scope.perPage;
+    loadOwnerBookings();
+  };
 
-    $q.all([loadBookings(FOR_OWNER, range), loadBookings(FOR_RENTER, range)]).finally(function () {
-      if (isFirstLoad) {
-        isFirstLoad = false;
-        bookings[FOR_RENTER].isCollapsed = bookings[FOR_RENTER].data.length <= 0;
-        bookings[FOR_OWNER].isCollapsed = bookings[FOR_OWNER].data.length <= 0;
-      }
-      // alertService.loaded();
-    });
-  }
+  $scope.prevPage = function() {
+    $scope.curPage = $scope.curPage - 1;
+    $scope.offset = ($scope.curPage - 1) * $scope.perPage;
+    loadOwnerBookings();
+  };
 
-  function loadBookings (key, range) {
-    bookings[key].isLoading = true;
-    return bookingService[methods[key]]({
+  function loadYear ()
+  {
+    // Convert the year to a start and end  date
+
+    $scope.startDate = moment([$scope.selectedYear, 0, 1]);
+    $scope.endDate = moment([$scope.selectedYear + 1, 0, 1]);
+
+    // Get the bookings for this person as renter
+
+    bookingService.getBookingList({
       person: me.id,
       timeFrame: {
-        startDate: range.startDate.format(API_DATE_FORMAT),
-        endDate  : range.endDate.format(API_DATE_FORMAT)
+        startDate: $scope.startDate.format(API_DATE_FORMAT),
+        endDate: $scope.endDate.format(API_DATE_FORMAT)
       }
-    }).then(function (data) {
-      $log.debug('GOT ' + data.length + ' BOOKINGS ' + key);
-      bookings[key].data = data;
-      return data;
-    }).finally(function () {
-      bookings[key].isLoading = false;
+    }).then(function(renterBookings) {
+      $scope.renterBookings = renterBookings;
     });
+
+    // Get the bookings for this person as an owner
+    loadOwnerBookings();
   }
 
-  function toLog (range) {
-    return range.startDate.format('DD-MM-YY HH:MM') + ' t/m ' + range.endDate.format('DD-MM-YY HH:MM');
+  function loadOwnerBookings()
+  {
+    // Get the bookings for this person as owner with pagination
+
+    bookingService.forOwner({
+      person: me.id,
+      timeFrame: {
+        startDate: $scope.startDate.format(API_DATE_FORMAT),
+        endDate  : $scope.endDate.format(API_DATE_FORMAT),
+      },
+      offset: $scope.offset,
+      limit: $scope.perPage
+    }).then(function(ownerBookings) {
+      $scope.ownerBookings = ownerBookings.result;
+      $scope.totalOwnerBookings = ownerBookings.total;
+      $scope.lastPage = Math.ceil($scope.totalOwnerBookings / $scope.perPage);
+    });
   }
 
   $scope.createTripDetailsLink = function (booking) {
     return linksService.tripDetailsPdf(booking.id);
   };
 
-})
-;
+});
