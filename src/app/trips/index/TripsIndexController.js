@@ -21,15 +21,15 @@ angular.module('owm.trips.index', [])
 
   // Set pagination defaults
 
+  $scope.curPage = {};
+  $scope.perPage = {};
+  $scope.offset = {};
+  $scope.lastPage = {};
+
   setPaginationDefaults('asRenter');
   setPaginationDefaults('asOwner');
 
   function setPaginationDefaults (role) {
-    $scope.curPage = {};
-    $scope.perPage = {};
-    $scope.offset = {};
-    $scope.lastPage = {};
-
     $scope.curPage[role] = 1;
     $scope.perPage[role] = 10;
     $scope.offset[role] = ($scope.curPage[role] - 1) * $scope.perPage[role];
@@ -67,7 +67,7 @@ angular.module('owm.trips.index', [])
 
   // Load all bookings for the selected year
 
-  function loadYear ()
+  function loadYear()
   {
     // Convert the year to a start and end  date
 
@@ -105,6 +105,8 @@ angular.module('owm.trips.index', [])
     var bookingsPromise = {};
 
     if(role === 'asRenter') {
+      parameters.asc = true;
+      parameters.cancelled = false;
       bookingsPromise = bookingService.getBookingList(parameters);
     }
 
@@ -122,7 +124,6 @@ angular.module('owm.trips.index', [])
         $scope.lastPage[role] = Math.ceil($scope.totalBookings[role] / $scope.perPage[role]);
 
         $scope.showLoaderSpinner = false;
-
       });
   }
 
