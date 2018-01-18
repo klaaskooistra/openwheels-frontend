@@ -18,7 +18,7 @@ angular.module('owm.person.profile', [])
     $scope.person = angular.copy(person);
 
     // certain fields may only be edited if driver license is not yet checked by the office (see template)
-    $scope.allowLicenseRelated = true;//(person.driverLicenseStatus !== 'ok');
+    $scope.allowLicenseRelated = (person.driverLicenseStatus !== 'ok');
 
     // always show at least one phone number field
     ensurePhoneNumber();
