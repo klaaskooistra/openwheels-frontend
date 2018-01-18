@@ -86,7 +86,9 @@ angular.module('owm.person.dashboard', [])
   $scope.me = me;
   $scope.blogItems = blogItems;
   $scope.bookings = bookingList.bookings;
+  $scope.totalBookings = bookingList.totalBookings;
   $scope.rentals = rentalList.bookings;
+  $scope.totalRentals = rentalList.totalBookings;
   $scope.actions = actions;
   $scope.favoriteResources = null;
   $scope.membersResources = null;
