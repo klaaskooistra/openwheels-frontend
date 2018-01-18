@@ -1,0 +1,22 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Check beschikbaarheid</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="hide()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-dialog-content layout-padding>
+    <reservation-form person="me" resource="resource" booking="booking" show-price="false"></reservation-form>
+    <div class="booking-benefits-mywheels">
+      <ul ng-if="!booking.beginRequested || !booking.endRequested">
+        <li><md-icon>check</md-icon> <span>Uitgebreide verzekering</span></li>
+        <li><md-icon>check</md-icon> <span>Leden geven MyWheels een 8,9</span></li>
+        <li><md-icon>check</md-icon> <span>24/7 klantenservice</span></li>
+      </ul>
+    </div>
+  </md-dialog-content>
+</md-dialog>
