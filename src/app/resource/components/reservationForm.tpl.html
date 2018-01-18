@@ -65,8 +65,8 @@
   <!-- availability & price -->
   <div class="form-group" ng-if="price || isPriceLoading || availability || isAvailabilityLoading">
     <div class="text-center">
-      <h4 ng-if="availability.available==='no'"><i class="fa fa-times text-danger" ></i> {{ 'NOT_AVAILABLE' | translate }}</h4>
-      <h4 ng-if="availability.available==='yes'"><i class="fa fa-check text-success" ></i> {{ 'AVAILABLE' | translate }}</h4>
+      <h4 ng-if="availability.available==='no'"><md-icon class="text-danger">close</md-icon> {{ 'NOT_AVAILABLE' | translate }}</h4>
+      <h4 ng-if="availability.available==='yes'"><md-icon class="text-success">check</md-icon> {{ 'AVAILABLE' | translate }}</h4>
       <h4 ng-if="availability.available==='yes' && price">
         {{ 'COSTS' | translate }}:
         <span>{{ price.total | currency }}</span>
@@ -80,7 +80,7 @@
     </div>
   </div>
 
-  <div class="text-center">
+  <div class="text-center" hide-xs>
     <p>
       <button class="btn btn-success" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]" ng-disabled="discountCodeValidation.busy || discountCodeValidation.error || !availability || availability.available=='no' || loading.createBooking"
         ng-click="createBooking(booking)">
@@ -90,5 +90,11 @@
         <i class="fa fa-calendar"></i> {{ 'CALENDAR_BUTTON' | translate }}
       </a>
     </p>
+  </div>
+
+  <div hide-gt-xs>
+    <md-dialog-actions style="bottom:0;position:fixed;width:100%;margin-left:-12px;">
+      <md-button class="md-raised md-primary" ng-click="createBooking(booking)" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]" ng-disabled="discountCodeValidation.busy || discountCodeValidation.error || !availability || availability.available=='no' || loading.createBooking" ng-click="createBooking(booking)" style="width:100%;margin-left:0;">Maak reservering</md-button>
+    </md-dialog-actions>
   </div>
 </form>

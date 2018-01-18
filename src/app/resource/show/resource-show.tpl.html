@@ -95,13 +95,13 @@
                     <!-- booking form -->
                     <div class="text-center" ng-if="showBookingFormToggle">
                         <p>
-                            <button ng-if="!me" class="btn btn-success" ng-click="toggleBookingForm()">
+                            <button ng-if="!me" class="btn btn-success" ng-click="toggleBookingForm()" hide-xs>
                                 {{ 'CREATE_BOOKING' | translate }}
                             </button>
-                            <button ng-if="me" class="btn btn-success" ng-click="toggleBookingForm()">
+                            <button ng-if="me" class="btn btn-success" ng-click="toggleBookingForm()" hide-xs>
                                 {{ 'CREATE_BOOKING' | translate }}
                             </button>
-                            <a class="btn btn-default" ui-sref="owm.resource.calendar({city: resource.city, resourceId: resource.id})">
+                            <a class="btn btn-link" ui-sref="owm.resource.calendar({city: resource.city, resourceId: resource.id})">
                                 <i class="fa fa-calendar"></i> {{ 'CALENDAR_BUTTON' | translate }}
                             </a>
                         </p>
@@ -285,6 +285,13 @@
     </div>
     <!-- /row -->
 </div>
+
+<md-toolbar class="md-hue-2 fixed-call-to-action" ng-if="resource.removed === false" hide-gt-xs>
+  <div class="md-toolbar-tools">
+    <md-button class="md-raised md-primary" ng-click="checkAvailabilityDialog()">Check beschikbaarheid</md-button>
+  </div>
+</md-toolbar>
+
 <div class="col-md-8 col-md-offset-2">
   <md-card ng-if="resource.removed === true">
     <md-card-title>

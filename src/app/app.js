@@ -118,7 +118,6 @@ angular.module('openwheels', [
   'owm.trips',
   'owm.chat',
   'owm.message',
-  'owm.livehelperchat',
   'owm.discount',
   'owm.contract'
 ])
