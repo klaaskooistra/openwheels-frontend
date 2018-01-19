@@ -370,7 +370,7 @@
     "BOOKING.REJECT.TITLE": "Refuser la demande location",
     "BOOKING.REJECT.INTRO": "Êtes-vous sûr de vouloir refuser la demande de location?",
     "BOOKING.REJECT.SUCCESS": "Vous avez refusé la demande de location",
-    "BOOKING.REMARK_REQUESTER_LABEL": "Remarque pour le propriétaire",
+    "BOOKING.REMARK_REQUESTER_LABEL": "Remarque pour {{ owner }}",
     "BOOKING.REMARK_AUTHORIZER_LABEL": "Remarque pour le loueur",
     "RATINGS": "Evaluations",
     "SATISFACTION": "Satisfait",
