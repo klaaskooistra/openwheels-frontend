@@ -302,7 +302,7 @@
     "BOOKING.REJECT.TITLE": "Reject booking request",
     "BOOKING.REJECT.INTRO": "Are you sure you want to reject the booking request?",
     "BOOKING.REJECT.SUCCESS": "You have rejected the booking request",
-    "BOOKING.REMARK_REQUESTER_LABEL": "Remark for the owner",
+    "BOOKING.REMARK_REQUESTER_LABEL": "Remark for {{ owner }}",
     "IBAN_NUMBER": "IBAN (bank account number)",
     "PROFILE_IBAN_INTRO": "Enter your IBAN without spaces, e.g. NL29RABO0159955734",
     "BOOKING.RATING.RENTER.PAGE_TITLE": "Rate your trip",
