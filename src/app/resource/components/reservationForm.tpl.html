@@ -92,9 +92,7 @@
     </p>
   </div>
 
-  <div hide-gt-xs>
-    <md-dialog-actions class="dialog-create-button">
-      <md-button class="md-raised md-primary" ng-click="createBooking(booking)" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]" ng-disabled="discountCodeValidation.busy || discountCodeValidation.error || availability.available=='no' || loading.createBooking" ng-click="createBooking(booking)" style="width:100%;margin-left:0;">Maak reservering</md-button>
-    </md-dialog-actions>
+  <div class="dialog-create-button" hide-gt-xs>
+    <md-button class="md-raised md-primary" ng-click="createBooking(booking)" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]" ng-disabled="discountCodeValidation.busy || discountCodeValidation.error || availability.available=='no' || loading.createBooking" ng-click="createBooking(booking)" style="width:100%;">Maak reservering</md-button>
   </div>
 </form>
