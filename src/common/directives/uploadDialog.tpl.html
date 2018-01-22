@@ -39,8 +39,8 @@
         </div>
 
         <div flex ng-show="image && !showEditor">
-          <p class="text-center"><img width="500" height="330" ng-src="{{image}}" /></p>
-              
+          <p class="text-center"><img class="img-responsive" width="500" height="330" ng-src="{{image}}" /></p>
+
           <div layout="row">
             <span flex></span>
             <md-button class="no-margin" ng-show="!showEditor && image" ng-click="showEditor=true">Bewerken</md-button>

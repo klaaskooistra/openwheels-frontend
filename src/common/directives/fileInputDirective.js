@@ -21,7 +21,7 @@ angular.module('fileInputDirective', [])
           templateUrl: 'directives/uploadDialog.tpl.html',
           parent: angular.element(document.body),
 					fullscreen: $mdMedia('xs'),
-          clickOutsideToClose:true,
+          clickOutsideToClose:true
         })
         .then(function(blob) {
           scope.onChange(blob);
@@ -52,8 +52,9 @@ angular.module('fileInputDirective', [])
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
       }
-
+      
       scope.id = 'file_input_'+getRandomInt(11111,99999);
+      chooseFile();
 
       function clearFileProps() {
         scope.uploaded = {
@@ -74,6 +75,13 @@ angular.module('fileInputDirective', [])
         });
       }
 
+      function chooseFile() {
+        setTimeout(function () {
+          var element = angular.element(document.getElementById(scope.id));
+          element.trigger('click');
+          scope.clicked = true;
+        }, 0);
+      }
 
       function onChange (e) {
         scope.uploaded.hasUploaded = true;
