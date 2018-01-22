@@ -2,7 +2,7 @@
 
   <p ng-if="!ownerflow">{{ 'RESOURCE_PICTURES_INTRO' | translate }}</p>
 
-  <form ng-show="photos.length < 4">
+  <form ng-show="photos.length < 11">
     <div class="form-group">
       <label>{{ 'RESOURCE_PICTURES_UPLOAD' | translate }}</label>
       <file-input on-change="addPicture"></file-input>
@@ -19,19 +19,15 @@
     </div>
 
     <div class="photo-container" ng-repeat="photo in photos" as-sortable-item>
-      <div class="text-right">
-        <button class="btn btn-link" ng-click="removePicture(photo, $index)"><i class="fa fa-times"></i></button>
-      </div>
       <div as-sortable-item-handle class="photo">
+        <button class="btn btn-link remove-photo" ng-click="removePicture(photo, $index)"><i class="fa fa-times"></i></button>
         <img class="image" ng-src="{{ photo.url }}" />
       </div>
     </div>
 
     <div class="photo-container" ng-repeat="i in emptySlots" as-sortable-item>
-      <div class="text-right">
-        <button class="btn btn-link" ng-click="removePicture(photo, $index)"><i class="fa"></i></button>
-      </div>
       <div class="photo">
+        <button class="btn btn-link remove-photo" ng-click="removePicture(photo, $index)"><i class="fa fa-times"></i></button>
         <div class="image"></div>
       </div>
     </div>
