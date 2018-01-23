@@ -35,6 +35,7 @@
 .photo-grid {
   display: block;
   margin-bottom: 5px;
+  min-height: 200px;
 
   .photo-container,
   .as-sortable-item,
@@ -88,4 +89,15 @@
       width: 250px;
     }
   }
+}
+.resource-ui-cropper {
+    max-width: 500px; 
+    margin: auto;
+    canvas {
+        max-width: 100%;
+    }
+    .editor {
+        max-width: 100%;
+        margin: auto;
+    }
 }

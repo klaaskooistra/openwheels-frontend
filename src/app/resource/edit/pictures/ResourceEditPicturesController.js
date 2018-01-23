@@ -8,7 +8,6 @@ angular.module('owm.resource.edit.pictures', [])
   // scope exports
   angular.extend($scope, {
     photos       : [],
-    emptySlots   : [],
     addPicture   : addPicture,
     removePicture: removePicture
   });
@@ -17,6 +16,7 @@ angular.module('owm.resource.edit.pictures', [])
   $scope.sortableOptions = {
     containment: '.photo-grid',
     orderChanged: function (e) {
+      $scope.isSaving = true;
       savePictures($scope.photos);
     }
   };
@@ -73,6 +73,8 @@ angular.module('owm.resource.edit.pictures', [])
 
   function removePicture (photo, index) {
     $scope.isBusy = true;
+    alertService.load();
+    $scope.isRemoving = true;
 
     return resourceService.removePicture({
       picture: photo.originalPicture.id
@@ -85,6 +87,8 @@ angular.module('owm.resource.edit.pictures', [])
     })
     .finally(function () {
       $scope.isBusy = false;
+      alertService.loaded();
+      $scope.isRemoving = false;
     });
   }
 
@@ -111,6 +115,7 @@ angular.module('owm.resource.edit.pictures', [])
     })
     .finally(function () {
       $scope.isBusy = false;
+      $scope.isSaving = false;
     });
   }
 
