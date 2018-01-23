@@ -1,0 +1,14 @@
+<md-dialog>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Bekijk beschikbaarheid</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="hide()">
+        <md-icon>close</md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout-padding style="padding-top:0px;">
+    <reservation-form person="me" resource="resource" booking="booking" show-price="false"></reservation-form>
+  </md-dialog-content>
+</md-dialog>

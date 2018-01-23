@@ -3,7 +3,7 @@
 angular.module('owm.home', ['owm.resource', 'slick'])
 
 //Module in app/pages/pagesModule.js
-.controller('HomeController', function ($scope, $translate, $location, resourceQueryService, $state, resourceService, $localStorage, $http) {
+.controller('HomeController', function ($scope, $translate, $location, resourceQueryService, $window, $state, resourceService, $localStorage, $http) {
 
   $scope.$watch(function () {
     return $translate.use();
@@ -31,20 +31,26 @@ angular.module('owm.home', ['owm.resource', 'slick'])
     });
   }
 
-  if ($scope.features.featuredSlider) {
+  //get resources for slider if page is loaded
+  angular.element($window.document).ready(function () {
+    getFeaturedResources();
+  });
+
+  function getFeaturedResources() {
     resourceService.all({
-        'onlyFeatured': 'true'
-      })
-      .then(function (res) {
-        $scope.resources_slider = res;
-      });
-    $scope.gotoProfile = function (resource) {
-      $state.go('owm.resource.show', {
-        city: resource.city,
-        resourceId: resource.id
-      });
-    };
+      'onlyFeatured': 'true'
+    })
+    .then(function (res) {
+      $scope.resources_slider = res;
+    });
   }
+
+  $scope.gotoProfile = function (resource) {
+    $state.go('owm.resource.show', {
+      city: resource.city,
+      resourceId: resource.id
+    });
+  };
 
   $scope.search = {
     text: ''
