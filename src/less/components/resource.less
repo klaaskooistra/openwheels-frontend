@@ -1,8 +1,3 @@
-.card-max-width {
-  width: 35em;
-  max-width: 35em;
-  margin: auto;
-}
 .smartwheels-tip-search {
     padding-bottom: 5px;
     font-size: 13px;
@@ -118,5 +113,18 @@ label[for=smartwheels] {
         position: fixed;
         padding-left: 16px;
         padding-right: 16px;
+    }
+}
+@media all and (max-width: @screen-sm) {
+    .card-max-width {
+      width: 100% !important;
+      margin: auto;
+    }
+}
+@media all and (min-width: @screen-sm) {
+    .card-max-width {
+      width: 35em;
+      max-width: 35em;
+      margin: auto;
     }
 }
