@@ -395,7 +395,7 @@
     "FUEL_CARD_CODE": "Fuel card code",
     "RESOURCE_PROPERTIES": "Accessories",
     "RESOURCE_PICTURES_UPLOAD": "Upload photo",
-    "RESOURCE_PICTURES_INTRO": "You can upload up to 3 photos. Drag to change the order.",
+    "RESOURCE_PICTURES_INTRO": "You can upload up to 10 photos. Drag to change the order.",
     "RESOURCE_AVAILABLE_LABEL": "Availability",
     "RESOURCE_AVAILABLE_ALWAYS": "Available",
     "RESOURCE_AVAILABLE_FRIENDS": "Available to friends",

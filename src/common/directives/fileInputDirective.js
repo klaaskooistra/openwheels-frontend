@@ -6,14 +6,13 @@ angular.module('fileInputDirective', [])
 
   return {
     restrict: 'EA',
-    template: '<button ng-click="openModal()">Upload foto</button>',
+    template: '<button ng-click="openModal()">Selecteer een foto</button>',
     replace: true,
     scope: {
       onChange: '=',
       reset: '@',
     },
     link: function (scope, elm, attrs) {
-
 
       scope.openModal = function() {
         $mdDialog.show({
@@ -38,7 +37,7 @@ angular.module('fileInputDirective', [])
 
   return {
     restrict: 'EA',
-    template: '<span><input id="{{id}}" type="file" class="inputfile" /><label for="{{id}}"><md-icon class="text-white">file_upload</md-icon> Selecteer een foto</label></span>',
+    template: '<span><input id="{{id}}" type="file" class="inputfile" /><label for="{{id}}" ng-show="!fileProps.sizeOk && !uploaded.sizeOk"><md-icon class="text-white">file_upload</md-icon> Selecteer een foto</label><span ng-show="uploaded.hasUploaded && uploaded.isImage && fileProps.sizeOk"><i class="fa fa-spin fa-2x fa-fw fa-spinner"></i></span></span>',
     replace: true,
     scope: {
       onChange: '=',
@@ -58,7 +57,7 @@ angular.module('fileInputDirective', [])
 
       function clearFileProps() {
         scope.uploaded = {
-          sizeOk: undefined,
+          sizeOk: true,
           height: undefined,
           width: undefined,
           isImage: undefined,
