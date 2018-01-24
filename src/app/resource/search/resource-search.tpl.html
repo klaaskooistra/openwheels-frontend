@@ -4,28 +4,25 @@
         <div class="col-xs-12 place-padding">
             <div class="card">
                 <!-- image -->
-                <div style="min-height: 340px; overflow: hidden">
-                    <img ng-src="{{ place.picture || 'branding/img/bg.jpg' }}" class="img-scale" style="min-width: 400px" />
-                </div>
+                <div ng-style="{'background-image': 'url(' + place.picture + ')'}" class="place-picture" ng-if="place.picture"></div>
+                <div style="background-image: 'url(branding/img/bg.jpg)'" class="place-picture" ng-if="!place.picture"></div>
 
                 <!-- overlay -->
                 <div class="image-overlay">
-                    <div>
-                        <div class="col-xs-offset-1 col-md-offset-1 col-xs-10 col-md-6">
-                            <h1 class="tagline">Autodelen in {{ place.name | toTitleCase }}</h1>
-                            <h2 class="lead">{{ place.lead }}</h2>
-                        </div>
+                    <div class="col-xs-offset-1 col-md-offset-1 col-xs-10 col-md-6">
+                        <h1 class="tagline">Autodelen in {{ place.name | toTitleCase }}</h1>
+                        <h2 class="lead">{{ place.lead }}</h2>
+                    </div>
 
-                        <!-- coordinator (big screens) -->
-                        <div ng-if="place.coordinator" class="hidden-xs hidden-sm col-md-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="media">
-                                        <img class="media-object pull-left img-user-normal" person-profile-image="{ person: place.coordinator, size: 'normal' }" />
-                                        <div class="media-body text-left" ng-bind-html="place.coordinatorBody">
-                                        </div>
-                                        <a ui-sref="member({ personId: place.coordinator.id })">{{ place.coordinator | fullname }}</a>
+                    <!-- coordinator (big screens) -->
+                    <div ng-if="place.coordinator" class="hidden-xs hidden-sm col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media">
+                                    <img class="media-object pull-left img-user-normal" person-profile-image="{ person: place.coordinator, size: 'normal' }" />
+                                    <div class="media-body text-left" ng-bind-html="place.coordinatorBody">
                                     </div>
+                                    <a ui-sref="member({ personId: place.coordinator.id })">{{ place.coordinator | fullname }}</a>
                                 </div>
                             </div>
                         </div>

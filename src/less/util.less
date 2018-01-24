@@ -4,13 +4,36 @@
 
 .place-padding {
   padding-right: 0px !important;
+  padding-left: 0px !important;
+  .card {
+    overflow: hidden;
+    max-height: auto;
+  }
+  .place-picture {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    height: 40rem;
+    background-position: 50% 50%;
+  }
 }
 
-@media (max-width:992px) {
-  .place-padding {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-  }  
+@media (max-width:350px) {
+  .place-picture {
+    height: 50rem !important;
+  }
+}
+
+@media (min-width:600px) and (max-width:800px) {
+  .place-picture {
+    height: 30rem !important;
+  }
+}
+
+@media (min-width:800px) {
+  .place-picture {
+    height: 45rem !important;
+  }
 }
 
 .no-margin {
