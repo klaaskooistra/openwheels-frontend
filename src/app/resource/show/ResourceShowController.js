@@ -6,7 +6,6 @@ angular.module('owm.resource.show', [])
   Analytics.trackEvent('discovery', 'show_car', resource.id, undefined, true);
 
   metaInfoService.set({robots: resource.isActive && !resource.removed ? 'all' : 'noindex'});
-  metaInfoService.flush();
 
   if(resource.removed === undefined) { resource.removed = false; }
   if(resource.removed) {
