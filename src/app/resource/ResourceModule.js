@@ -218,11 +218,11 @@ angular.module('owm.resource', [
   });
 
   /**
-   * /mijn-auto/create?licencePlate=23sdwe&dayPrice=26&numberOfDays=5&personSubmitted=false
+   * /mijn-auto/create?licencePlate=23sdwe&dayPrice=26&numberOfDays=5&personSubmitted=false&seats&color&fuel&type&year
    */
 
   $stateProvider.state('owm.resource.create.carInfo', {
-    url: '?brand&color&model',
+    url: '?brand&color&model&seats&fuel&type&year',
     reloadOnSearch: false,
     controller: 'carInfoControler',
     templateUrl: 'resource/create/carInfo/car-info.tpl.html'
@@ -405,7 +405,6 @@ angular.module('owm.resource', [
       }],
       resource: ['$stateParams', 'resourceService', function ($stateParams, resourceService) {
         var resourceId = $stateParams.resourceId;
-        console.log(resourceId);
         return resourceService.get({
           id: resourceId
         });
