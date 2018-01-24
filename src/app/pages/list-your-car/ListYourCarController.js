@@ -1,7 +1,7 @@
 'use strict';
 angular.module('owm.pages.list-your-car', [])
 
-.controller('listYourCarController', function ($scope, $state, $mdDialog, $log, $mdMedia) {
+.controller('listYourCarController', function ($scope, $state, $mdDialog, $log, $mdMedia, $filter) {
 
   $scope.openboxes = {};
 
@@ -60,6 +60,13 @@ angular.module('owm.pages.list-your-car', [])
     if ($scope.user.identity !== undefined && $scope.user.identity !== null) {
       $state.go('owm.resource.create.carInfo', { // should fill in the details
         licencePlate: $scope.licencePlate.content,
+        brand: $filter('toTitleCase')($scope.licencePlate.data.merk),
+        model: $filter('toTitleCase')($scope.licencePlate.data.handelsbenaming),
+        color: $filter('lowercase')($scope.licencePlate.data.kleur),
+        seats: $scope.licencePlate.data.zitplaatsen,
+        fuel: $filter('lowercase')($scope.licencePlate.data.brandstof),
+        type: $filter('lowercase')($scope.licencePlate.data.inrichting),
+        year: $scope.licencePlate.data.datum_eerste_toelating,
         dayPrice: $scope.calculateYourPrice.dayPrice,
         numberOfDays: $scope.calculateYourPrice.numberOfDays,
         personSubmitted: false

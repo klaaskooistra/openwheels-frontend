@@ -41,10 +41,14 @@ angular.module('licencePlateInfoDirective', [])
               if (response.data.length > 0) {
                 $scope.licencePlate.data = {
                   merk: responseCarData.data[0].merk,
-                  brandstof: response.data[0].brandstof_omschrijving,
                   handelsbenaming: responseCarData.data[0].handelsbenaming,
+                  zitplaatsen: responseCarData.data[0].aantal_zitplaatsen,
+                  inrichting: responseCarData.data[0].inrichting,
+                  brandstof: response.data[0].brandstof_omschrijving,
                   datum_eerste_toelating: moment(responseCarData.data[0].datum_eerste_toelating, 'DD/MM/YYYY').format('YYYY'),
-                  kleur: responseCarData.data[0].eerste_kleur
+                  kleur: responseCarData.data[0].eerste_kleur,
+                  verzekerd: responseCarData.data[0].wam_verzekerd,
+                  vervaldatum_apk:  responseCarData.data[0].vervaldatum_apk
                 };
                 showError(false);
               } else {
