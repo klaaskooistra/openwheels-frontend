@@ -2,7 +2,7 @@
 
 angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMaterial'])
  
-.directive('owGeocoderSearchbar', function ($filter, Geocoder, resourceQueryService, $state, $mdMenu, $window) {
+.directive('owGeocoderSearchbar', function ($filter, Geocoder, resourceQueryService, $state, $mdMenu, $window, alertService) {
   return {
     restrict: 'E',
     templateUrl: 'directives/geocoderDirectiveSearchbar.tpl.html',
@@ -76,7 +76,7 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
       }
 
       $scope.getLocation = function() {
-        $window.navigator.geolocation.getCurrentPosition(setLocation);
+        $window.navigator.geolocation.getCurrentPosition(setLocation, locationError);
       };
 
       function setLocation(position) {
@@ -97,6 +97,10 @@ angular.module('geocoderDirectiveSearchbar', ['geocoder', 'google.places', 'ngMa
             }
           }
         });
+      }
+
+      function locationError() {
+        alertService.add('danger', 'Jouw huidige locatie kan helaas niet opgehaald worden.', 5000);
       }
 
       $scope.doSearch = function() {
