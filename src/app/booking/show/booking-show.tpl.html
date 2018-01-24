@@ -478,14 +478,14 @@
   <div class="card-body">
     <p>Verhoog de kans op een auto en reserveer meerdere auto's. Zodra een huurverzoek geaccepteerd wordt, verlopen de andere huurverzoeken.</p>
     <ul class="list-row">
-      <li ng-repeat="resource in resourceAlternatives" ng-click="selectResourceAlternative(resource)">
+      <li ng-repeat="resource in resourceAlternatives" ng-click="selectResourceAlternative(resource)" ga-track-event="['interaction', 'selectResourceAlternative', 'bookingShow']">
         <div ng-include="'resource/partials/resource-header4.tpl.html'"></div>
       </li>
     </ul>
 
     <ul class="list-inline text-center">
       <li id="dashboard_rent_a_car">
-        <a ui-sref="owm.resource.search.list({start: startDate, end: endDate, type: booking.resource.resourceType, seats: booking.resource.numberOfSeats})" class="btn btn-success btn-lg">
+        <a ui-sref="owm.resource.search.list({start: startDate, end: endDate, type: booking.resource.resourceType, seats: booking.resource.numberOfSeats})" class="btn btn-success btn-lg"  ga-track-event="['interaction', 'selectAllResourceAlternatives', 'bookingShow']">
           Bekijk alle auto's
         </a>
       </li>
