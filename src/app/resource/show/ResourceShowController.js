@@ -2,11 +2,10 @@
 
 angular.module('owm.resource.show', [])
 
-.controller('ResourceShowController', function ($window, $log, $q, $timeout, $location, $scope, $state, $filter, authService, resourceService, bookingService, invoice2Service, boardcomputerService, alertService, chatPopupService, ratingService, API_DATE_FORMAT, resource, me, resourceQueryService, featuresService, $stateParams, linksService, Analytics, metaInfoService, $localStorage) {
+.controller('ResourceShowController', function ($window, $log, $q, $timeout, $location, $mdDialog, $mdMedia, $scope, $state, $filter, authService, resourceService, bookingService, invoice2Service, boardcomputerService, alertService, chatPopupService, ratingService, API_DATE_FORMAT, resource, me, resourceQueryService, featuresService, $stateParams, linksService, Analytics, metaInfoService, $localStorage) {
   Analytics.trackEvent('discovery', 'show_car', resource.id, undefined, true);
 
   metaInfoService.set({robots: resource.isActive && !resource.removed ? 'all' : 'noindex'});
-  metaInfoService.flush();
 
   if(resource.removed === undefined) { resource.removed = false; }
   if(resource.removed) {
@@ -151,6 +150,23 @@ angular.module('owm.resource.show', [])
     });
   }
 
+  $scope.checkAvailabilityDialog = function () {
+    $mdDialog.show({
+      autoWrap: false,
+      templateUrl: 'resource/show/checkAvailabilityDialog.tpl.html',
+      controller: ['$scope', '$mdDialog', function($scope, $mdDialog) {
+        $scope.hide = function() {
+          $mdDialog.hide();
+        };
+      }],
+      scope: $scope,
+      preserveScope: true,
+      fullscreen: $mdMedia('xs'),
+      clickOutsideToClose: true,
+      escapeToClose: true
+    });
+  };
+
   function toggleFavorite (bool) {
     var params = { resource: resource.id };
     var method = bool ? resourceService.addFavorite : resourceService.removeFavorite;
@@ -179,5 +195,4 @@ angular.module('owm.resource.show', [])
     }
   };
 
-})
-;
+});

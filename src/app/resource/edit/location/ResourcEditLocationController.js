@@ -60,7 +60,7 @@ angular.module('owm.resource.edit.location', ['geocoderDirective'])
     };
 
     $scope.submit = function () {
-      if(!$scope.clickedAddress.route || !$scope.clickedAddress.streetNumber) {
+      if(!$scope.resource.location) {
         return;
       }
 

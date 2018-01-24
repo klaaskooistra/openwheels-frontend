@@ -4,7 +4,7 @@
 
   <div class="form-group">
     <label>
-      {{ 'DATE_START' | translate }}
+      {{ 'PICKUP_DATE' | translate }}
       <button id="resource_now_button" type="button" class="btn btn-warning btn-xs" ng-click="setTimeframe(0)">{{ 'NOW' | translate }}</button>
     </label>
     <div class="row">
@@ -18,7 +18,7 @@
   </div>
 
   <div class="form-group">
-    <label for="endTrip">{{ 'DATE_END' | translate }}</label>
+    <label for="endTrip">{{ 'RETURN_DATE' | translate }}</label>
     <div class="row">
       <div class="col-xs-7">
         <input type="text" placeholder="{{ 'DATE' | translate }}" class="form-control pickadate-input" ng-model="booking.endRequested" ng-change="onEndDateChange()" pickadate="dateConfig">
@@ -30,7 +30,7 @@
   </div>
 
   <div class="form-group">
-    <label ng-bind="'BOOKING.REMARK_REQUESTER_LABEL' | translate"></label>
+    <label translate="BOOKING.REMARK_REQUESTER_LABEL" translate-values="{ owner: resource.owner.firstName || 'de eigenaar' }"></label>
     <textarea rows="2" id="remarkRequester" name="remarkRequester" class="form-control" ng-model="booking.remarkRequester"></textarea>
   </div>
 
@@ -65,13 +65,14 @@
   <!-- availability & price -->
   <div class="form-group" ng-if="price || isPriceLoading || availability || isAvailabilityLoading">
     <div class="text-center">
-      <h4 ng-if="availability.available==='no'"><i class="fa fa-times text-danger" ></i> {{ 'NOT_AVAILABLE' | translate }}</h4>
-      <h4 ng-if="availability.available==='yes'"><i class="fa fa-check text-success" ></i> {{ 'AVAILABLE' | translate }}</h4>
+      <h4 ng-if="availability.available==='no'"><md-icon class="text-danger">close</md-icon> {{ 'NOT_AVAILABLE' | translate }}</h4>
+      <h4 ng-if="availability.available==='yes'"><md-icon class="text-success">check</md-icon> {{ 'AVAILABLE' | translate }}</h4>
       <h4 ng-if="availability.available==='yes' && price">
         {{ 'COSTS' | translate }}:
         <span>{{ price.total | currency }}</span>
         <info-icon tooltip-html="priceHtml(price)"></info-icon>
-        <span ng-if="booking.discountCode" style="display: block; font-size: 0.8em;">De kortingscode wordt later verrekend.</span>
+        <span ng-if="booking.discountCode && !discountCodeValidation.error" style="display: block; font-size: 0.8em;">De kortingscode wordt later verrekend.</span>
+        <span ng-if="booking.discountCode && discountCodeValidation.error" class="text-danger" style="display: block; font-size: 0.8em;">De kortingscode is ongeldig.</span>
         {{ 'RESOURCE_PRICE_DISCLAIMER' | translate }}
       </h4>
       <h4 ng-if="isPriceLoading || isAvailabilityLoading">
@@ -80,9 +81,9 @@
     </div>
   </div>
 
-  <div class="text-center">
+  <div class="text-center" hide-xs>
     <p>
-      <button class="btn btn-success" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]" ng-disabled="discountCodeValidation.busy || discountCodeValidation.error || !availability || availability.available=='no' || loading.createBooking"
+      <button class="btn btn-success" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]" ng-disabled="discountCodeValidation.busy || discountCodeValidation.error || availability.available=='no' || loading.createBooking"
         ng-click="createBooking(booking)">
         {{ 'CREATE_BOOKING' | translate }}
       </button>
@@ -90,5 +91,17 @@
         <i class="fa fa-calendar"></i> {{ 'CALENDAR_BUTTON' | translate }}
       </a>
     </p>
+  </div>
+
+  <div class="booking-benefits-mywheels" hide-gt-xs>
+    <ul ng-if="!booking.beginRequested || !booking.endRequested">
+      <li class="benefit-1"><md-icon>check</md-icon> <span>Uitgebreide verzekering</span></li>
+      <li class="benefit-2"><md-icon>check</md-icon> <span>Leden geven MyWheels een 8,9</span></li>
+      <li class="benefit-3"><md-icon>check</md-icon> <span>24/7 klantenservice</span></li>
+    </ul>
+  </div>
+
+  <div class="dialog-create-button" hide-gt-xs>
+    <md-button class="md-raised md-primary" ng-click="createBooking(booking)" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]" ng-disabled="discountCodeValidation.busy || discountCodeValidation.error || availability.available=='no' || loading.createBooking" ng-click="createBooking(booking)" style="width:100%;">Maak reservering</md-button>
   </div>
 </form>

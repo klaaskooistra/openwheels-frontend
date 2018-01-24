@@ -13,24 +13,50 @@ angular.module('owm.resource.create.carInfo', [])
     masterResource = resource;
     masterResourceProperties = createResourceProperties(resource);
   } else {
+    alertService.load();
     resource = {};
     masterResource = {};
     masterResourceProperties = {};
     $scope.$on('resource_added', function(event, resource2) {
+      $scope.resourceAdded = true;
       $scope.resource = resource2;
       masterResource = resource2;
       masterResourceProperties = createResourceProperties(resource2);
-    });
-  }
 
-  if($stateParams.brand) {
-    resource.brand = $stateParams.brand;
-  }
-  if($stateParams.color) {
-    resource.color = $stateParams.color;
-  }
-  if($stateParams.model) {
-    resource.model = $stateParams.model;
+      if($stateParams.brand) {
+        $scope.resource.brand = $stateParams.brand;
+      }
+      if($stateParams.model) {
+        $scope.resource.model = $stateParams.model;
+      }
+      if($stateParams.color) {
+        $scope.resource.color = $stateParams.color;
+      }
+      if($stateParams.seats) {
+        $scope.resource.numberOfSeats = parseInt($stateParams.seats);
+      }
+      if($stateParams.fuel) {
+        $scope.resource.fuelType = $stateParams.fuel;
+      }
+      if($stateParams.type) {
+        if($stateParams.type === 'stationwagen') {
+          $scope.resource.resourceType = 'station';
+        }
+        else if ($stateParams.type === 'cabriolet') {
+          $scope.resource.resourceType = 'cabrio';
+        }
+        else if ($stateParams.type === 'gesloten opbouw') {
+          $scope.resource.resourceType = 'van';
+        }
+        else if ($stateParams.type === 'kampeerwagen') {
+          $scope.resource.resourceType = 'camper';
+        }
+        else {
+          $scope.resource.resourceType = $stateParams.type;
+        }
+      }
+      alertService.loaded();
+    });
   }
 
   $scope.minSeatOptions = [{
@@ -160,7 +186,13 @@ angular.module('owm.resource.create.carInfo', [])
   $scope.save = function () {
     alertService.closeAll();
     alertService.load();
-    var newProps = $filter('returnDirtyItems')(angular.copy($scope.resource), $scope.editResourceForm, ['location', 'city', 'latitude', 'longitude']);
+
+    var newProps;
+    if($scope.resourceAdded) {
+      newProps = $filter('returnDirtyItems')(angular.copy($scope.resource), $scope.editResourceForm, ['location', 'streetNumber', 'city', 'latitude', 'longitude', 'brand', 'model', 'numberOfSeats', 'fuelType', 'color', 'resourceType']);
+    } else {
+      newProps = $filter('returnDirtyItems')(angular.copy($scope.resource), $scope.editResourceForm, ['location', 'streetNumber', 'city', 'latitude', 'longitude']);
+    }
 
     var alias = $scope.resource.alias,
       brand = $scope.resource.brand,
@@ -184,7 +216,7 @@ angular.module('owm.resource.create.carInfo', [])
                   masterResource = resource;
                   masterResourceProperties = $scope.resourceProperties;
                   $scope.cancel();
-                  $state.go('owm.resource.create.location');
+                  $state.go('owm.resource.create.location', {brand: false, model: false, color: false, numberOfSeats: false, fuelType: false, resourceType: false});
                 })
                 .catch(function (err) {
                   alertService.addError(err);
@@ -209,7 +241,6 @@ angular.module('owm.resource.create.carInfo', [])
       alertService.add('danger', 'Vul het merk en type van jouw auto in', 5000);
       alertService.loaded();
     }
-
   };
 
   function createResourceProperties(resource) {

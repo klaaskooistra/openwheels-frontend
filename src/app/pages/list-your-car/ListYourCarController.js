@@ -1,7 +1,7 @@
 'use strict';
 angular.module('owm.pages.list-your-car', [])
 
-.controller('listYourCarController', function ($scope, $state, $mdDialog, $log, $mdMedia) {
+.controller('listYourCarController', function ($scope, $state, $mdDialog, $log, $mdMedia, $filter) {
 
   $scope.openboxes = {};
 
@@ -60,6 +60,13 @@ angular.module('owm.pages.list-your-car', [])
     if ($scope.user.identity !== undefined && $scope.user.identity !== null) {
       $state.go('owm.resource.create.carInfo', { // should fill in the details
         licencePlate: $scope.licencePlate.content,
+        brand: $filter('toTitleCase')($scope.licencePlate.data.merk),
+        model: $filter('toTitleCase')($scope.licencePlate.data.handelsbenaming),
+        seats: $scope.licencePlate.data.zitplaatsen,
+        color: $filter('lowercase')($scope.licencePlate.data.kleur),
+        fuel: $filter('lowercase')($scope.licencePlate.data.brandstof),
+        type: $filter('lowercase')($scope.licencePlate.data.inrichting),
+        year: $scope.licencePlate.data.datum_eerste_toelating,
         dayPrice: $scope.calculateYourPrice.dayPrice,
         numberOfDays: $scope.calculateYourPrice.numberOfDays,
         personSubmitted: false
@@ -69,12 +76,26 @@ angular.module('owm.pages.list-your-car', [])
         clickOutsideToClose: true,
         locals: {
           licencePlate: $scope.licencePlate,
-          calculateYourPrice: $scope.calculateYourPrice
+          calculateYourPrice: $scope.calculateYourPrice,
+          brand: $filter('toTitleCase')($scope.licencePlate.data.merk),
+          model: $filter('toTitleCase')($scope.licencePlate.data.handelsbenaming),
+          seats: $scope.licencePlate.data.zitplaatsen,
+          color: $filter('lowercase')($scope.licencePlate.data.kleur),
+          fuel: $filter('lowercase')($scope.licencePlate.data.brandstof),
+          type: $filter('lowercase')($scope.licencePlate.data.inrichting),
+          year: $scope.licencePlate.data.datum_eerste_toelating
         },
         fullscreen: $mdMedia('xs'),
         templateUrl: 'pages/list-your-car/list-your-car-dialog.tpl.html',
-        controller: ['$scope', '$mdDialog', 'authService', 'calculateYourPrice', 'licencePlate', function ($scope, $mdDialog, authService, calculateYourPrice, licencePlate) {
+        controller: ['$scope', '$mdDialog', 'authService', 'calculateYourPrice', 'licencePlate', 'brand', 'model', 'color', 'seats', 'fuel', 'type', 'year', function ($scope, $mdDialog, authService, calculateYourPrice, licencePlate, brand, model, color, seats, fuel, type, year, $filter) {
           $scope.url = 'owm.resource.create.carInfo';
+          $scope.brand = brand;
+          $scope.model = model;
+          $scope.seats = seats;
+          $scope.color = color;
+          $scope.fuel = fuel;
+          $scope.type = type;
+          $scope.year = year;
           $scope.calculateYourPrice = calculateYourPrice;
           $scope.licencePlate = licencePlate;
           $scope.hide = function () {
