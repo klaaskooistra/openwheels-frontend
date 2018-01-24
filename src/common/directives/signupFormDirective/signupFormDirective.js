@@ -40,10 +40,14 @@ angular.module('signupFormDirective', [])
             dayPrice: $scope.calculateYourPrice.dayPrice,
             numberOfDays: $scope.calculateYourPrice.numberOfDays,
             licencePlate: $scope.licencePlate.content,
-            personSubmitted: false,
-            brand: $scope.licencePlate.data.merk,
-            model: $scope.licencePlate.data.handelsbenaming,
-            color: $scope.licencePlate.data.kleur,
+            brand: $scope.brand,
+            model: $scope.model,
+            seats: $scope.seats,
+            color: $scope.color,
+            fuel: $scope.fuel,
+            type: $scope.type,
+            year: $scope.year,
+            personSubmitted: false
           };
           $localStorage.booking_before_signup = data;
         } else {
@@ -139,12 +143,26 @@ angular.module('signupFormDirective', [])
                   } else if ($scope.url === 'owm.resource.create.carInfo') {
                     var licencePlate = $scope.licencePlate;
                     var calculateYourPrice = $scope.calculateYourPrice;
+                    var brand = $scope.brand;
+                    var model = $scope.model;
+                    var seats = $scope.seats;
+                    var color = $scope.color;
+                    var fuel = $scope.fuel;
+                    var type = $scope.type;
+                    var year = $scope.year;
                     $mdDialog.cancel();
 
                     $state.go('owm.resource.create.carInfo', { // should fill in the details
                       licencePlate: licencePlate.content,
                       dayPrice: calculateYourPrice.dayPrice,
-                      numberOfDays: calculateYourPrice.numberOfDays
+                      numberOfDays: calculateYourPrice.numberOfDays,
+                      brand: brand,
+                      model: model,
+                      seats: seats,
+                      color: color,
+                      fuel: fuel,
+                      type: type,
+                      year: year
                     });
                   } else {
                     $state.go($scope.url);
