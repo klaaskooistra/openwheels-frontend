@@ -20,6 +20,7 @@ angular.module('owm.resource.show', [])
   $scope.me = me;
   $scope.showBookingForm = false;
   $scope.showBookingFormToggle = true;
+  $scope.satisfaction = Math.round($scope.resource.rating_totals.satisfaction * 100) + '%';
 
   $scope.openChatWith = openChatWith;
   $scope.isFavoriteResolved = false;
