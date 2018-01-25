@@ -285,9 +285,10 @@
 </div>
 
 <md-toolbar class="md-hue-2 fixed-call-to-action" ng-if="resource.removed === false" hide-gt-xs>
-  <div class="md-toolbar-tools">
+    <div class="md-toolbar-tools">
     <md-button class="md-raised md-primary" ng-click="checkAvailabilityDialog()">{{ 'BOOK_A_CAR' | translate }}</md-button>
-  </div>
+    </div>
+    <div class="satisfaction">{{ satisfaction }} {{ 'SATISFACTION_RENTERS' | translate }}</div>
 </md-toolbar>
 
 <div class="col-md-8 col-md-offset-2">
