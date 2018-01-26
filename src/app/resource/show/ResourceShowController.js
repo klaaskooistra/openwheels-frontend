@@ -21,6 +21,7 @@ angular.module('owm.resource.show', [])
   $scope.showBookingForm = false;
   $scope.showBookingFormToggle = true;
   $scope.satisfaction = Math.round($scope.resource.rating_totals.satisfaction * 100) + '%';
+  $scope.openDialogSpinner = false;
 
   $scope.openChatWith = openChatWith;
   $scope.isFavoriteResolved = false;
@@ -152,10 +153,12 @@ angular.module('owm.resource.show', [])
   }
 
   $scope.checkAvailabilityDialog = function () {
+    $scope.openDialogSpinner = true;
     $mdDialog.show({
       autoWrap: false,
       templateUrl: 'resource/show/checkAvailabilityDialog.tpl.html',
       controller: ['$scope', '$mdDialog', function($scope, $mdDialog) {
+        $scope.openDialogSpinner = false;
         $scope.hide = function() {
           $mdDialog.hide();
         };

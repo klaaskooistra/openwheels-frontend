@@ -170,7 +170,7 @@
                               </md-list-item>
                               <md-list-item ng-if="resource.locktypes.indexOf('chipcard') >= 0 && resource.locktypes.indexOf('smartphone') >= 0">
                                 <md-icon class="text-success list-margin">vpn_key</md-icon>
-                                <span>Openen met je smartphone & chipkaart</span>
+                                <span>Openen met je <a target="_blank" href="https://mywheels.nl/autodelen/veelgestelde-vragen/hoe-open-auto-smartphone/">smartphone</a> & <a target="_blank" href="https://mywheels.nl/autodelen/veelgestelde-vragen/hoe-open-ik-een-auto-met-mijn-chipkaart/">chipkaart</a></span>
                               </md-list-item>
                               <md-list-item>
                                 <md-icon class="text-success list-margin">date_range</md-icon>
@@ -286,9 +286,11 @@
 
 <md-toolbar class="md-hue-2 fixed-call-to-action" ng-if="resource.removed === false" hide-gt-xs>
     <div class="md-toolbar-tools">
-    <md-button class="md-raised md-primary" ng-click="checkAvailabilityDialog()">{{ 'BOOK_A_CAR' | translate }}</md-button>
+    <md-button class="md-raised md-primary" ng-click="checkAvailabilityDialog()" ng-if="!openDialogSpinner">{{ 'BOOK_A_CAR' | translate }}</md-button>
+    <md-button class="md-raised md-primary" ng-if="openDialogSpinner"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></md-button>
     </div>
-    <div class="satisfaction">{{ satisfaction }} {{ 'SATISFACTION_RENTERS' | translate }}</div>
+    <div class="satisfaction" ng-if="resource.rating_totals.senders > 0">{{ satisfaction }} {{ 'SATISFACTION_RENTERS' | translate }}</div>
+    <div class="satisfaction" ng-if="resource.rating_totals.senders === 0">{{ resource.price.dayRateTotal | currency }} per dag <span ng-if="resource.price.kmFree">en 100 km gratis</span></div>
 </md-toolbar>
 
 <div class="col-md-8 col-md-offset-2">
