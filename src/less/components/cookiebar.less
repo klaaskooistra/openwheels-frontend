@@ -18,4 +18,24 @@
         min-height: 25px;
         font-size: 12px;
     }
+    md-icon {
+        display: none;
+    }
+
+}
+@media all and (min-width: 300px) and (max-width: 600px) {
+    .cookiebar--content {
+        min-height: 40px;
+        md-icon {
+            display: unset;
+            color: #fff;
+            float: right;
+        }
+        span {
+            float: left;
+        }
+        .md-button {
+            display: none;
+        }
+    }
 }
