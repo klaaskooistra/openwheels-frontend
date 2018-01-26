@@ -1,37 +1,41 @@
 .cookiebar {
     text-align: center;
-    padding: 1em;
     z-index: 1000;
-    left: 0;
-    bottom: 100px;
     background: none;
     width: 100%;
-    position: fixed;
-
-    &--low {
-      bottom: 45px;
-    }
 }
 .cookiebar--content {
-    padding: 0.1em 0.5em;
-    border-radius: 0.5em;
+    padding: 1rem;
     margin: 0 auto;
     width: 100%;
-    max-width: 31em;
     color: #fff;
-    background-color: rgba(17, 17, 17, .7);
-    display: inline-block;
-    line-height: 2.2rem;
-    padding: 1rem 2rem;
-}
-.cookiebar--btn {
-    background: none;
-    border: none;
-    md-icon {
-        line-height: 2.5rem;
-        font-size: 1.5em;
+    background-color: #5d5a5a;
+    line-height: 2rem;
+    .md-button {
+        line-height: 1;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        min-height: 25px;
+        font-size: 12px;
     }
+    md-icon {
+        display: none;
+    }
+
 }
-.cookiebar--btn:hover {
-    text-decoration: underline;
+@media all and (min-width: 300px) and (max-width: 600px) {
+    .cookiebar--content {
+        min-height: 40px;
+        md-icon {
+            display: unset;
+            color: #fff;
+            float: right;
+        }
+        span {
+            float: left;
+        }
+        .md-button {
+            display: none;
+        }
+    }
 }
