@@ -3,18 +3,20 @@
     padding: 1em;
     z-index: 1000;
     left: 0;
-    bottom: 100px;
+    bottom: 20px;
     background: none;
     width: 100%;
     position: fixed;
-
-    &--low {
-      bottom: 65px;
+}
+@media all and (max-width: @screen-sm) {
+    .cookiebar {
+        width: 55%;
+        bottom: 0;
     }
 }
 .cookiebar--content {
     padding: 0.1em 0.5em;
-    border-radius: 0.5em;
+    border-radius: 0.21em;
     margin: 0 auto;
     width: 100%;
     max-width: 31em;
@@ -22,7 +24,7 @@
     background-color: rgba(17, 17, 17, .7);
     display: inline-block;
     line-height: 2rem;
-    padding: 0.5rem 0.5rem;;
+    padding: 1rem;
 }
 .cookiebar--btn {
     background: none;
