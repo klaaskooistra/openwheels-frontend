@@ -104,18 +104,18 @@ angular.module('owm.resource', [
           return user.isAuthenticated ? user.identity : null;
         });
       }],
-      metaInfo: ['$translate', 'place', 'metaInfoService',
-        function ($translate, place, metaInfoService) {
+      metaInfo: ['$translate', 'place', 'metaInfoService', '$filter',
+        function ($translate, place, metaInfoService, $filter) {
           if (!place) {
             return;
           }
           return $translate('SITE_NAME').then(function () {
             metaInfoService.set({
               title: $translate.instant('META_CITYPAGE_TITLE', {
-                city: place.name
+                city: $filter('toTitleCase')(place.name)
               }),
               description: $translate.instant('META_CITYPAGE_DESCRIPTION', {
-                city: place.name
+                city: $filter('toTitleCase')(place.name)
               })
             });
           });
