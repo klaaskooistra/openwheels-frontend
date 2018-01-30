@@ -26,23 +26,26 @@ angular.module('owm.trips.index', [])
   $scope.offset = {};
   $scope.lastPage = {};
 
+  //TODO: ???
   setPaginationDefaults('asRenter');
   setPaginationDefaults('asOwner');
 
   function setPaginationDefaults (role) {
     $scope.curPage[role] = 1;
-    $scope.perPage[role] = 10;
-    $scope.offset[role] = ($scope.curPage[role] - 1) * $scope.perPage[role];
+    $scope.perPage[role] = 35;
+    $scope.offset[role] = 0;
   }
 
   // Pagination buttons and their actions
 
   $scope.nextPage = function(role) {
+    $scope.offset[role] = $scope.curPage[role] * $scope.perPage[role];
     $scope.curPage[role] = $scope.curPage[role] + 1;
     loadBookings(role);
   };
 
   $scope.prevPage = function(role) {
+    $scope.offset[role] = ($scope.curPage[role] - 2) * $scope.perPage[role];
     $scope.curPage[role] = $scope.curPage[role] - 1;
     loadBookings(role);
   };
@@ -86,7 +89,7 @@ angular.module('owm.trips.index', [])
   function loadBookings(role)
   {
     // Set the offset for the pagination for this role based on the current page and elements per page
-    $scope.offset[role] = ($scope.curPage[role] - 1) * $scope.perPage[role];
+    //$scope.offset[role] = ($scope.curPage[role] - 1) * $scope.perPage[role];
 
     // Define the parameters for getting the bookings
     var parameters = {
