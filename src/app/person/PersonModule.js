@@ -142,13 +142,11 @@ angular.module('owm.person', [
         }
         return bookingService.getBookingList({
             person: me.id,
-            timeFrame: timeFrame,
-            limit: 10
+            timeFrame: timeFrame
           })
           .then(function (bookings) {
             return {
-              bookings: bookings.result,
-              totalBookings: bookings.total,
+              bookings: bookings,
               timeFrame: timeFrame
             };
           });
@@ -167,13 +165,11 @@ angular.module('owm.person', [
         }
         return bookingService.forOwner({
             person: me.id,
-            timeFrame: timeFrame,
-            limit: 10
+            timeFrame: timeFrame
           })
           .then(function (bookings) {
             return {
-              bookings: bookings.result,
-              totalBookings: bookings.total,
+              bookings: bookings,
               timeFrame: timeFrame
             };
           });
