@@ -32,7 +32,7 @@ angular.module('owm.trips.index', [])
 
   function setPaginationDefaults (role) {
     $scope.curPage[role] = 1;
-    $scope.perPage[role] = 10;
+    $scope.perPage[role] = 35;
     $scope.offset[role] = 0;
   }
 
