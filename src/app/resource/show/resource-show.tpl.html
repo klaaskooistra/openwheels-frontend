@@ -286,8 +286,8 @@
 
 <md-toolbar class="md-hue-2 fixed-call-to-action" ng-if="resource.removed === false" hide-gt-xs>
     <div class="md-toolbar-tools">
-    <md-button class="md-raised md-primary" ng-click="checkAvailabilityDialog()" ng-if="!openDialogSpinner">{{ 'BOOK_A_CAR' | translate }}</md-button>
-    <md-button class="md-raised md-primary" ng-if="openDialogSpinner"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></md-button>
+        <md-button class="md-raised md-primary" ng-click="checkAvailabilityDialog()" ng-if="!openDialogSpinner" ga-track-event="['booking', 'created_pre', user.isAuthenticated, null, true]">{{ 'BOOK_A_CAR' | translate }}</md-button>
+        <md-button class="md-raised md-primary" ng-if="openDialogSpinner"><i class="fa fa-fw fa-circle-o-notch fa-spin"></i></md-button>
     </div>
     <div class="satisfaction" ng-if="resource.rating_totals.senders > 0">{{ satisfaction }} {{ 'SATISFACTION_RENTERS' | translate }}</div>
     <div class="satisfaction" ng-if="resource.rating_totals.senders === 0">{{ resource.price.dayRateTotal | currency }} per dag <span ng-if="resource.price.kmFree">en 100 km gratis</span></div>
