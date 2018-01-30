@@ -6,6 +6,14 @@
     <section class="">
         <h3 class="text-success">{{resource.alias}}</h3>
         <span>{{(resource.brand | toTitleCase) || ('UNKNOWN_BRAND' | translate)}} {{resource.model}}</span>
+        <ul class="list-unstyled list-spaced list-responsive" ng-if="!$root.isWindowSizeSM">
+            <li>
+                <span style="max-width:100%;padding-top:5px;">{{startDate}}</span>
+            </li>
+            <li>
+                <span style="max-width:100%;">{{endDate}}</span>
+            </li>
+        </ul>
     </section>
     <md-divider></md-divider>
     <section ng-if="$root.isWindowSizeSM">

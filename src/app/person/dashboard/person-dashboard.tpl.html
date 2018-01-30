@@ -27,11 +27,11 @@
 <div id="current_bookings" class="card" ng-if="bookings.length > 0">
   <div class="card-heading">
     <h2 class="card-title">{{ 'CURRENT_BOOKINGS' | translate }}
-      <span class="pull-right">
+      <!-- <span class="pull-right">
         <small>
           Getoond: {{ bookings.length }} van {{ totalBookings }} (<a ui-sref="owm.trips">Bekijk ritgeschiedenis</a>)
         </small>
-      </span>
+      </span> -->
     </h2>
   </div>
   <div class="card-body">
@@ -53,12 +53,12 @@
   <div class="card-heading">
     <h2 class="card-title">{{ 'CURRENT_RENTALS' | translate }}
       <span class="pull-right">
-        <small>
+<!--         <small>
           Getoond: {{ rentals.length }} van {{ totalRentals }}
           (<a ng-if="me.provider.id !== 50" ui-sref="owm.trips">Bekijk verhuurgeschiedenis</a>
           <a ng-if="me.provider.id === 50" ui-sref="owm.trips">Bekijk ritgeschiedenis</a>)
 
-        </small>
+        </small> -->
       </span>
     </h2>
   </div>
@@ -79,8 +79,26 @@
   </div>
 </div>
 
-<!-- FAVORITES -->
 
+<!-- MEMBER RESOURCES -->
+<div id="members_resource_buttons" class="card" ng-if="membersResources.length >= 1">
+
+  <div class="card-heading">
+    <h2 class="card-title">{{ 'MEMBERS_RESOURCES' | translate }}<info-icon tooltip-html="'INFO_MEMBERS_RESOURCES' | translate"></info-icon></h2>
+  </div>
+
+  <div class="card-body">
+    <div ng-if="membersResources.length >= 1">
+      <ul class="list-row">
+        <li ng-repeat="resource in membersResources" ng-click="selectFavoriteResource(resource)">
+          <div ng-include="'resource/partials/resource-header1.tpl.html'"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FAVORITES -->
 <div id="dashboard_buttons" class="card">
 
   <div class="card-heading" ng-if="favoriteResources.length >= 1">
@@ -109,25 +127,5 @@
         </a>
       </li>
     </ul>
-  </div>
-</div>
-
-
-<!-- RESOURCES -->
-
-<div id="members_resource_buttons" class="card" ng-if="membersResources.length >= 1">
-
-  <div class="card-heading">
-    <h2 class="card-title">{{ 'MEMBERS_RESOURCES' | translate }}<info-icon tooltip-html="'INFO_MEMBERS_RESOURCES' | translate"></info-icon></h2>
-  </div>
-
-  <div class="card-body">
-    <div ng-if="membersResources.length >= 1">
-      <ul class="list-row">
-        <li ng-repeat="resource in membersResources" ng-click="selectFavoriteResource(resource)">
-          <div ng-include="'resource/partials/resource-header1.tpl.html'"></div>
-        </li>
-      </ul>
-    </div>
   </div>
 </div>
