@@ -25,6 +25,7 @@ angular.module('openwheels', [
   'ngAutocomplete',
   'ngScrollTo',
   'uiCropper',
+  'vcRecaptcha',
 
   /* Auto-generated */
   'templates-app',
@@ -53,7 +54,6 @@ angular.module('openwheels', [
   'owm.featuresService',
   'owm.metaInfoService',
   'owm.meHelperService',
-  'ng-optimizely',
   'angular-google-analytics',
 
   /* Directives */
