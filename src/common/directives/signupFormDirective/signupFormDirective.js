@@ -117,13 +117,16 @@ angular.module('signupFormDirective', [])
           terms = $scope.auth.terms,
           preference = user.preference;
 
+        var captcha = user.captcha;
+
         if (email && password && user) {
           if (preference) {
             if (terms === true) {
               authService.oauthSubscribe({
                   email: email.trim().toLowerCase(),
                   password: password,
-                  other: user
+                  other: user,
+                  captcha: captcha
                 }).then(function (res) {
                   Analytics.trackEvent('person', 'created', res.id, undefined, true);
                   if ($scope.url === 'owm.person.details({pageNumber: \'1\'})') {

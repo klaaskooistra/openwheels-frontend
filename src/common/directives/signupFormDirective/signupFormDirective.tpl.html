@@ -44,6 +44,9 @@
                 <span class="text-danger">{{ 'REQUIRED' | translate }}</span>
             </div>
         </div>
+        <div style="margin-bottom: 10px; margin-top: 10px;">
+            <div vc-recaptcha key="'6LdTB0QUAAAAAO-E0MxFe-pMpMRoaQVKhrNCLmTv'" ng-model="user.captcha"></div>
+        </div>
 
     </div>
     <button type="button" name="button" class="mywheels-btn mywheels-btn-default mywheels-btn-form-margin" ng-click="signup()" md-ink-ripple="#3a6d81" ng-disabled="signupform.email.$error.required || signupform.firstName.$error.email || signupform.password.$error.required">

@@ -6,7 +6,7 @@
     "angular-animate": "1.4.8",
     "angular-bootstrap": "1.1.2",
     "angular-cookies": "1.4.8",
-    "angular-messages": "1.5.6", 
+    "angular-messages": "1.5.6",
     "angular-google-maps": "2.0.12",
     "angular-jsonrpc-q": "0.0.2",
     "angular-moment": "0.5.2",
@@ -29,7 +29,8 @@
     "bootstrap": "3.3.6",
     "angular-slick": "~0.2.1",
     "slick-carousel": "1.6.0",
-    "ui-cropper": "^1.0.4"
+    "ui-cropper": "^1.0.4",
+    "angular-recaptcha": "^4.1.2"
   },
   "resolutions": {
     "jquery": "~2.x",
