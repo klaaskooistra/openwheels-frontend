@@ -60,6 +60,7 @@ module.exports = {
       'vendor/ng-sortable/dist/ng-sortable.js',
       'vendor/ng-optimizely/ng-optimizely.js',
       'vendor/ui-cropper/compile/unminified/ui-cropper.js',
+      'vendor/angular-recaptcha/release/angular-recaptcha.js',
 
 
 
