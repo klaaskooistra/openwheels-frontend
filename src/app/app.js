@@ -25,7 +25,7 @@ angular.module('openwheels', [
   'ngAutocomplete',
   'ngScrollTo',
   'uiCropper',
-  'vcRecaptcha',
+  // 'vcRecaptcha',
 
   /* Auto-generated */
   'templates-app',
